@@ -17,7 +17,7 @@
   <label for="sheetSelect" class="mb-4 font-semibold">Seleccionar Hoja:</label>
   <select id="sheetSelect" [(ngModel)]="selectedSheetIndex" (ngModelChange)="selectSheet($event)">
     <option *ngFor="let sheet of sheetsData; let i = index" [value]="i">
-      Hojas {{ i + 1 }} - {{ sheet.name }}
+      Hoja {{ i + 1 }} - {{ sheet.name }}
     </option>
   </select>
 

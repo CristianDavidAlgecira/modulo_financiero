@@ -60,7 +60,20 @@ export class Grupo1Component implements OnInit {
 
   onFileSelected(file: File[]) {
     this.selectedFile = file[0];
-    this.loadExcelFile();
+    
+  }
+
+  OnUploadButton(file: File[]) {
+    if (file[0]) {
+      console.log("hay archivo", file[0]);
+      
+      this.loadExcelFile();
+    } else {
+      console.log("no hay");
+      
+      this.sheetsData = [];
+    }
+    
   }
 
   loadExcelFile() {

@@ -6,7 +6,7 @@
     </p>
 
     <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".xlsx"
-                     [error]="errorStates[1]" (fileSelected)="onFileSelected($event)"/>
+                     [error]="errorStates[1]" (fileSelected)="onFileSelected($event)" (uploadFile)="OnUploadButton($event)"/>
   </div>
 
 </form>

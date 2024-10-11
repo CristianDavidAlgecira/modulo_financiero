@@ -29,6 +29,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() error: boolean = false;
   @Input() fileValue: File[] = [];
   @Output() fileSelected = new EventEmitter<File[]>();
+  @Output() uploadFile = new EventEmitter<File[]>();
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   files: File[] = [];
@@ -92,6 +93,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit, OnChanges {
     this.files = this.files.filter(f => f !== file);
     this.fileName = this.files.length > 0 ? this.files[0].name : '';
     this.fileSelected.emit(this.files);
+    this.uploadFile.emit(this.files);
 
     if (this.files.length === 0) {
       this.isFileUpdate = null;
@@ -116,6 +118,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.files.length === 0) {
       this.isFileUpdate = false;
     } else {
+      this.uploadFile.emit(this.files);
       this.isFileUpdate = true;
     }
 

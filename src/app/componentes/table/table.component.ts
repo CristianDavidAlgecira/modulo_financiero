@@ -18,8 +18,8 @@ import {PageEvent} from "@angular/material/paginator";
 export class TableComponent implements OnInit {
 
   data: any = []
-
   headers: any = []
+  paginatedData: any = [];
 
   ngOnInit() {
 
@@ -152,6 +152,8 @@ export class TableComponent implements OnInit {
 
     ]
 
+    this.paginatorFilter(0, 5)
+
   }
 
   get info(): string[] {
@@ -181,7 +183,17 @@ export class TableComponent implements OnInit {
   }
 
   onPageChanged(event: PageEvent) {
-    console.log('Page event:', event);
+
+    this.paginatorFilter(event.pageIndex, event.pageSize);
+
+  }
+
+  paginatorFilter(pageIndex: number, pageSize: number) {
+
+    const startIndex = (pageIndex) * pageSize;
+    const endIndex = startIndex + pageSize;
+    this.paginatedData = this.data.content.slice(startIndex, endIndex);
+
   }
 
 }

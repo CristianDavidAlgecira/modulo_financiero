@@ -5,6 +5,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatInputModule} from "@angular/material/input";
 import {NgIf} from "@angular/common";
+import {MatPaginatorIntl} from '@angular/material/paginator';
+import {CustomPaginatorComponent} from '../servicios/custom-paginator/custom-paginator.component';
 
 @Component({
   selector: 'app-paginator',
@@ -17,7 +19,10 @@ import {NgIf} from "@angular/common";
     NgIf
   ],
   templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.css']
+  styleUrls: ['./paginator.component.css'],
+  providers: [
+    {provide: MatPaginatorIntl, useValue: CustomPaginatorComponent()}
+  ]
 })
 export class PaginatorComponent implements OnInit {
 
@@ -26,7 +31,7 @@ export class PaginatorComponent implements OnInit {
 
   length = 0;
   pageSize = 5;
-  pageSizeOptions = [5, 10, 25, 100];
+  pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
 
   ngOnInit() {
@@ -37,4 +42,5 @@ export class PaginatorComponent implements OnInit {
     this.pageEvent = event;
     this.pageChange.emit(event);
   }
+
 }

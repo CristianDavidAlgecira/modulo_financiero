@@ -24,9 +24,9 @@
 
               </thead>
 
-              <tbody *ngIf="data.content.length > 0">
+              <tbody *ngIf="paginatedData.length > 0">
 
-              <tr class="text-primary3 border-b-2 border-secondary1 bg-white" *ngFor="let item of data.content">
+              <tr class="text-primary3 border-b-2 border-secondary1 bg-white" *ngFor="let item of paginatedData">
 
                 <td *ngFor="let key of info" class="px-5 py-5">
 
@@ -40,7 +40,7 @@
 
               </tbody>
 
-              <tbody *ngIf="data.content.length == 0">
+              <tbody *ngIf="paginatedData.length == 0">
 
               <tr>
 
@@ -73,10 +73,10 @@
 <div class="mt-6 w-full mb-6 sm:hidden">
 
   <!-- cuando hay registros -->
-  <div class="border-2 bg-white border-secondary1 max-h-[28rem] overflow-y-auto" *ngIf="data.content.length > 0">
+  <div class="border-2 bg-white border-secondary1 max-h-[28rem] overflow-y-auto" *ngIf="paginatedData.length > 0">
 
     <!-- Contenedor general con scroll -->
-    <div class="flex flex-col space-y-6" *ngFor="let item of data.content">
+    <div class="flex flex-col space-y-6" *ngFor="let item of paginatedData">
 
       <div class="border-2 bg-white border-secondary1 py-4 px-4">
 
@@ -107,7 +107,7 @@
   </div>
 
   <!-- cuando no hay registros -->
-  <div class="border-2 bg-white border-secondary1 max-h-[28rem] overflow-y-auto" *ngIf="data.content.length == 0">
+  <div class="border-2 bg-white border-secondary1 max-h-[28rem] overflow-y-auto" *ngIf="paginatedData == 0">
 
     <p class="work-sans text-lg font-normal text-primary2 italic flex justify-center">
       No hay ningún registro con los criterios de búsqueda o filtros seleccionados

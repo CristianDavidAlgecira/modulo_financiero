@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FileUploadComponent } from "../../../componentes/file-upload/file-upload.component";
-import { ErrorService } from "../../../componentes/servicios/error/error.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { NgForOf, NgIf } from "@angular/common";
+import {Component, OnInit} from '@angular/core';
+import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
+import {ErrorService} from "../../../componentes/servicios/error/error.service";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgForOf, NgIf} from "@angular/common";
 import * as XLSX from 'xlsx';
 import {PaginatorModule} from "primeng/paginator";
 
+
 @Component({
-  selector: 'app-grupo1',
+  selector: 'app-visualizar-archivo',
   standalone: true,
   imports: [
     FileUploadComponent,
@@ -16,16 +17,17 @@ import {PaginatorModule} from "primeng/paginator";
     NgForOf,
     PaginatorModule
   ],
-  templateUrl: './grupo1.component.html',
-  styleUrl: './grupo1.component.css'
+  templateUrl: './visualizar-archivo.component.html',
+  styleUrl: './visualizar-archivo.component.css'
 })
-export class Grupo1Component implements OnInit {
+export class VisualizarArchivoComponent implements OnInit {
 
   // Constructor
   constructor(
     private errorService: ErrorService,
     private fb: FormBuilder,
-  ) { }
+  ) {
+  }
 
   // Formulario
   formGroup1!: FormGroup;
@@ -60,20 +62,20 @@ export class Grupo1Component implements OnInit {
 
   onFileSelected(file: File[]) {
     this.selectedFile = file[0];
-    
+
   }
 
   OnUploadButton(file: File[]) {
     if (file[0]) {
       console.log("hay archivo", file[0]);
-      
+
       this.loadExcelFile();
     } else {
       console.log("no hay");
-      
+
       this.sheetsData = [];
     }
-    
+
   }
 
   loadExcelFile() {
@@ -82,7 +84,7 @@ export class Grupo1Component implements OnInit {
 
       reader.onload = (e: any) => {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
+        const workbook = XLSX.read(data, {type: 'array'});
 
         // Limpiar los datos previos
         this.sheetsData = [];
@@ -90,10 +92,10 @@ export class Grupo1Component implements OnInit {
         // Recorrer todas las hojas del archivo Excel
         workbook.SheetNames.forEach(sheetName => {
           const sheet = workbook.Sheets[sheetName];
-          const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+          const sheetData = XLSX.utils.sheet_to_json(sheet, {header: 1});
 
           // Almacenar los datos de la hoja con su nombre
-          this.sheetsData.push({ name: sheetName, data: sheetData });
+          this.sheetsData.push({name: sheetName, data: sheetData});
         });
 
         // Seleccionar la primera hoja por defecto
@@ -108,4 +110,5 @@ export class Grupo1Component implements OnInit {
   selectSheet(index: number) {
     this.selectedSheetIndex = index;
   }
+
 }

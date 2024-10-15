@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FooterComponent} from "../../componentes/footer/footer.component";
 import {HeaderComponent} from "../../componentes/header/header.component";
-import {Grupo1Component} from "../grupos/grupo1/grupo1.component";
+import {AdministracionComponent} from "../spring-1/administracion/administracion.component";
 
 @Component({
   selector: 'app-inicio',
@@ -9,7 +9,7 @@ import {Grupo1Component} from "../grupos/grupo1/grupo1.component";
   imports: [
     FooterComponent,
     HeaderComponent,
-    Grupo1Component
+    AdministracionComponent
   ],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css'

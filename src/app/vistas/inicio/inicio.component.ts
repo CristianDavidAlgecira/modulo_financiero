@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FooterComponent} from "../../componentes/footer/footer.component";
 import {HeaderComponent} from "../../componentes/header/header.component";
-import {AdministracionComponent} from "../spring-1/administracion/administracion.component";
+import {RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-inicio',
@@ -9,12 +9,18 @@ import {AdministracionComponent} from "../spring-1/administracion/administracion
   imports: [
     FooterComponent,
     HeaderComponent,
-    AdministracionComponent
+    RouterOutlet
   ],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css'
 })
 
-export class InicioComponent {
+export class InicioComponent implements OnInit {
+
+  constructor() {
+  }
+
+  ngOnInit() {
+  }
 
 }

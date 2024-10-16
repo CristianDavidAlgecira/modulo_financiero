@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
-import {ErrorService} from "../../../componentes/servicios/error/error.service";
+import {ErrorService} from "../../../componentes/servicios/error/error.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import * as XLSX from 'xlsx';
@@ -32,7 +32,7 @@ export class VisualizarArchivoComponent implements OnInit {
   // Formulario
   formGroup1!: FormGroup;
 
-  // Porpiedad de objeto para manejar errores
+  // Propiedad de objeto para manejar errores
   errorStates: { [key: number]: boolean } = {};
 
   // Propiedades del input: tamaño, info, etc.

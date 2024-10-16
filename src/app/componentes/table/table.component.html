@@ -28,10 +28,15 @@
 
               <tr class="text-primary3 border-b-2 border-secondary1 bg-white" *ngFor="let item of paginatedData">
 
-                <td *ngFor="let key of info" class="px-5 py-5">
+                <td *ngFor="let key of info; let index = index" class="px-5 py-5">
 
-                  <p class="whitespace-no-wrap">
+                  <p *ngIf="index != 7" class="whitespace-no-wrap">
                     {{ formatField(item[key]) }}
+                  </p>
+
+                  
+                  <p *ngIf="index== 7" class="whitespace-no-wrap text-center">
+                    <span (click)="onButtonClick(item[key])" class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
 
                 </td>

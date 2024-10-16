@@ -1,163 +1,166 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CommonModule, formatDate, NgForOf, NgIf} from "@angular/common";
-import {PaginatorComponent} from "../paginator/paginator.component";
-import {PageEvent} from "@angular/material/paginator";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule, formatDate, NgForOf, NgIf } from '@angular/common';
+import { PaginatorComponent } from '../paginator/paginator.component';
+import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    CommonModule,
-    PaginatorComponent
-  ],
+  imports: [NgForOf, NgIf, CommonModule, PaginatorComponent],
   templateUrl: './table.component.html',
-  styleUrl: './table.component.css'
+  styleUrl: './table.component.css',
 })
 export class TableComponent implements OnInit {
+  constructor(private router: Router) {}
 
-  data: any = []
-  headers: any = []
+  data: any = [];
+  headers: any = [];
   paginatedData: any = [];
+  @Output() requerimientoDetalle: EventEmitter<number> =
+    new EventEmitter<number>();
 
   ngOnInit() {
-
     this.data = {
-      "totalElements": 0,
-      "totalPages": 0,
-      "pageable": {
-        "paged": true,
-        "pageNumber": 0,
-        "pageSize": 0,
-        "offset": 0,
-        "sort": [
+      totalElements: 0,
+      totalPages: 0,
+      pageable: {
+        paged: true,
+        pageNumber: 0,
+        pageSize: 0,
+        offset: 0,
+        sort: [
           {
-            "direction": "string",
-            "nullHandling": "string",
-            "ascending": true,
-            "property": "string",
-            "ignoreCase": true
-          }
+            direction: 'string',
+            nullHandling: 'string',
+            ascending: true,
+            property: 'string',
+            ignoreCase: true,
+          },
         ],
-        "unpaged": true
+        unpaged: true,
       },
-      "size": 0,
-      "content": [
+      size: 0,
+      content: [
         {
-          "nombreRequerimiento": "General anualizada",
-          "numeroRequerimiento": "413",
-          "anio": "2024",
-          "fechaInicio": "2024-10-15T12:42:49.226Z",
-          "fechaFin": "2024-10-15T12:42:49.226Z",
-          "diasFaltantes": "0",
-          "estado": "cancelado",
+          nombreRequerimiento: 'General anualizada',
+          numeroRequerimiento: '413',
+          anio: '2024',
+          fechaInicio: '2024-10-15T12:42:49.226Z',
+          fechaFin: '2024-10-15T12:42:49.226Z',
+          diasFaltantes: '0',
+          estado: 'cancelado',
+          detalle: '413',
         },
         {
-          "nombreRequerimiento": "Modelo de negocios especiales",
-          "numeroRequerimiento": "398",
-          "anio": "2023",
-          "fechaInicio": "2023-10-15T12:42:49.226Z",
-          "fechaFin": "2023-10-15T12:42:49.226Z",
-          "diasFaltantes": "10",
-          "estado": "proceso",
+          nombreRequerimiento: 'Modelo de negocios especiales',
+          numeroRequerimiento: '398',
+          anio: '2023',
+          fechaInicio: '2023-10-15T12:42:49.226Z',
+          fechaFin: '2023-10-15T12:42:49.226Z',
+          diasFaltantes: '10',
+          estado: 'proceso',
+          detalle: '398',
         },
         {
-          "nombreRequerimiento": "Periodos intermedios",
-          "numeroRequerimiento": "390",
-          "anio": "2022",
-          "fechaInicio": "2022-10-15T12:42:49.226Z",
-          "fechaFin": "2022-10-15T12:42:49.226Z",
-          "diasFaltantes": "0",
-          "estado": "finalizado",
+          nombreRequerimiento: 'Periodos intermedios',
+          numeroRequerimiento: '390',
+          anio: '2022',
+          fechaInicio: '2022-10-15T12:42:49.226Z',
+          fechaFin: '2022-10-15T12:42:49.226Z',
+          diasFaltantes: '0',
+          estado: 'finalizado',
+          detalle: '390',
         },
         {
-          "nombreRequerimiento": "Periodos intermedios",
-          "numeroRequerimiento": "390",
-          "anio": "2022",
-          "fechaInicio": "2022-10-15T12:42:49.226Z",
-          "fechaFin": "2022-10-15T12:42:49.226Z",
-          "diasFaltantes": "0",
-          "estado": "finalizado",
+          nombreRequerimiento: 'Periodos intermedios',
+          numeroRequerimiento: '390',
+          anio: '2022',
+          fechaInicio: '2022-10-15T12:42:49.226Z',
+          fechaFin: '2022-10-15T12:42:49.226Z',
+          diasFaltantes: '0',
+          estado: 'finalizado',
+          detalle: '390',
         },
         {
-          "nombreRequerimiento": "Periodos intermedios",
-          "numeroRequerimiento": "390",
-          "anio": "2022",
-          "fechaInicio": "2022-10-15T12:42:49.226Z",
-          "fechaFin": "2022-10-15T12:42:49.226Z",
-          "diasFaltantes": "0",
-          "estado": "finalizado",
+          nombreRequerimiento: 'Periodos intermedios',
+          numeroRequerimiento: '390',
+          anio: '2022',
+          fechaInicio: '2022-10-15T12:42:49.226Z',
+          fechaFin: '2022-10-15T12:42:49.226Z',
+          diasFaltantes: '0',
+          estado: 'finalizado',
+          detalle: '390',
         },
         {
-          "nombreRequerimiento": "Modelo de negocios especiales",
-          "numeroRequerimiento": "398",
-          "anio": "2023",
-          "fechaInicio": "2023-10-15T12:42:49.226Z",
-          "fechaFin": "2023-10-15T12:42:49.226Z",
-          "diasFaltantes": "10",
-          "estado": "proceso",
-        }
+          nombreRequerimiento: 'Modelo de negocios especiales',
+          numeroRequerimiento: '398',
+          anio: '2023',
+          fechaInicio: '2023-10-15T12:42:49.226Z',
+          fechaFin: '2023-10-15T12:42:49.226Z',
+          diasFaltantes: '10',
+          estado: 'proceso',
+          detalle: '398',
+        },
       ],
-      "number": 0,
-      "sort": [
+      number: 0,
+      sort: [
         {
-          "direction": "string",
-          "nullHandling": "string",
-          "ascending": true,
-          "property": "string",
-          "ignoreCase": true
-        }
+          direction: 'string',
+          nullHandling: 'string',
+          ascending: true,
+          property: 'string',
+          ignoreCase: true,
+        },
       ],
-      "numberOfElements": 0,
-      "first": true,
-      "last": true,
-      "empty": true
-    }
+      numberOfElements: 0,
+      first: true,
+      last: true,
+      empty: true,
+    };
 
     this.headers = [
-
       {
         id: 1,
-        title: "Nombre del requerimiento",
+        title: 'Nombre del requerimiento',
       },
       {
         id: 2,
-        title: "Número del requerimiento",
+        title: 'Número del requerimiento',
       },
       {
         id: 3,
-        title: "Año",
+        title: 'Año',
       },
       {
         id: 4,
-        title: "Fecha inicio",
+        title: 'Fecha inicio',
       },
       {
         id: 5,
-        title: "Fecha fin",
+        title: 'Fecha fin',
       },
       {
         id: 6,
-        title: "Días faltantes",
+        title: 'Días faltantes',
       },
       {
         id: 7,
-        title: "Estado",
+        title: 'Estado',
       },
       {
         id: 8,
-        title: "Ver detalle",
+        title: 'Ver detalle',
       },
+    ];
 
-    ]
-
-    this.paginatorFilter(0, 5)
-
+    this.paginatorFilter(0, 5);
   }
 
   get info(): string[] {
-    return this.data.content.length > 0 ? Object.keys(this.data.content[0]) : [];
+    return this.data.content.length > 0
+      ? Object.keys(this.data.content[0])
+      : [];
   }
 
   isDateTime(value: any): boolean {
@@ -183,17 +186,21 @@ export class TableComponent implements OnInit {
   }
 
   onPageChanged(event: PageEvent) {
-
     this.paginatorFilter(event.pageIndex, event.pageSize);
-
   }
 
   paginatorFilter(pageIndex: number, pageSize: number) {
-
-    const startIndex = (pageIndex) * pageSize;
+    const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
     this.paginatedData = this.data.content.slice(startIndex, endIndex);
-
   }
 
+  //Metodo para mostrar registro guardado
+  onButtonClick(id: number) {
+    this.router.navigate(['/detalle-requerimientos'], {
+      state: {
+        id: id,
+      },
+    });
+  }
 }

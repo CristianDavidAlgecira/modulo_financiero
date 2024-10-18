@@ -17,7 +17,7 @@
           <label class="text-primary3 font-medium h-full text-xs">Nombre del requerimiento</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
+            type="text" placeholder="Digite el nombre del requerimiento" (input)="onInputChange($event)">
         </div>
 
         <!-- Input 2 -->
@@ -25,40 +25,34 @@
           <label class="text-primary3 font-medium h-full text-xs">Número del acto administrativo</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
+            type="number" placeholder="Digite el número del acto administrativo" (input)="onInputChange($event)">
         </div>
-
 
         <!-- Input 3 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">Año del acto Administrativo</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" placeholder="dd/mm/aaaa">
-
+            type="number" placeholder="Digite el año del acto administrativo" (input)="onInputChange($event)">
         </div>
 
       </div>
 
-      <!-- Botones de filtros -->
+      <!-- Botón Limpiar -->
       <div class="flex justify-end p-4 space-x-4">
 
-        <!-- Botón Limpiar -->
         <button
-          class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
-          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-          Limpiar
+          class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+          Limpiar filtros
         </button>
-
-        <!-- Botón Buscar -->
-        <app-primary-button type="button">Buscar</app-primary-button>
 
       </div>
 
+      <!-- Botón Nuevo Requerimiento -->
       <div class="flex justify-end p-4 space-x-4">
 
-        <!-- Botón Nuevo Requerimiento -->
-        <app-primary-button type="button" (click)="navigateToNuevoRequerimiento()">Nuevo requerimiento</app-primary-button>
+        <app-primary-button type="button" (click)="navigateToNuevoRequerimiento()">Nuevo requerimiento
+        </app-primary-button>
 
       </div>
 
@@ -71,7 +65,7 @@
     <!-- TABLES -->
     <div class="w-full pb-6">
 
-      <app-table></app-table>
+      <app-table [filtro]="filtros"></app-table>
 
     </div>
 

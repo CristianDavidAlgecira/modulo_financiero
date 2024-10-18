@@ -34,9 +34,10 @@
                     {{ formatField(item[key]) }}
                   </p>
 
-                  
+
                   <p *ngIf="index== 7" class="whitespace-no-wrap text-center">
-                    <span (click)="onButtonClick(item[key])" class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
+                    <span (click)="onButtonClick(item[key])"
+                          class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
 
                 </td>
@@ -122,4 +123,4 @@
 
 </div>
 
-<app-paginator [data]="data.content.length" (pageChange)="onPageChanged($event)"></app-paginator>
+<app-paginator [data]="pageLength" (pageChange)="onPageChanged($event)"></app-paginator>

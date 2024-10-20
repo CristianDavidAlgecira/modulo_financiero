@@ -17,7 +17,10 @@ import {FormsModule} from "@angular/forms";
 })
 export class AdministracionComponent implements OnInit {
 
-  filtros: string = '';
+  filtroNombre: string = '';
+  filtroNumero: string = '';
+  filtroAnio: string = '';
+  filtroGlobal: string = '';
 
   constructor(
     private router: Router
@@ -27,9 +30,17 @@ export class AdministracionComponent implements OnInit {
   ngOnInit() {
   }
 
-  onInputChange(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.filtros = inputElement.value;
+  limpiarFiltros() {
+
+    this.filtroNombre = '';
+    this.filtroNumero = '';
+    this.filtroAnio = '';
+    this.filtroGlobal = '';
+
+  }
+
+  onInputChange() {
+    this.filtroGlobal = `${this.filtroNombre}|${this.filtroNumero}|${this.filtroAnio}`;
   }
 
   navigateToNuevoRequerimiento() {

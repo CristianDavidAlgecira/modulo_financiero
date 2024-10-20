@@ -206,22 +206,22 @@ export class TableComponent implements OnInit, OnChanges {
 
   applyFilter() {
 
-    let datos;
+    let datos = this.data.content;
 
     if (this.filtro) {
-      const filterLower = this.filtro.toLowerCase();
-      datos = this.data.content.filter((item: any) =>
-        item.nombreRequerimiento.toLowerCase().includes(filterLower) ||
-        item.numeroRequerimiento.toString().toLowerCase().includes(filterLower) ||
-        item.anio.toString().includes(filterLower)
-      );
-      this.pageLength = datos.length;
-    } else {
-      datos = this.data.content;
-      this.pageLength = this.data.content.length;
+      const [nombre, numero, anio] = this.filtro.split('|');
+
+      datos = datos.filter((item: any) => {
+        const matchNombre = nombre ? item.nombreRequerimiento.toLowerCase().includes(nombre.toLowerCase()) : true;
+        const matchNumero = numero ? item.numeroRequerimiento.toString().includes(numero) : true;
+        const matchAnio = anio ? item.anio.toString().includes(anio) : true;
+
+        return matchNombre && matchNumero && matchAnio;
+      });
     }
 
-    this.paginatorFilter(0, 5, datos)
+    this.pageLength = datos.length;
+    this.paginatorFilter(0, 5, datos);
 
   }
 

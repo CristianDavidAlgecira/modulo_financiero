@@ -14,36 +14,48 @@
 
         <!-- Input 1 -->
         <div class="w-full">
+
           <label class="text-primary3 font-medium h-full text-xs">Nombre del requerimiento</label>
+
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder="Digite el nombre del requerimiento" (input)="onInputChange($event)">
+            type="text" placeholder="Digite el nombre del requerimiento" [(ngModel)]="filtroNombre"
+            (input)="onInputChange()">
+
         </div>
 
         <!-- Input 2 -->
         <div class="w-full">
+
           <label class="text-primary3 font-medium h-full text-xs">Número del acto administrativo</label>
+
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el número del acto administrativo" (input)="onInputChange($event)">
+            type="number" placeholder="Digite el número del acto administrativo" [(ngModel)]="filtroNumero"
+            (input)="onInputChange()">
+
         </div>
 
         <!-- Input 3 -->
         <div class="w-full">
+
           <label class="text-primary3 font-medium h-full text-xs">Año del acto Administrativo</label>
+
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el año del acto administrativo" (input)="onInputChange($event)">
+            type="number" placeholder="Digite el año del acto administrativo" [(ngModel)]="filtroAnio"
+            (input)="onInputChange()">
+
         </div>
 
       </div>
 
-      <!-- Botón Limpiar -->
+      <!-- Botón de Limpiar Filtros -->
       <div class="flex justify-end p-4 space-x-4">
 
         <button
-          class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-          Limpiar filtros
+          class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+          (click)="limpiarFiltros()">Limpiar filtros
         </button>
 
       </div>
@@ -65,7 +77,7 @@
     <!-- TABLES -->
     <div class="w-full pb-6">
 
-      <app-table [filtro]="filtros"></app-table>
+      <app-table [filtro]="filtroGlobal"></app-table>
 
     </div>
 

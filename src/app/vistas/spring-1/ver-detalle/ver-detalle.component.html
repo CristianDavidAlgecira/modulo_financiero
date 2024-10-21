@@ -1,250 +1,494 @@
 <div class="w-full mb-12 pb-12 text-[14px]">
-    <div class="w-full px-6 sm:px-24 md:px-36 mt-12 mb-12 pb-4">
-        <!-- información inicial -->
-        <div class="sm:grid sm:grid-cols-2 gap-x-4 mt-6 sm:px-24">
-            <!-- Nombre del Requerimiento -->
-            <div class="mb-2 w-full">
-                <p class="text-primary3 font-semibold">
-                    Nombre del Requerimiento
-                </p>
-            </div>
-            <div class="w-full">
-                <p class="text-primary3">
-                    string
-                </p>
-            </div>
-            <!-- Periodo de entrega -->
-            <div class="mb-2 w-full">
-                <p class="text-primary3 font-semibold">
-                    Periodo de entrega
-                </p>
-            </div>
-            <div class="w-full">
-                <p class="text-primary3">
-                    string
-                </p>
-            </div>
-            <!-- Estado vigilados -->
-            <div class="mb-2 w-full">
-                <p class="text-primary3 font-semibold">
-                    Estado vigilados
-                </p>
-            </div>
-            <div class="w-full">
-                <p class="text-primary3">
-                    string
-                </p>
-            </div>
+  <div class="w-full px-6 sm:px-24 md:px-36 mt-12 mb-12 pb-4">
+    <!-- información inicial -->
+    <div *ngIf="!modificando" class="sm:grid sm:grid-cols-2 gap-x-4 mt-6 sm:px-24">
+      <!-- Nombre del Requerimiento -->
+      <div class="mb-2 w-full">
+        <p class="text-primary3 font-semibold">
+          Nombre del Requerimiento
+        </p>
+      </div>
+      <div class="w-full">
+        <p class="text-primary3">
+          {{ data.nombreRequerimiento }}
+        </p>
+      </div>
+      <!-- Periodo de entrega -->
+      <div class="mb-2 w-full">
+        <p class="text-primary3 font-semibold">
+          Periodo de entrega
+        </p>
+      </div>
+      <div class="w-full">
+        <p class="text-primary3">
+          {{ data.periodoEntrega }}
+        </p>
+      </div>
+      <!-- Estado vigilados -->
+      <div class="mb-2 w-full">
+        <p class="text-primary3 font-semibold">
+          Estado vigilados
+        </p>
+      </div>
+      <div class="w-full">
+        <p class="text-primary3">
+          {{ data.estadoVigilado }}
+        </p>
+      </div>
 
-            <!-- Tipo de Programación -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Tipo de Programación
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    Programación por Dígito NIT
-                </p>
-            </div>
-            <!-- Número Acto administrativo -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Número Acto administrativo
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    {{numeroActo}}
-                </p>
-            </div>
-            <!-- Fehca de Publicación -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Fecha de Publicación
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    24/01/2024
-                </p>
-            </div>
-            <!-- AÑO -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Año
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    24/01/2024
-                </p>
-            </div>
-            <!-- Funcionario programador -->
-            <div class="mb-2 w-full">
-                <p class="text-primary3 font-semibold">
-                    Funcionario programador
-                </p>
-            </div>
-            <div class="w-full">
-                <p class="text-primary3">
-                    Cristian pro
-                </p>
-            </div>
-            <!-- Fecha creación -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Fecha creación
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    17/09/2024
-                </p>
-            </div>
-            <!-- Estado -->
-            <div class="mb-2 mt-6 w-full">
-                <p class="text-primary3 font-semibold">
-                    Estado
-                </p>
-            </div>
-            <div class="w-full mt-6">
-                <p class="text-primary3">
-                    string
-                </p>
-            </div>
+      <!-- Tipo de Programación -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Tipo de Programación
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ data.tipoProgramacion }}
+        </p>
+      </div>
+      <!-- Número Acto administrativo -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Número Acto administrativo
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ data.numeroRequerimiento }}
+        </p>
+      </div>
+      <!-- Fehca de Publicación -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Fecha de Publicación
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ this.formatField(data.fechaInicio) }}
+        </p>
+      </div>
+      <!-- AÑO -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Año
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ data.anio }}
+        </p>
+      </div>
+      <!-- Funcionario programador -->
+      <div class="mb-2 w-full">
+        <p class="text-primary3 font-semibold">
+          Funcionario programador
+        </p>
+      </div>
+      <div class="w-full">
+        <p class="text-primary3">
+          {{ data.funcionarioProgramador }}
+        </p>
+      </div>
+      <!-- Fecha creación -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Fecha creación
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ this.formatField(data.fechaCreacion) }}
+        </p>
+      </div>
+      <!-- Estado -->
+      <div class="mb-2 mt-6 w-full">
+        <p class="text-primary3 font-semibold">
+          Estado
+        </p>
+      </div>
+      <div class="w-full mt-6">
+        <p class="text-primary3">
+          {{ data.estado }}
+        </p>
+      </div>
+    </div>
+    <!-- información inicial para modificar -->
+    <form *ngIf="modificando" [formGroup]="formGroup1" class="sm:grid sm:grid-cols-2 gap-x-6 mt-6 sm:px-24">
+      <!-- Nombre del Requerimiento -->
+      <div class="w-full mb-2">
+        <div class="mb-2 w-full">
+          <p class="text-primary3 font-semibold">
+            Nombre del Requerimiento
+          </p>
         </div>
-        <!-- TABLE -->
-        <div class="mt-4 w-full mb-6 hidden sm:block">
+        <!-- input -->
+        <div class="w-full relative h-full">
+          <input
+            class="shadow-sm rounded-md min-w-[160px] w-full p-[10px] h-[40px] border border-primary3 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" formControlName="nombreRequerimiento" required placeholder="Ingrese nombre requerimiento">
+          <div class="w-full relative">
+            <!-- Icono de error (rojo) -->
+            <span
+              *ngIf="formGroup1.get('nombreRequerimiento')?.invalid && (formGroup1.get('nombreRequerimiento')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-exclamation-circle text-error text-[24px]"></span>
+                            </span>
 
-            <div class="flex flex-col">
+            <!-- Icono de éxito (verde) -->
+            <span
+              *ngIf="formGroup1.get('nombreRequerimiento')?.valid && (formGroup1.get('nombreRequerimiento')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-check-circle text-success text-[24px]"></span>
+                            </span>
+          </div>
+          <span *ngIf="submitted && formGroup1.get('nombreRequerimiento')?.errors?.['required']"
+                class="text-error">
+                            El numero de contrato es obligatorio
+                        </span>
 
-                <div class="inline-block shadow">
+        </div>
+      </div>
+      <!-- Periodo de entrega -->
+      <div class="w-full mb-2">
+        <div class="mb-2 w-full">
+          <p class="text-primary3 font-semibold">
+            Periodo de entrega
+          </p>
+        </div>
+        <!-- select 1 -->
+        <div class="w-full relative mt-2">
 
-                    <div class="min-w-full py-2">
+          <div (click)="toggleDropdown(0)"
+               [ngClass]="{'text-error !border border-error': formGroup1.get('periodoEntrega')?.invalid && (formGroup1.get('periodoEntrega')?.touched || formGroup1.get('periodoEntrega')?.dirty)}"
+               class="cursor-pointer shadow-sm min-w-[160px] w-full p-[10px] h-[40px] bg-transparent border-2 border-secondary1 focus:outline-none focus:border-primary1 flex justify-between items-center">
+            <span *ngIf="!selects[0].value" class="font-[500] text-xs">Seleccione</span>
+            <span *ngIf="selects[0].value" class="text-normal">{{
+                formGroup1.get('periodoEntrega')?.value.label
+              }}</span>
 
-                        <div class="overflow-x-auto">
+            <i class="pi pi-chevron-down text-primary2 text-xs"
+               [ngClass]="{'!text-error': formGroup1.get('periodoEntrega')?.invalid && (formGroup1.get('periodoEntrega')?.touched || formGroup1.get('periodoEntrega')?.dirty)}"></i>
+          </div>
 
-                            <div class="h-full">
+          <ul *ngIf="selects[0].isDropdownOpen"
+              class="absolute z-20 bg-secondary4 border border-primary1 shadow-md rounded-bl-md rounded-br-md w-full mt-1 max-h-48 overflow-y-auto">
+            <li *ngFor="let option of periodo" (click)="selectOption(0, option, 'periodoEntrega')"
+                class="cursor-pointer px-4 py-2 hover:bg-primary1 hover:text-white">
+              {{ option.label }}
+            </li>
+          </ul>
+          <!-- Mensajes de validación -->
+          <span class="text-sm text-success"
+                *ngIf="formGroup1.get('periodoEntrega')?.valid && formGroup1.get('periodoEntrega')?.touched">
+                            Selección válida
+                        </span>
+          <span class="text-sm text-error"
+                *ngIf="formGroup1.get('periodoEntrega')?.invalid && (formGroup1.get('periodoEntrega')?.touched || formGroup1.get('periodoEntrega')?.dirty)">
+                            {{ selects[0].errorMessage }}
+                        </span>
 
-                                <table class="w-full overflow-auto border-2 border-secondary1">
+        </div>
 
-                                    <thead
-                                        class="bg-secondary1 sticky top-0 text-left font-semibold tracking-wide text-primary2 z-10">
+      </div>
 
-                                        <tr class="border-b">
+      <!-- Tipo de Programación -->
+      <div class="w-full mb-2">
+        <div class="mb-2 mt-6 w-full">
+          <p class="text-primary3 font-semibold">
+            Tipo de Programación
+          </p>
+        </div>
+        <!-- select -->
+        <div class="w-full relative mt-2">
 
-                                            <th class="px-5 py-3 font-semibold tracking-wider">
+          <div (click)="toggleDropdown(1)"
+               [ngClass]="{'text-error !border border-error': formGroup1.get('tipoProgramacion')?.invalid && (formGroup1.get('tipoProgramacion')?.touched || formGroup1.get('tipoProgramacion')?.dirty)}"
+               class="cursor-pointer shadow-sm min-w-[160px] w-full p-[10px] h-[40px] bg-transparent border-2 border-secondary1 focus:outline-none focus:border-primary1 flex justify-between items-center">
+            <span *ngIf="!selects[1].value" class="font-[500] text-xs">Seleccione</span>
+            <span *ngIf="selects[1].value" class="text-normal">{{
+                formGroup1.get('tipoProgramacion')?.value.label
+              }}</span>
+
+            <i class="pi pi-chevron-down text-primary2 text-xs"
+               [ngClass]="{'!text-error': formGroup1.get('tipoProgramacion')?.invalid && (formGroup1.get('tipoProgramacion')?.touched || formGroup1.get('tipoProgramacion')?.dirty)}"></i>
+          </div>
+
+          <ul *ngIf="selects[1].isDropdownOpen"
+              class="absolute z-20 bg-secondary4 border border-primary1 shadow-md rounded-bl-md rounded-br-md w-full mt-1 max-h-48 overflow-y-auto">
+            <li *ngFor="let option of tipoProgramacion" (click)="selectOption(1, option, 'tipoProgramacion')"
+                class="cursor-pointer px-4 py-2 hover:bg-primary1 hover:text-white">
+              {{ option.label }}
+            </li>
+          </ul>
+          <!-- Mensajes de validación -->
+          <span class="text-sm text-success"
+                *ngIf="formGroup1.get('tipoProgramacion')?.valid && formGroup1.get('tipoProgramacion')?.touched">
+                            Selección válida
+                        </span>
+          <span class="text-sm text-error"
+                *ngIf="formGroup1.get('tipoProgramacion')?.invalid && (formGroup1.get('tipoProgramacion')?.touched || formGroup1.get('tipoProgramacion')?.dirty)">
+                            {{ selects[1].errorMessage }}
+                        </span>
+
+        </div>
+      </div>
+      <!-- Número Acto administrativo -->
+      <div class="w-full mb-2">
+        <div class="mb-2 mt-6 w-full">
+          <p class="text-primary3 font-semibold">
+            Número Acto administrativo
+          </p>
+        </div>
+        <!-- input -->
+        <div class="w-full relative h-full">
+          <input
+            class="shadow-sm rounded-md min-w-[160px] w-full p-[10px] h-[40px] border border-primary3 focus:outline-none focus:border-primary1 bg-transparent"
+            type="number" formControlName="numeroRequerimiento" placeholder="Ingrese numero requerimiento">
+          <div class="w-full relative">
+            <!-- Icono de error (rojo) -->
+            <span
+              *ngIf="formGroup1.get('numeroRequerimiento')?.invalid && (formGroup1.get('numeroRequerimiento')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-exclamation-circle text-error text-[24px]"></span>
+                            </span>
+
+            <!-- Icono de éxito (verde) -->
+            <span
+              *ngIf="formGroup1.get('numeroRequerimiento')?.valid && (formGroup1.get('numeroRequerimiento')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-check-circle text-success text-[24px]"></span>
+                            </span>
+          </div>
+          <span *ngIf="submitted && formGroup1.get('numeroRequerimiento')?.errors?.['required']"
+                class="text-error">
+                            El numero acto administrativo es obligatorio
+                        </span>
+
+        </div>
+      </div>
+      <!-- Fehca de Publicación -->
+      <div class="w-full mb-2">
+        <div class="mb-2 mt-6 w-full">
+          <p class="text-primary3 font-semibold">
+            Fecha de Publicación
+          </p>
+        </div>
+        <div class="w-full mt-6">
+          <p class="text-primary3">
+            {{ this.formatField(data.fechaInicio) }}
+          </p>
+        </div>
+      </div>
+      <!-- AÑO -->
+      <div class="w-full mb-2">
+        <div class="mb-2 mt-6 w-full">
+          <p class="text-primary3 font-semibold">
+            Año
+          </p>
+        </div>
+        <div class="w-full mt-6">
+          <p class="text-primary3">
+            {{ data.anio }}
+          </p>
+        </div>
+      </div>
+      <!-- Funcionario programador -->
+      <div class="w-full mb-2">
+        <div class="mb-2 w-full">
+          <p class="text-primary3 font-semibold">
+            Funcionario programador
+          </p>
+        </div>
+        <div class="w-full">
+          <p class="text-primary3">
+            {{ data.funcionarioProgramador }}
+          </p>
+        </div>
+      </div>
+      <!-- Datos no modificables-->
+      <div>
+        <!-- Fecha creación -->
+        <div class="w-full mb-2">
+          <div class="mb-2 mt-6 w-full">
+            <p class="text-primary3 font-semibold">
+              Fecha creación
+            </p>
+          </div>
+          <div class="w-full mt-6">
+            <p class="text-primary3">
+              {{ this.formatField(data.fechaCreacion) }}
+            </p>
+          </div>
+        </div>
+        <!-- Estado vigilados -->
+        <div class="w-full mb-2">
+          <div class="mb-2 w-full">
+            <p class="text-primary3 font-semibold">
+              Estado vigilados
+            </p>
+          </div>
+          <div class="w-full">
+            <p class="text-primary3">
+              {{ data.estadoVigilado }}
+            </p>
+          </div>
+
+        </div>
+        <!-- Estado -->
+        <div class="w-full mb-2">
+          <div class="mb-2 mt-6 w-full">
+            <p class="text-primary3 font-semibold">
+              Estado
+            </p>
+          </div>
+          <div class="w-full mt-6">
+            <p class="text-primary3">
+              {{ data.estado }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    <!-- TABLE -->
+    <div class="mt-4 w-full mb-6 hidden sm:block">
+
+      <div class="flex flex-col">
+
+        <div class="inline-block shadow">
+
+          <div class="min-w-full py-2">
+
+            <div class="overflow-x-auto">
+
+              <div class="h-full">
+
+                <table class="w-full overflow-auto border-2 border-secondary1">
+
+                  <thead
+                    class="bg-secondary1 sticky top-0 text-left font-semibold tracking-wide text-primary2 z-10">
+
+                  <tr class="border-b">
+
+                    <th class="px-5 py-3 font-semibold tracking-wider">
                                                 <span>
                                                     Programación por Dígitos
                                                 </span>
-                                            </th>
-                                            <th class="px-5 py-3 font-semibold tracking-wider">
+                    </th>
+                    <th class="px-5 py-3 font-semibold tracking-wider">
                                                 <span>
 
                                                     Rango Dígitos
                                                 </span>
-                                            </th>
-                                            <th class="px-5 py-3 font-semibold tracking-wider">
+                    </th>
+                    <th class="px-5 py-3 font-semibold tracking-wider">
                                                 <span>
 
                                                     Rango fechas de Registro
                                                 </span>
-                                            </th>
+                    </th>
 
-                                        </tr>
+                  </tr>
 
-                                    </thead>
+                  </thead>
 
-                                    <tbody>
-                                        <!-- 1 -->
-                                        <tr class="text-primary3 border-b-2 border-secondary1 bg-white">
-                                            <!-- 1 -->
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    Último Dígito
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    1
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    10/05/2024 - 15/05/2024
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <!-- 2 -->
-                                        <tr class="text-primary3 border-b-2 border-secondary1 bg-secondary1">
-                                            <!-- 2 -->
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    Último Dígito
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    2
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    10/05/2024 - 17/05/2024
-                                                </p>
-                                            </td>
-                                        </tr>
+                  <tbody>
+                  <!-- 1 -->
+                  <tr class="text-primary3 border-b-2 border-secondary1 bg-white">
+                    <!-- 1 -->
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        Último Dígito
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        1
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        10/05/2024 - 15/05/2024
+                      </p>
+                    </td>
+                  </tr>
+                  <!-- 2 -->
+                  <tr class="text-primary3 border-b-2 border-secondary1 bg-secondary1">
+                    <!-- 2 -->
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        Último Dígito
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        2
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        10/05/2024 - 17/05/2024
+                      </p>
+                    </td>
+                  </tr>
 
-                                        <!-- 3 -->
-                                        <tr class="text-primary3 border-b-2 border-secondary1 bg-white">
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    Último Dígito
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    3
-                                                </p>
-                                            </td>
-                                            <td class="px-5 py-2">
-                                                <p class="whitespace-no-wrap">
-                                                    10/05/2024 - 20/05/2024
-                                                </p>
-                                            </td>
+                  <!-- 3 -->
+                  <tr class="text-primary3 border-b-2 border-secondary1 bg-white">
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        Último Dígito
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        3
+                      </p>
+                    </td>
+                    <td class="px-5 py-2">
+                      <p class="whitespace-no-wrap">
+                        10/05/2024 - 20/05/2024
+                      </p>
+                    </td>
 
-                                        </tr>
+                  </tr>
 
-                                    </tbody>
+                  </tbody>
 
 
-                                </table>
+                </table>
 
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
+              </div>
 
             </div>
 
-        </div>
-        <!-- Botones de filtros -->
-        <div class="flex justify-end p-4 space-x-4">
-            <!-- Botón Limpiar -->
-            <button
-                class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-                Modificar
-            </button>
+          </div>
 
-            <!-- Botón Limpiar -->
-            <button (click)="regresar()"
-                class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-                Regresar
-            </button>
         </div>
+
+      </div>
+
     </div>
+    <!-- Botones de filtros -->
+    <div class="flex justify-end p-4 space-x-4">
+      <!-- Botón modificar -->
+      <button *ngIf="!modificando" (click)="modificando = true"
+              class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+        Modificar
+      </button>
+
+      <!-- Botón guardar -->
+      <button *ngIf="modificando" (click)="modificando = false"
+              class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+        Modificar
+      </button>
+
+      <!-- Botón Limpiar -->
+      <button (click)="regresar()"
+              class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+        Regresar
+      </button>
+    </div>
+  </div>
 </div>

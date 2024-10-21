@@ -1,8 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {CommonModule, formatDate, NgForOf, NgIf} from '@angular/common';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {PageEvent} from '@angular/material/paginator';
 import {Router} from '@angular/router';
+import {ApiMFService} from "../../services/api/api-mf.service";
 
 @Component({
   selector: 'app-table',
@@ -21,108 +22,16 @@ export class TableComponent implements OnInit, OnChanges {
   paginatedData: any = [];
   pageLength: number = 0;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private apiMFService: ApiMFService,
+    private cdRef: ChangeDetectorRef, // Inyecta el ChangeDetectorRef
+  ) {
   }
 
   ngOnInit() {
 
-    this.data = {
-      totalElements: 0,
-      totalPages: 0,
-      pageable: {
-        paged: true,
-        pageNumber: 0,
-        pageSize: 0,
-        offset: 0,
-        sort: [
-          {
-            direction: 'string',
-            nullHandling: 'string',
-            ascending: true,
-            property: 'string',
-            ignoreCase: true,
-          },
-        ],
-        unpaged: true,
-      },
-      size: 0,
-      content: [
-        {
-          nombreRequerimiento: 'General anualizada',
-          numeroRequerimiento: '413',
-          anio: '2024',
-          fechaInicio: '2024-10-15T12:42:49.226Z',
-          fechaFin: '2024-10-15T12:42:49.226Z',
-          diasFaltantes: '0',
-          estado: 'cancelado',
-          detalle: '413',
-        },
-        {
-          nombreRequerimiento: 'Modelo de negocios especiales',
-          numeroRequerimiento: '398',
-          anio: '2023',
-          fechaInicio: '2023-10-15T12:42:49.226Z',
-          fechaFin: '2023-10-15T12:42:49.226Z',
-          diasFaltantes: '10',
-          estado: 'proceso',
-          detalle: '398',
-        },
-        {
-          nombreRequerimiento: 'Periodos intermedios',
-          numeroRequerimiento: '390',
-          anio: '2022',
-          fechaInicio: '2022-10-15T12:42:49.226Z',
-          fechaFin: '2022-10-15T12:42:49.226Z',
-          diasFaltantes: '0',
-          estado: 'finalizado',
-          detalle: '390',
-        },
-        {
-          nombreRequerimiento: 'Periodos intermedios',
-          numeroRequerimiento: '390',
-          anio: '2022',
-          fechaInicio: '2022-10-15T12:42:49.226Z',
-          fechaFin: '2022-10-15T12:42:49.226Z',
-          diasFaltantes: '0',
-          estado: 'finalizado',
-          detalle: '390',
-        },
-        {
-          nombreRequerimiento: 'Periodos intermedios',
-          numeroRequerimiento: '390',
-          anio: '2022',
-          fechaInicio: '2022-10-15T12:42:49.226Z',
-          fechaFin: '2022-10-15T12:42:49.226Z',
-          diasFaltantes: '0',
-          estado: 'finalizado',
-          detalle: '390',
-        },
-        {
-          nombreRequerimiento: 'Modelo de negocios especiales',
-          numeroRequerimiento: '398',
-          anio: '2023',
-          fechaInicio: '2023-10-15T12:42:49.226Z',
-          fechaFin: '2023-10-15T12:42:49.226Z',
-          diasFaltantes: '10',
-          estado: 'proceso',
-          detalle: '398',
-        },
-      ],
-      number: 0,
-      sort: [
-        {
-          direction: 'string',
-          nullHandling: 'string',
-          ascending: true,
-          property: 'string',
-          ignoreCase: true,
-        },
-      ],
-      numberOfElements: 0,
-      first: true,
-      last: true,
-      empty: true,
-    };
+    this.loadInitialData();
 
     this.headers = [
       {
@@ -167,6 +76,28 @@ export class TableComponent implements OnInit, OnChanges {
 
     this.applyFilter();
 
+  }
+
+  loadInitialData(): void {
+
+    this.getRequerimientos();
+  }
+
+  getRequerimientos(): void {
+    // traer los datos de la consulta
+    this.apiMFService.getRequerimientos()
+      .subscribe(
+        (response) => {
+          console.log(response);
+            this.data = response;
+            this.cdRef.detectChanges(); // Forzar la detección de cambios
+
+        },
+        (error) => {
+          this.cdRef.detectChanges(); // Forzar la detección de cambios
+          console.error('Error fetching user data', error);
+        }
+      );
   }
 
   get info(): string[] {

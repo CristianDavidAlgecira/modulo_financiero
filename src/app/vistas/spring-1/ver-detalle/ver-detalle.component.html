@@ -44,7 +44,7 @@
       </div>
       <div class="w-full mt-6">
         <p class="text-primary3">
-          {{ data.tipoProgramacion }}
+          {{ data.tipoProgramacion[0].descripcion }}
         </p>
       </div>
       <!-- Número Acto administrativo -->
@@ -135,7 +135,6 @@
               class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
                                 <span class="pi pi-exclamation-circle text-error text-[24px]"></span>
                             </span>
-
             <!-- Icono de éxito (verde) -->
             <span
               *ngIf="formGroup1.get('nombreRequerimiento')?.valid && (formGroup1.get('nombreRequerimiento')?.touched || submitted)"
@@ -145,7 +144,7 @@
           </div>
           <span *ngIf="submitted && formGroup1.get('nombreRequerimiento')?.errors?.['required']"
                 class="text-error">
-                            El numero de contrato es obligatorio
+                            El nombre del requerimiento no puede estar vacío
                         </span>
 
         </div>
@@ -245,7 +244,7 @@
         <div class="w-full relative h-full">
           <input
             class="shadow-sm rounded-md min-w-[160px] w-full p-[10px] h-[40px] border border-primary3 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" formControlName="numeroRequerimiento" placeholder="Ingrese numero requerimiento">
+            type="number" formControlName="numeroRequerimiento" required placeholder="Ingrese numero requerimiento">
           <div class="w-full relative">
             <!-- Icono de error (rojo) -->
             <span
@@ -263,7 +262,7 @@
           </div>
           <span *ngIf="submitted && formGroup1.get('numeroRequerimiento')?.errors?.['required']"
                 class="text-error">
-                            El numero acto administrativo es obligatorio
+                            El numero acto administrativo no puede estar vacío
                         </span>
 
         </div>
@@ -275,11 +274,9 @@
             Fecha de Publicación
           </p>
         </div>
-        <div class="w-full mt-6">
-          <p class="text-primary3">
-            {{ this.formatField(data.fechaInicio) }}
-          </p>
-        </div>
+        <input
+          class="shadow-sm rounded-md w-full p-[10px] h-[40px] border border-primary3 focus:outline-none focus:border-primary1 bg-transparent"
+          type="datetime-local" formControlName="fechaInicio" required placeholder="dd/mm/aaaa">
       </div>
       <!-- AÑO -->
       <div class="w-full mb-2">
@@ -290,7 +287,7 @@
         </div>
         <div class="w-full mt-6">
           <p class="text-primary3">
-            {{ data.anio }}
+            {{ anioPublicacion != '' ? anioPublicacion : data.anio }}
           </p>
         </div>
       </div>
@@ -301,29 +298,49 @@
             Funcionario programador
           </p>
         </div>
-        <div class="w-full">
-          <p class="text-primary3">
-            {{ data.funcionarioProgramador }}
-          </p>
+        <!-- input -->
+        <div class="w-full relative h-full">
+          <input
+            class="shadow-sm rounded-md min-w-[160px] w-full p-[10px] h-[40px] border border-primary3 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" formControlName="funcionarioProgramador" required placeholder="Ingrese nombre requerimiento">
+          <div class="w-full relative">
+            <!-- Icono de error (rojo) -->
+            <span
+              *ngIf="formGroup1.get('funcionarioProgramador')?.invalid && (formGroup1.get('funcionarioProgramador')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-exclamation-circle text-error text-[24px]"></span>
+                            </span>
+            <!-- Icono de éxito (verde) -->
+            <span
+              *ngIf="formGroup1.get('funcionarioProgramador')?.valid && (formGroup1.get('funcionarioProgramador')?.touched || submitted)"
+              class="absolute top-[-33px] right-0 flex items-center pr-[10px]">
+                                <span class="pi pi-check-circle text-success text-[24px]"></span>
+                            </span>
+          </div>
+          <span *ngIf="submitted && formGroup1.get('funcionarioProgramador')?.errors?.['required']"
+                class="text-error">
+                            El nombre del funcionario no puede quedar vacío
+                        </span>
+
         </div>
       </div>
       <!-- Datos no modificables-->
-      <div>
+      <div class="mt-4 col-span-2 w-full">
         <!-- Fecha creación -->
-        <div class="w-full mb-2">
-          <div class="mb-2 mt-6 w-full">
+        <div class="w-full mb-1">
+          <div class="w-full">
             <p class="text-primary3 font-semibold">
               Fecha creación
             </p>
           </div>
-          <div class="w-full mt-6">
+          <div class="w-full mt-2">
             <p class="text-primary3">
               {{ this.formatField(data.fechaCreacion) }}
             </p>
           </div>
         </div>
         <!-- Estado vigilados -->
-        <div class="w-full mb-2">
+        <div class="w-full mb-1">
           <div class="mb-2 w-full">
             <p class="text-primary3 font-semibold">
               Estado vigilados
@@ -337,13 +354,13 @@
 
         </div>
         <!-- Estado -->
-        <div class="w-full mb-2">
-          <div class="mb-2 mt-6 w-full">
+        <div class="w-full mb-1">
+          <div class="mb-2 w-full">
             <p class="text-primary3 font-semibold">
               Estado
             </p>
           </div>
-          <div class="w-full mt-6">
+          <div class="w-full">
             <p class="text-primary3">
               {{ data.estado }}
             </p>
@@ -481,7 +498,12 @@
       <!-- Botón guardar -->
       <button *ngIf="modificando" (click)="modificando = false"
               class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-        Modificar
+        Cerrar
+      </button>
+      <!-- Botón guardar -->
+      <button *ngIf="modificando" (click)="ActualizarDatos()"
+              class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+        Guardar
       </button>
 
       <!-- Botón Limpiar -->

@@ -37,12 +37,15 @@
       <!-- Contenido 1 -->
       <div class="md:flex justify-center gap-4 px-4 pb-8">
 
-        <!-- Input 1 -->
+        <!-- Caja seleccionable 1 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Nombre del requerimiento</label>
-          <input
+          <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
+            [(ngModel)]="filtroNombreRequerimiento">
+            <option value="" disabled selected hidden>Seleccione el nombre del requerimiento</option>
+            <option *ngFor="let nombre of nombreRequerimientos" [value]="nombre">{{ nombre }}</option>
+          </select>
         </div>
 
         <!-- Input 2 -->
@@ -50,15 +53,29 @@
           <label class="text-primary3 font-medium h-full text-xs">*Fecha Inicio</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" placeholder="dd/mm/aaaa">
+            type="date">
         </div>
 
-        <!-- Input 3 -->
+        <!-- Caja seleccionable 2 -->
         <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
-          <input
+          <label class="text-primary3 font-medium h-full text-xs">*Periodo de entrega</label>
+          <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" placeholder="dd/mm/aaaa">
+            [(ngModel)]="filtroPeriodo">
+            <option value="" disabled selected hidden>Seleccione el periodo de entrega</option>
+            <option *ngFor="let periodo of periodos" [value]="periodo">{{ periodo }}</option>
+          </select>
+        </div>
+
+        <!-- Caja seleccionable 3 -->
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full text-xs">Estado del vigilado</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            [(ngModel)]="filtroEstados">
+            <option value="" disabled selected hidden>Seleccione el estado del vigilado</option>
+            <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+          </select>
         </div>
 
       </div>
@@ -66,146 +83,45 @@
       <!-- Contenido 2 -->
       <div class="md:flex justify-center gap-4 px-4 pb-8">
 
-        <!-- Input 4 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">*Periodo de entrega</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
-        </div>
-
         <!-- Input 5 -->
         <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Delegatura</label>
+          <label class="text-primary3 font-medium h-full text-xs">Número acto administrativo</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
+            type="number" placeholder="Digite el número de acto administrativo">
         </div>
 
         <!-- Input 6 -->
         <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Tipo de vigilado</label>
+          <label class="text-primary3 font-medium h-full text-xs">Fecha publicación</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
+            type="date">
         </div>
 
-        <!-- Botón Adicionar -->
-        <div class="p-7">
-          <app-primary-button type="button">Adicionar</app-primary-button>
+        <!-- Input 7 -->
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full text-xs">Año</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="number" placeholder="Digite el número de año">
+        </div>
+
+        <!-- Caja seleccionable 4 -->
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full text-xs">*Tipo de programación</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            [(ngModel)]="filtroProgramaciones">
+            <option value="" disabled selected hidden>Seleccione el tipo de programación</option>
+            <option *ngFor="let programacion of programaciones" [value]="programacion">{{ programacion }}</option>
+          </select>
         </div>
 
       </div>
 
       <!-- Contenido 3 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
-
-        <!-- Input 7 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Estado vigilado</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="text" placeholder=" ">
-        </div>
-
-        <!-- Input 8 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Programación por digitos NIT</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-      </div>
-
-      <!-- Contenido 4 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
-
-        <!-- Input 9 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Digitos Iniciales</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-        <!-- Input 10 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Digitos Finales</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-        <!-- Botón Adicionar -->
-        <div class="p-7">
-          <app-primary-button type="button">Adicionar</app-primary-button>
-        </div>
-
-      </div>
-
-      <!-- Contenido 5 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
-
-        <!-- Input 11 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Programación individual por NIT</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-        <!-- Botón buscar NIT -->
-        <div class="p-7">
-          <app-primary-button type="button">Buscar</app-primary-button>
-        </div>
-
-        <!-- Input 12 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Razón Social</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-        <!-- Botón buscar razon social -->
-        <div class="p-7">
-          <app-primary-button type="button">Buscar</app-primary-button>
-        </div>
-
-      </div>
-
-      <!-- Contenido 6 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
-
-        <!-- Input 13 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Número acto administrativo</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-        <!-- Input 14 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Fecha publicación</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" placeholder=" ">
-        </div>
-
-        <!-- Input 15 -->
-        <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Año</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder=" ">
-        </div>
-
-      </div>
-
-      <!-- Contenido 7 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
+      <div class="md:flex justify-center gap-4 px-4 pb-16">
 
         <!-- Carga de archivo pdf -->
         <div class="flex flex-col w-full h-full justify-center items-start pt-6l my-auto mb-2">
@@ -215,6 +131,137 @@
 
           <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
                            [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+        </div>
+
+      </div>
+
+
+      <!-- Contenido desplegable -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <div class="md:flex justify-center gap-4 px-4 pb-8" *ngIf="filtroProgramaciones === 'Delegatura'">
+
+          <!-- Input 8 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="date">
+          </div>
+
+          <!-- Caja seleccionable 5 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Delegatura</label>
+            <select
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              [(ngModel)]="filtroDelegaturas"
+              (change)="onDelegaturaChange()">
+              <option value="" disabled selected hidden>Seleccione el tipo de delegatura</option>
+              <option *ngFor="let delegatura of delgaturas" [value]="delegatura">{{ delegatura }}</option>
+            </select>
+          </div>
+
+          <!-- Caja seleccionable 6 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
+            <select
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              [(ngModel)]="filtroVigilados"
+              [disabled]="!filtroDelegaturas">
+              <option value="" disabled selected hidden>Seleccione el tipo de vigilado</option>
+              <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
+            </select>
+          </div>
+
+          <!-- Botón Adicionar -->
+          <div class="p-7">
+            <app-primary-button type="button">Adicionar</app-primary-button>
+          </div>
+
+        </div>
+
+        <div class="md:flex justify-center gap-4 px-4 pb-8"
+             *ngIf="filtroProgramaciones === 'Programación por dígito NIT'">
+
+          <!-- Input 9 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="date">
+          </div>
+
+          <!-- Caja seleccionable 7 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Programación por dígitos NIT</label>
+            <select
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              [(ngModel)]="filtroDigitos">
+              <option value="" disabled selected hidden>Seleccione la programación por dígitos NIT</option>
+              <option *ngFor="let digito of digitos" [value]="digito">{{ digito }}</option>
+            </select>
+          </div>
+
+          <!-- Input 10 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="number" placeholder="Dígito(s) Inicial">
+          </div>
+
+          <!-- Input 11 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="number" placeholder="Dígito(s) Final">
+          </div>
+
+          <!-- Botón Adicionar -->
+          <div class="p-7">
+            <app-primary-button type="button">Adicionar</app-primary-button>
+          </div>
+
+        </div>
+
+        <div class="md:flex justify-center gap-4 px-4 pb-8"
+             *ngIf="filtroProgramaciones === 'Programación individual por NIT'">
+
+          <!-- Input 12 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="date">
+          </div>
+
+          <!-- Input 13 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Programación Individual por NIT</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="number" placeholder="Digite el NIT de la empresa">
+          </div>
+
+          <!-- Botón Buscar -->
+          <div class="p-7">
+            <app-primary-button type="button">Buscar</app-primary-button>
+          </div>
+
+          <!-- Input 14 -->
+          <div class="w-full">
+            <label class="text-primary3 font-medium h-full text-xs">*Razón social</label>
+            <input
+              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+              type="text" placeholder="Digite el nombre de la razón social">
+          </div>
+
+          <!-- Botón Buscar -->
+          <div class="p-7">
+            <app-primary-button type="button">Buscar</app-primary-button>
+          </div>
+
         </div>
 
       </div>

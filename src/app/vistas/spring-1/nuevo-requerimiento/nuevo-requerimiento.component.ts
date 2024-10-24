@@ -92,6 +92,17 @@ export class NuevoRequerimientoComponent implements OnInit {
   ];
   filtroDigitos: string = '';
 
+  // Variable para almacenar la fecha
+  fechaActual: string = '';
+
+  // Variables para dias requerimiento
+  fechaInicio: string = '';
+  fechaFin: string = '';
+  diasRequerimiento: number = 0;
+
+  // Variables para digitos
+  digitoInicial: number | null = null;
+  digitoFinal: number | null = null;
 
   // Constructor
   constructor(
@@ -110,6 +121,13 @@ export class NuevoRequerimientoComponent implements OnInit {
   errorStates: { [key: number]: boolean } = {};
 
   ngOnInit() {
+
+    const hoy = new Date();
+    const dia = hoy.getDate().toString().padStart(2, '0'); // Formatear para dos dígitos
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const anio = hoy.getFullYear().toString();
+
+    this.fechaActual = `${dia}/${mes}/${anio}`;
 
     this.errorService.errorStates$.subscribe((errorStates) => {
       this.errorStates = errorStates;
@@ -189,13 +207,72 @@ export class NuevoRequerimientoComponent implements OnInit {
         this.vigilados = ['TODOS', ...option3];
         break;
       case 'Todas':
-        this.vigilados = ['TODOS', ...option1, ...option2, ...option3];
+        this.vigilados = ['TODOS'];
         break;
       default:
         this.vigilados = [];
     }
 
     this.filtroVigilados = '';
+
+  }
+
+  onProgramacionChange(): void {
+
+    this.fechaFin = '';
+    this.diasRequerimiento = 0;
+
+  }
+
+  calcularDias(): void {
+
+    if (this.fechaInicio && this.fechaFin) {
+
+      const fechaInicioDate = new Date(this.fechaInicio);
+      const fechaFinDate = new Date(this.fechaFin);
+      const diffTime = fechaFinDate.getTime() - fechaInicioDate.getTime();
+      this.diasRequerimiento = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    }
+
+  }
+
+  esOpcionSeleccionada(): boolean {
+
+    return this.filtroDigitos === 'Último Dígito' ||
+      this.filtroDigitos === 'Dos últimos dígitos' ||
+      this.filtroDigitos === 'Tres últimos dígitos';
+
+  }
+
+  validarDigito(event: any): void {
+
+    const valor = event.target.value;
+
+    switch (this.filtroDigitos) {
+
+      case 'Último Dígito':
+        if (valor < 0 || valor > 9 || valor.length > 1) {
+          event.target.value = '';
+        }
+        break;
+
+      case 'Dos últimos dígitos':
+        if (valor < 0 || valor > 99 || valor.length > 2) {
+          event.target.value = '';
+        }
+        break;
+
+      case 'Tres últimos dígitos':
+        if (valor < 0 || valor > 999 || valor.length > 3) {
+          event.target.value = '';
+        }
+        break;
+
+      default:
+        event.target.value = '';
+
+    }
 
   }
 

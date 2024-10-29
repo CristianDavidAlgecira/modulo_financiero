@@ -3,6 +3,9 @@ import {InicioComponent} from './vistas/inicio/inicio.component';
 import {AdministracionComponent} from './vistas/spring-1/administracion/administracion.component';
 import {NuevoRequerimientoComponent} from './vistas/spring-1/nuevo-requerimiento/nuevo-requerimiento.component';
 import {VerDetalleComponent} from './vistas/spring-1/ver-detalle/ver-detalle.component';
+import LoginComponent from "./vistas/login/login.component";
+import {AuthGuard} from "./auth.guard";
+import {AuthLoginComponent} from "./layout/login/auth-login.component";
 
 export const routes: Routes = [
 
@@ -13,14 +16,17 @@ export const routes: Routes = [
       {
         path: 'administracion',
         loadComponent: () => AdministracionComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'nuevo-requerimiento',
         loadComponent: () => NuevoRequerimientoComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'detalle-requerimientos',
         loadComponent: () => VerDetalleComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: '',
@@ -28,6 +34,30 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: '',
+    loadComponent: () => AuthLoginComponent,
+    children: [
+      {
+        path: 'login',
+        loadComponent: () => LoginComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: 'administracion'
+
   }
+
+
 
 ];

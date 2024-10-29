@@ -7,34 +7,34 @@ import {environment} from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiMFService {
-  private baseUrl = environment.API_URL;
-
-  constructor(private http: HttpClient) {
-  }
+  // private baseUrl = environment.API_URL;
+  //
+  // constructor(private http: HttpClient) {
+  // }
 
   //GET requerimientos
-  getRequerimientosAPI(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/requerimiento`);
-  }
+  // getRequerimientosAPI(): Observable<any> {
+  //   return this.http.get(`${this.baseUrl}/api/requerimiento`);
+  // }
 
   //GET requerimiento by ID
-  getRequerimientosByID(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
-  }
+  // getRequerimientosByID(id: string): Observable<any> {
+  //   return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
+  // }
 
   // POST requerimiento primer creacion
-  createRequerimientoAPI(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/requerimiento`, data, {
-      responseType: 'text',
-    });
-  }
+  // createRequerimientoAPI(data: any): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/api/requerimiento`, data, {
+  //     responseType: 'text',
+  //   });
+  // }
 
   // POST requerimiento programacion por delegatura
-  createContratos(data1: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/formularioContratoPasos/paso4`, data1, {
-      responseType: 'text',
-    });
-  }
+  // createContratos(data1: any): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/api/formularioContratoPasos/paso4`, data1, {
+  //     responseType: 'text',
+  //   });
+  // }
 
   //obtener requerimientos dashboard
   getRequerimientos(): Observable<any> {

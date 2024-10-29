@@ -33,7 +33,7 @@ export default class LoginComponent {
           this.setErrorMessage(response.error); // Almacena el mensaje de error
         } else {
           this.errorMessage = null;
-          this.router.navigate(['/dashboard']).then(() => {
+          this.router.navigate(['/administrador']).then(() => {
 
           });
           console.log(response.user); // Aquí puedes redirigir o manejar la lógica según el rol

@@ -4,7 +4,7 @@ import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -14,7 +14,8 @@ import {NgForOf, NgIf} from "@angular/common";
     FileUploadComponent,
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './nuevo-requerimiento.component.html',
   styleUrl: './nuevo-requerimiento.component.css'
@@ -72,7 +73,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   filtroProgramaciones: string = '';
 
   // Seleccionable de delegatura
-  delgaturas: string[] = [
+  delegaturas: string[] = [
     'Todas',
     'Delegatura de Concesiones e infraestructura',
     'Delegatura de puertos',
@@ -103,6 +104,10 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Variables para digitos
   digitoInicial: number | null = null;
   digitoFinal: number | null = null;
+
+  // Variables para porgramacion individual
+  programacionNIT: number | null = null;
+  razonSocial: string = '';
 
   // Constructor
   constructor(

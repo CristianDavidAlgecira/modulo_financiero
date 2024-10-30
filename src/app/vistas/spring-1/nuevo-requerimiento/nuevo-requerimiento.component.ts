@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
@@ -61,7 +61,11 @@ export class NuevoRequerimientoComponent implements OnInit {
   razonSocial: string = '';
 
   // Constructor
-  constructor(private errorService: ErrorService, private router: Router) {
+  constructor(
+    private errorService: ErrorService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {
   }
 
   // Propiedades del input: tamaño, info, etc.
@@ -70,11 +74,12 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: {[key: number]: boolean} = {};
+  errorStates: { [key: number]: boolean } = {};
 
-  //estado para mostrar tabla
+  // Estado para mostrar tabla
   isAdicionar: boolean = false;
-  //headers table
+
+  // Headers table
   headers: any = [];
   datosTable: any = [];
 
@@ -95,7 +100,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
 
-    if(file[0]) {
+    if (file[0]) {
       console.log("hay archivo", file[0]);
     } else {
       console.log("no hay");
@@ -111,7 +116,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
-    switch(this.filtroDelegaturas) {
+    switch (this.filtroDelegaturas) {
       case 'Delegatura de Concesiones e infraestructura':
         this.vigilados = ['TODOS', ...option1];
         break;
@@ -136,12 +141,19 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.isAdicionar = false;
     this.fechaFin = '';
     this.diasRequerimiento = 0;
-
+    this.filtroDelegaturas = '';
+    this.filtroVigilados = '';
+    this.filtroDigitos = '';
+    this.digitoInicial = null;
+    this.digitoFinal = null;
+    this.programacionNIT = null;
+    this.razonSocial = '';
+    this.datosTable = [];
   }
 
   calcularDias(): void {
 
-    if(this.fechaInicio && this.fechaFin) {
+    if (this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -162,22 +174,22 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch(this.filtroDigitos) {
+    switch (this.filtroDigitos) {
 
       case 'Último Dígito':
-        if(valor < 0 || valor > 9 || valor.length > 1) {
+        if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
 
       case 'Dos últimos dígitos':
-        if(valor < 0 || valor > 99 || valor.length > 2) {
+        if (valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
 
       case 'Tres últimos dígitos':
-        if(valor < 0 || valor > 999 || valor.length > 3) {
+        if (valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -197,9 +209,9 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   btnAdicionar(num: number) {
     this.isAdicionar = true;
-    switch(num) {
-      // delegatura
+    switch (num) {
       case 1:
+
         this.headers = [{
           id: 1, title: 'Delegada'
         }, {
@@ -213,7 +225,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         }, {
           id: 6, title: 'Acciones',
         },];
-        // Verificación de datos (si es necesario, dependiendo de los requerimientos)
+
         const datosDelegatura = {
           Delegatura: this.filtroDelegaturas || 'Sin dato',
           vigilado: this.filtroVigilados || 'Sin dato',
@@ -224,9 +236,10 @@ export class NuevoRequerimientoComponent implements OnInit {
         };
 
         this.datosTable.push(datosDelegatura);
-        console.log(this.datosTable);
         break;
+
       case 2:
+
         this.headers = [{
           id: 1, title: 'Programación por Dígitos NIT'
         }, {
@@ -240,7 +253,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         }, {
           id: 6, title: 'Acciones',
         },];
-        // Verificación de datos (si es necesario, dependiendo de los requerimientos)
+
         const datosDigitoNit = {
           programacionNIT: this.filtroDigitos || 'Sin dato',
           rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
@@ -251,8 +264,12 @@ export class NuevoRequerimientoComponent implements OnInit {
         };
 
         this.datosTable.push(datosDigitoNit);
-        console.log(this.datosTable);
         break;
+
     }
+
+    this.cdr.detectChanges();
+
   }
+
 }

@@ -32,13 +32,12 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
   ngOnInit() {
 
     this.loadInitialData();
-    console.log(this.data);
-
 
   }
 
   ngOnChanges() {
 
+    this.loadInitialData();
 
   }
 
@@ -53,7 +52,6 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
       : [];
 
   }
-
 
 
   isDateTime(value: any): boolean {
@@ -83,7 +81,6 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
     this.paginatorFilter(event.pageIndex, event.pageSize);
 
   }
-
 
 
   paginatorFilter(pageIndex: number, pageSize: number, datos?: any) {

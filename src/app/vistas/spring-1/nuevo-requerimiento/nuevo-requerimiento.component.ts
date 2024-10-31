@@ -144,6 +144,14 @@ export class NuevoRequerimientoComponent implements OnInit {
   onProgramacionChange(): void {
     this.isAdicionar = false;
     this.tipoVigiladoBloqueo = false;
+    this.setearDatosProgramacion();
+    this.programacionNIT = null;
+    this.razonSocial = '';
+    this.datosTable = [];
+    this.contadorIDTable = 0;
+  }
+
+  setearDatosProgramacion() {
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroDelegaturas = '';
@@ -151,10 +159,6 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.filtroDigitos = '';
     this.digitoInicial = null;
     this.digitoFinal = null;
-    this.programacionNIT = null;
-    this.razonSocial = '';
-    this.datosTable = [];
-    this.contadorIDTable = 0;
   }
 
   calcularDias(): void {
@@ -306,12 +310,18 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.diasRequerimiento = data.diasRequerimiento || 0;
     this.filtroDelegaturas = data.Delegatura || '';
     this.filtroVigilados = data.vigilado || '';
-    this.digitoInicial = data.rango || '';
-    this.digitoFinal = data.rango || '';
-    this.programacionNIT = data.programacionNIT || '';
+    const [digitoInicial, digitoFinal] = data.rango ? data.rango.split("-"): '';
+    this.digitoInicial = digitoInicial;
+    this.digitoFinal = digitoFinal;
+    this.filtroDigitos = data.programacionNIT || '';
 
 
     this.showEditModal = true;
+  }
+
+  closeModal() {
+    this.setearDatosProgramacion();
+    this.showEditModal = false;
   }
 
   editDataTable() {
@@ -320,6 +330,10 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   deleteItem(item:any) {
     this.datosTable = this.datosTable.filter((dato:any) => dato.id !== item.id);
+    this.tipoVigiladoBloqueo = false;
+    if(this.datosTable.length == 0){
+      this.isAdicionar = false;
+    }
     this.cdr.detectChanges();
   }
 }

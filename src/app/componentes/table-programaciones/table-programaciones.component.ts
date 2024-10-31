@@ -43,7 +43,9 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
 
   loadInitialData(): void {
     this.pageLength = this.data.length;
+
     this.paginatorFilter(0, 5, this.data);
+
   }
 
   get info(): string[] {

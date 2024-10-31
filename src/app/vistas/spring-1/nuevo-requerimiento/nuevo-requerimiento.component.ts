@@ -4,13 +4,14 @@ import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-nuevo-requerimiento',
   standalone: true,
-  imports: [PrimaryButtonComponent, FileUploadComponent, FormsModule, NgForOf, NgIf, NgClass, TableProgramacionesComponent],
+  imports: [PrimaryButtonComponent, FileUploadComponent, FormsModule, NgForOf, NgIf, NgClass, TableProgramacionesComponent, DialogModule, CommonModule],
   templateUrl: './nuevo-requerimiento.component.html',
   styleUrl: './nuevo-requerimiento.component.css'
 })
@@ -61,11 +62,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   razonSocial: string = '';
 
   // Constructor
-  constructor(
-    private errorService: ErrorService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef,) {
   }
 
   // Propiedades del input: tamaño, info, etc.
@@ -74,7 +71,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: { [key: number]: boolean } = {};
+  errorStates: {[key: number]: boolean} = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -82,6 +79,11 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Headers table
   headers: any = [];
   datosTable: any = [];
+  contadorIDTable: number = 0;
+  datosEditar: any = [];
+
+  //modals
+  showEditModal: boolean = false;
 
   ngOnInit() {
 
@@ -100,7 +102,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
 
-    if (file[0]) {
+    if(file[0]) {
       console.log("hay archivo", file[0]);
     } else {
       console.log("no hay");
@@ -116,7 +118,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
-    switch (this.filtroDelegaturas) {
+    switch(this.filtroDelegaturas) {
       case 'Delegatura de Concesiones e infraestructura':
         this.vigilados = ['TODOS', ...option1];
         break;
@@ -149,11 +151,12 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.programacionNIT = null;
     this.razonSocial = '';
     this.datosTable = [];
+    this.contadorIDTable = 0;
   }
 
   calcularDias(): void {
 
-    if (this.fechaInicio && this.fechaFin) {
+    if(this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -174,22 +177,22 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch (this.filtroDigitos) {
+    switch(this.filtroDigitos) {
 
       case 'Último Dígito':
-        if (valor < 0 || valor > 9 || valor.length > 1) {
+        if(valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
 
       case 'Dos últimos dígitos':
-        if (valor < 0 || valor > 99 || valor.length > 2) {
+        if(valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
 
       case 'Tres últimos dígitos':
-        if (valor < 0 || valor > 999 || valor.length > 3) {
+        if(valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -209,10 +212,14 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   btnAdicionar(num: number) {
     this.isAdicionar = true;
-    switch (num) {
+    this.contadorIDTable += 1;
+    console.log(this.contadorIDTable)
+    switch(num) {
       case 1:
 
         this.headers = [{
+          id: 0, title: 'ID'
+        }, {
           id: 1, title: 'Delegada'
         }, {
           id: 2, title: 'Tipo de Vigilado',
@@ -227,6 +234,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         },];
 
         const datosDelegatura = {
+          id: this.contadorIDTable,
           Delegatura: this.filtroDelegaturas || 'Sin dato',
           vigilado: this.filtroVigilados || 'Sin dato',
           fechaInicio: this.fechaInicio || 'Sin dato',
@@ -241,6 +249,8 @@ export class NuevoRequerimientoComponent implements OnInit {
       case 2:
 
         this.headers = [{
+          id: 0, title: 'ID'
+        }, {
           id: 1, title: 'Programación por Dígitos NIT'
         }, {
           id: 2, title: 'Rango Dígitos',
@@ -255,6 +265,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         },];
 
         const datosDigitoNit = {
+          id: this.contadorIDTable,
           programacionNIT: this.filtroDigitos || 'Sin dato',
           rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
           fechaInicio: this.fechaInicio || 'Sin dato',
@@ -267,9 +278,33 @@ export class NuevoRequerimientoComponent implements OnInit {
         break;
 
     }
-
+    console.log(this.datosTable)
     this.cdr.detectChanges();
 
   }
 
+  openEditModal(data: any) {
+    console.log(data);
+    this.datosEditar = data;
+    this.fechaFin = data.fechaFin || '';
+    this.fechaInicio = data.fechaInicio || '';
+    this.diasRequerimiento = data.diasRequerimiento || 0;
+    this.filtroDelegaturas = data.Delegatura || '';
+    this.filtroVigilados = data.vigilado || '';
+    this.digitoInicial = data.rango || '';
+    this.digitoFinal = data.rango || '';
+    this.programacionNIT = data.programacionNIT || '';
+
+
+    this.showEditModal = true;
+  }
+
+  editDataTable() {
+
+  }
+
+  deleteItem(item:any) {
+    this.datosTable = this.datosTable.filter((dato:any) => dato.id !== item.id);
+    this.cdr.detectChanges();
+  }
 }

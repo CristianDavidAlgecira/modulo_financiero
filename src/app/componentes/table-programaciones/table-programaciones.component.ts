@@ -17,8 +17,8 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
   @Input() filtro: string = '';
   @Input() headers: any = [];
   @Input() data: any = [];
-  @Output() requerimientoDetalle: EventEmitter<number> =
-    new EventEmitter<number>();
+  @Output() editClicked = new EventEmitter<any>();
+  @Output() deleteClicked = new EventEmitter<any>();
   paginatedData: any = [];
   pageLength: number = 0;
 
@@ -42,6 +42,7 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
   }
 
   loadInitialData(): void {
+    this.pageLength = this.data.length;
     this.paginatorFilter(0, 5, this.data);
   }
 
@@ -95,12 +96,13 @@ export class TableProgramacionesComponent implements OnInit, OnChanges {
 
   }
 
-  onButtonClick(id: number) {
-    this.router.navigate(['/detalle-requerimientos'], {
-      state: {
-        id: id,
-      },
-    });
+  onButtonClickDelete(item:any) {
+    this.deleteClicked.emit(item);
+
+  }
+
+  onButtonClickEdit(item: any) {
+    this.editClicked.emit(item); // Emite el valor específico
   }
 
 }

@@ -39,6 +39,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Seleccionable de tipo de vigilado
   vigilados: string[] = [];
   filtroVigilados: string = '';
+  tipoVigiladoBloqueo: boolean = false;
 
   // Seleccionable de programación por dígitos NIT
   digitos: string[] = ['Último Dígito', 'Dos últimos dígitos', 'Tres últimos dígitos'];
@@ -51,6 +52,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaInicio: string = '';
   fechaFin: string = '';
   diasRequerimiento: number = 0;
+  errorFechas: string = '';
 
   // Variables para digitos
   digitoInicial: number | null = null;
@@ -118,16 +120,16 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     switch (this.filtroDelegaturas) {
       case 'Delegatura de Concesiones e infraestructura':
-        this.vigilados = ['TODOS', ...option1];
+        this.vigilados = ['Todos', ...option1];
         break;
       case 'Delegatura de puertos':
-        this.vigilados = ['TODOS', ...option2];
+        this.vigilados = ['Todos', ...option2];
         break;
       case 'Delegatura de Tránsito y Transporte Terrestre Automotor':
-        this.vigilados = ['TODOS', ...option3];
+        this.vigilados = ['Todos', ...option3];
         break;
       case 'Todas':
-        this.vigilados = ['TODOS'];
+        this.vigilados = ['Todos'];
         break;
       default:
         this.vigilados = [];
@@ -139,6 +141,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   onProgramacionChange(): void {
     this.isAdicionar = false;
+    this.tipoVigiladoBloqueo = false;
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroDelegaturas = '';
@@ -158,7 +161,15 @@ export class NuevoRequerimientoComponent implements OnInit {
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
       const diffTime = fechaFinDate.getTime() - fechaInicioDate.getTime();
-      this.diasRequerimiento = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const diasCalculados = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
+
+      if (this.fechaFin <= this.fechaInicio) {
+        this.errorFechas = 'La fecha de fin debe ser posterior a la fecha de inicio.';
+      } else {
+        this.errorFechas = '';
+      }
 
     }
 
@@ -211,6 +222,10 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.isAdicionar = true;
     switch (num) {
       case 1:
+
+        if (this.filtroVigilados == 'Todos') {
+          this.tipoVigiladoBloqueo = true;
+        }
 
         this.headers = [{
           id: 1, title: 'Delegada'

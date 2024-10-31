@@ -37,7 +37,6 @@
       <!-- Contenido 1 -->
       <div class="md:flex justify-center gap-4 px-4 pb-8">
 
-        <!-- Caja seleccionable 1 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Nombre del requerimiento</label>
           <select
@@ -53,8 +52,6 @@
           </div>
         </div>
 
-
-        <!-- Input 2 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Fecha Inicio</label>
           <input
@@ -67,7 +64,6 @@
           </div>
         </div>
 
-        <!-- Caja seleccionable 2 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Periodo de entrega</label>
           <select
@@ -153,21 +149,13 @@
                            [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
         </div>
 
-        <div class="flex justify-end items-center p-4 space-x-4 pb-8">
-
-          <!-- Botón Guardar -->
-          <app-primary-button type="button">Guardar</app-primary-button>
-
-
-        </div>
-
       </div>
 
 
       <!-- Contenido desplegable -->
       <div class="md:flex justify-center gap-x-4 px-4 pb-4">
 
-        <!-- delegatura-->
+        <!-- Delegatura-->
         <div class="md:flex justify-center gap-4 px-4 pb-4" *ngIf="filtroProgramaciones === 'Delegatura'">
 
           <!-- Input 8 -->
@@ -176,9 +164,12 @@
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               type="date" [(ngModel)]="fechaFin" #fechaFinRef="ngModel" required
-              [ngClass]="{'border-error': fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)}"
-              (change)="calcularDias()">
-            <div *ngIf="fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)">
+              [ngClass]="{'border-error': (fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)) || errorFechas}"
+              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
+            <div *ngIf="errorFechas && fechaFinRef.valid" class="text-red-500 text-xs">
+              {{ errorFechas }}
+            </div>
+            <div *ngIf="errorFechas != '' && fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)">
               <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
             </div>
           </div>
@@ -189,7 +180,8 @@
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()" #delegaturaRef="ngModel" required
-              [ngClass]="{'border-error': delegaturaRef.invalid && (delegaturaRef.dirty || delegaturaRef.touched)}">
+              [ngClass]="{'border-error': delegaturaRef.invalid && (delegaturaRef.dirty || delegaturaRef.touched)}"
+              [disabled]="isAdicionar">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let delegatura of delegaturas" [value]="delegatura">{{ delegatura }}</option>
             </select>
@@ -204,7 +196,8 @@
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               [(ngModel)]="filtroVigilados" #tipoVigiladosRef="ngModel" required
-              [ngClass]="{'border-error': tipoVigiladosRef.invalid && (tipoVigiladosRef.dirty || tipoVigiladosRef.touched)}">
+              [ngClass]="{'border-error': tipoVigiladosRef.invalid && (tipoVigiladosRef.dirty || tipoVigiladosRef.touched)}"
+              [disabled]="tipoVigiladoBloqueo">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
             </select>
@@ -215,23 +208,29 @@
 
           <!-- Botón Adicionar -->
           <div class="p-7">
-            <app-primary-button type="button" (click)="btnAdicionar(1)">Adicionar</app-primary-button>
+            <app-primary-button type="button" (click)="btnAdicionar(1)" [disabled]="tipoVigiladoBloqueo">Adicionar
+            </app-primary-button>
           </div>
 
         </div>
-        <!-- digito nit-->
+
+
+        <!-- Digito NIT-->
         <div class="md:flex justify-center gap-4 px-2 pb-4"
              *ngIf="filtroProgramaciones === 'Programación por dígito NIT'">
 
-          <!-- Input 8 -->
+          <!-- Input 9 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               type="date" [(ngModel)]="fechaFin" #fechaFinRef2="ngModel" required
-              [ngClass]="{'border-error': fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)}"
-              (change)="calcularDias()">
-            <div *ngIf="fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)">
+              [ngClass]="{'border-error': (fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)) || errorFechas}"
+              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
+            <div *ngIf="errorFechas && fechaFinRef2.valid" class="text-red-500 text-xs">
+              {{ errorFechas }}
+            </div>
+            <div *ngIf="errorFechas != '' && fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)">
               <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
             </div>
           </div>
@@ -284,6 +283,7 @@
 
         </div>
 
+        <!-- Individual NIT-->
         <div class="md:flex justify-center gap-4 px-4 pb-4"
              *ngIf="filtroProgramaciones === 'Programación individual por NIT'">
 
@@ -293,9 +293,12 @@
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               type="date" [(ngModel)]="fechaFin" #fechaFinRef3="ngModel" required
-              [ngClass]="{'border-error': fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)}"
-              (change)="calcularDias()">
-            <div *ngIf="fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)">
+              [ngClass]="{'border-error': (fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)) || errorFechas}"
+              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
+            <div *ngIf="errorFechas && fechaFinRef3.valid" class="text-red-500 text-xs">
+              {{ errorFechas }}
+            </div>
+            <div *ngIf="errorFechas != '' && fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)">
               <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
             </div>
           </div>
@@ -326,24 +329,22 @@
             </div>
           </div>
 
-
         </div>
 
       </div>
 
       <div class="md:flex justify-center gap-x-4 px-4 pb-4" *ngIf="filtroProgramaciones && isAdicionar">
-        <!-- TABLES -->
+
         <div class="w-full">
-
           <app-table-programaciones [headers]="headers" [data]="datosTable"></app-table-programaciones>
-
         </div>
+
       </div>
 
       <div class="flex justify-end p-4 space-x-4 pb-8">
 
         <!-- Botón Guardar -->
-        <app-primary-button type="button">Enviar</app-primary-button>
+        <app-primary-button type="button">Guardar</app-primary-button>
 
         <!-- Botón Cancelar -->
         <button

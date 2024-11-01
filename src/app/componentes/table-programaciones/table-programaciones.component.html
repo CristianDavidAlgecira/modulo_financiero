@@ -34,8 +34,12 @@
                     {{ item[key] }}
                   </p>
 
-                  <p *ngIf="key != 'acciones' && key != 'id'" class="whitespace-no-wrap">
+                  <p *ngIf="key != 'acciones' && key != 'id' && key != 'diasRequerimiento'" class="whitespace-no-wrap">
                     {{ formatField(item[key]) }}
+                  </p>
+
+                  <p *ngIf="key == 'diasRequerimiento'" class="whitespace-no-wrap">
+                    {{ item[key] }}
                   </p>
 
                   <p *ngIf="key== 'acciones'" class="whitespace-no-wrap text-center flex flex-wrap gap-x-2">

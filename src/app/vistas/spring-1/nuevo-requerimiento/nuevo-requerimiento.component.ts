@@ -6,7 +6,7 @@ import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
-import { DialogModule } from 'primeng/dialog';
+import {DialogModule} from 'primeng/dialog';
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -151,14 +151,17 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.contadorIDTable = 0;
   }
 
-  setearDatosProgramacion() {
+  setearDatosProgramacion(isEdit?:boolean) {
     this.fechaFin = '';
     this.diasRequerimiento = 0;
-    this.filtroDelegaturas = '';
     this.filtroVigilados = '';
-    this.filtroDigitos = '';
     this.digitoInicial = null;
     this.digitoFinal = null;
+
+    if(!isEdit) {
+      this.filtroDelegaturas = '';
+      this.filtroDigitos = '';
+    }
   }
 
   calcularDias(): void {
@@ -172,7 +175,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
-      if (this.fechaFin <= this.fechaInicio) {
+      if(this.fechaFin <= this.fechaInicio) {
         this.errorFechas = 'La fecha de fin debe ser posterior a la fecha de inicio.';
       } else {
         this.errorFechas = '';
@@ -232,7 +235,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     switch(num) {
       case 1:
 
-        if (this.filtroVigilados == 'Todos') {
+        if(this.filtroVigilados == 'Todos') {
           this.tipoVigiladoBloqueo = true;
         }
 
@@ -310,28 +313,58 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.diasRequerimiento = data.diasRequerimiento || 0;
     this.filtroDelegaturas = data.Delegatura || '';
     this.filtroVigilados = data.vigilado || '';
-    const [digitoInicial, digitoFinal] = data.rango ? data.rango.split("-"): '';
+    const [digitoInicial, digitoFinal] = data.rango ? data.rango.split("-") : '';
     this.digitoInicial = digitoInicial;
     this.digitoFinal = digitoFinal;
     this.filtroDigitos = data.programacionNIT || '';
 
-
     this.showEditModal = true;
   }
 
-  closeModal() {
-    this.setearDatosProgramacion();
+  closeModal(isEdit:boolean = false) {
+
+    this.setearDatosProgramacion(isEdit);
     this.showEditModal = false;
   }
 
   editDataTable() {
+    // Encuentra el índice del elemento a actualizar
+    const index = this.datosTable.findIndex((dato: any) => dato.id === this.datosEditar.id);
 
+    const datosDelegatura = {
+      id: this.datosEditar.id,
+      Delegatura: this.filtroDelegaturas || 'Sin dato',
+      vigilado: this.filtroVigilados || 'Sin dato',
+      fechaInicio: this.fechaInicio || 'Sin dato',
+      fechaFin: this.fechaFin || 'Sin dato',
+      diasRequerimiento: this.diasRequerimiento || '0',
+      acciones: 'Acciones'
+    };
+
+    const datosDigitoNit = {
+      id: this.datosEditar.id,
+      programacionNIT: this.filtroDigitos || 'Sin dato',
+      rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
+      fechaInicio: this.fechaInicio || 'Sin dato',
+      fechaFin: this.fechaFin || 'Sin dato',
+      diasRequerimiento: this.diasRequerimiento || '0',
+      acciones: 'Acciones'
+    };
+    // Si se encuentra el elemento, actualiza sus propiedades
+    if(index !== - 1) {
+      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
+
+      Object.assign(this.datosTable[index], updatedData);
+    }
+    this.closeModal(true);
+    console.log(this.datosTable);
+    this.cdr.detectChanges();
   }
 
-  deleteItem(item:any) {
-    this.datosTable = this.datosTable.filter((dato:any) => dato.id !== item.id);
+  deleteItem(item: any) {
+    this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
     this.tipoVigiladoBloqueo = false;
-    if(this.datosTable.length == 0){
+    if(this.datosTable.length == 0) {
       this.isAdicionar = false;
     }
     this.cdr.detectChanges();

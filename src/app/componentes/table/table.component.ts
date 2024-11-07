@@ -40,11 +40,11 @@ export class TableComponent implements OnInit, OnChanges {
       },
       {
         id: 2,
-        title: 'Número del requerimiento',
+        title: 'Número del acto administrativo',
       },
       {
         id: 3,
-        title: 'Año',
+        title: 'Año de vigencia',
       },
       {
         id: 4,
@@ -68,8 +68,6 @@ export class TableComponent implements OnInit, OnChanges {
       },
     ];
 
-    this.applyFilter();
-
   }
 
   ngOnChanges() {
@@ -81,29 +79,31 @@ export class TableComponent implements OnInit, OnChanges {
   loadInitialData(): void {
 
     this.getRequerimientos();
+
   }
 
   getRequerimientos(): void {
-    // traer los datos de la consulta
-    this.apiMFService.getRequerimientos()
+
+    this.apiMFService.getRequerimientosAPI()
       .subscribe(
         (response) => {
           console.log(response);
-            this.data = response;
-            this.cdRef.detectChanges(); // Forzar la detección de cambios
-
+          this.data = response;
+          this.applyFilter()
+          this.cdRef.detectChanges(); // Forzar la detección de cambios
         },
         (error) => {
           this.cdRef.detectChanges(); // Forzar la detección de cambios
           console.error('Error fetching user data', error);
         }
       );
+
   }
 
   get info(): string[] {
 
-    return this.data.content.length > 0
-      ? Object.keys(this.data.content[0])
+    return this.data.length > 0
+      ? Object.keys(this.data[0])
       : [];
 
   }
@@ -137,7 +137,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   applyFilter() {
 
-    let datos = this.data.content;
+    let datos = this.data;
 
     if (this.filtro) {
       const [nombre, numero, anio] = this.filtro.split('|');
@@ -159,7 +159,7 @@ export class TableComponent implements OnInit, OnChanges {
   paginatorFilter(pageIndex: number, pageSize: number, datos?: any) {
 
     if (!datos) {
-      datos = this.data.content;
+      datos = this.data;
     }
     const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
@@ -168,11 +168,13 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   onButtonClick(id: number) {
+
     this.router.navigate(['/detalle-requerimientos'], {
       state: {
         id: id,
       },
     });
+
   }
 
 }

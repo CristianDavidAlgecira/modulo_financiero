@@ -33,10 +33,10 @@
 
         <!-- Input 3 -->
         <div class="w-full">
-          <label class="text-primary3 font-medium h-full text-xs">Año del acto Administrativo</label>
+          <label class="text-primary3 font-medium h-full text-xs">Año de vigencia</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el año del acto administrativo" [(ngModel)]="filtroAnio" min="0"
+            type="number" placeholder="Digite el año de vigencia" [(ngModel)]="filtroAnio" min="0"
             (input)="onInputChange('filtroAnio', $event)"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         </div>

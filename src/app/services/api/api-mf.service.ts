@@ -1,42 +1,45 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {environment} from '../../../environments/environment';
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiMFService {
-  // private baseUrl = environment.API_URL;
-  //
-  // constructor(private http: HttpClient) {
-  // }
 
-  //GET requerimientos
-  // getRequerimientosAPI(): Observable<any> {
-  //   return this.http.get(`${this.baseUrl}/api/requerimiento`);
-  // }
+  private baseUrl = environment.API_URL;
 
-  //GET requerimiento by ID
+  constructor(
+    private http: HttpClient
+  ) {
+  }
+
+  // Obtener requerimientos en principal
+  getRequerimientosAPI(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/requerimiento`);
+  }
+
+  // Obtener requerimiento por ID
   // getRequerimientosByID(id: string): Observable<any> {
   //   return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
   // }
 
-  // POST requerimiento primer creacion
+  // Envio requerimiento primer creacion
   // createRequerimientoAPI(data: any): Observable<any> {
   //   return this.http.post(`${this.baseUrl}/api/requerimiento`, data, {
   //     responseType: 'text',
   //   });
   // }
 
-  // POST requerimiento programacion por delegatura
+  // Envio requerimiento programacion por delegatura
   // createContratos(data1: any): Observable<any> {
   //   return this.http.post(`${this.baseUrl}/api/formularioContratoPasos/paso4`, data1, {
   //     responseType: 'text',
   //   });
   // }
 
-  //obtener requerimientos dashboard
+  // Obtener requerimientos dashboard
   getRequerimientos(): Observable<any> {
     const response = {
       totalElements: 0, totalPages: 0, pageable: {
@@ -106,8 +109,7 @@ export class ApiMFService {
     return of(response);
   }
 
-  //obtener requerimientos detalles
-  //obtener solicitudes indicadores gestion
+  // Obtener requerimientos detalles
   getRequerimientoInfo(id: string): Observable<any> {
     const response = {
       totalElements: 0, totalPages: 0, pageable: {
@@ -208,5 +210,6 @@ export class ApiMFService {
     // Retornar el resultado filtrado en un Observable
     return of(filteredRequerimiento || {});
   }
+
 }
 

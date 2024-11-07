@@ -73,7 +73,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: {[key: number]: boolean} = {};
+  errorStates: { [key: number]: boolean } = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -104,7 +104,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
 
-    if(file[0]) {
+    if (file[0]) {
       console.log("hay archivo", file[0]);
     } else {
       console.log("no hay");
@@ -120,7 +120,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
-    switch(this.filtroDelegaturas) {
+    switch (this.filtroDelegaturas) {
       case 'Delegatura de Concesiones e infraestructura':
         this.vigilados = ['Todos', ...option1];
         break;
@@ -142,6 +142,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   onProgramacionChange(): void {
+
     this.isAdicionar = false;
     this.tipoVigiladoBloqueo = false;
     this.setearDatosProgramacion();
@@ -149,24 +150,27 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.razonSocial = '';
     this.datosTable = [];
     this.contadorIDTable = 0;
+
   }
 
-  setearDatosProgramacion(isEdit?:boolean) {
+  setearDatosProgramacion(isEdit?: boolean) {
+
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroVigilados = '';
     this.digitoInicial = null;
     this.digitoFinal = null;
 
-    if(!isEdit) {
+    if (!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
     }
+
   }
 
   calcularDias(): void {
 
-    if(this.fechaInicio && this.fechaFin) {
+    if (this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -174,12 +178,6 @@ export class NuevoRequerimientoComponent implements OnInit {
       const diasCalculados = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
-
-      if(this.fechaFin <= this.fechaInicio) {
-        this.errorFechas = 'La fecha de fin debe ser posterior a la fecha de inicio.';
-      } else {
-        this.errorFechas = '';
-      }
 
     }
 
@@ -195,22 +193,22 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch(this.filtroDigitos) {
+    switch (this.filtroDigitos) {
 
       case 'Último Dígito':
-        if(valor < 0 || valor > 9 || valor.length > 1) {
+        if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
 
       case 'Dos últimos dígitos':
-        if(valor < 0 || valor > 99 || valor.length > 2) {
+        if (valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
 
       case 'Tres últimos dígitos':
-        if(valor < 0 || valor > 999 || valor.length > 3) {
+        if (valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -229,15 +227,11 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   btnAdicionar(num: number) {
+
     this.isAdicionar = true;
     this.contadorIDTable += 1;
-    console.log(this.contadorIDTable)
-    switch(num) {
+    switch (num) {
       case 1:
-
-        if(this.filtroVigilados == 'Todos') {
-          this.tipoVigiladoBloqueo = true;
-        }
 
         this.headers = [{
           id: 0, title: 'ID'
@@ -300,13 +294,13 @@ export class NuevoRequerimientoComponent implements OnInit {
         break;
 
     }
-    console.log(this.datosTable)
+
     this.cdr.detectChanges();
 
   }
 
   openEditModal(data: any) {
-    console.log(data);
+
     this.datosEditar = data;
     this.fechaFin = data.fechaFin || '';
     this.fechaInicio = data.fechaInicio || '';
@@ -317,21 +311,23 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.digitoInicial = digitoInicial;
     this.digitoFinal = digitoFinal;
     this.filtroDigitos = data.programacionNIT || '';
-
     this.showEditModal = true;
+
   }
 
-  closeModal(isEdit:boolean = false) {
+  closeModal(isEdit: boolean = false) {
 
     this.setearDatosProgramacion(isEdit);
     this.showEditModal = false;
+
   }
 
   editDataTable() {
-    // Encuentra el índice del elemento a actualizar
+
     const index = this.datosTable.findIndex((dato: any) => dato.id === this.datosEditar.id);
 
     const datosDelegatura = {
+
       id: this.datosEditar.id,
       Delegatura: this.filtroDelegaturas || 'Sin dato',
       vigilado: this.filtroVigilados || 'Sin dato',
@@ -339,9 +335,11 @@ export class NuevoRequerimientoComponent implements OnInit {
       fechaFin: this.fechaFin || 'Sin dato',
       diasRequerimiento: this.diasRequerimiento || '0',
       acciones: 'Acciones'
+
     };
 
     const datosDigitoNit = {
+
       id: this.datosEditar.id,
       programacionNIT: this.filtroDigitos || 'Sin dato',
       rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
@@ -349,24 +347,31 @@ export class NuevoRequerimientoComponent implements OnInit {
       fechaFin: this.fechaFin || 'Sin dato',
       diasRequerimiento: this.diasRequerimiento || '0',
       acciones: 'Acciones'
-    };
-    // Si se encuentra el elemento, actualiza sus propiedades
-    if(index !== - 1) {
-      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
 
+    };
+
+    if (index !== -1) {
+
+      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
+
     }
+
     this.closeModal(true);
-    console.log(this.datosTable);
     this.cdr.detectChanges();
+
   }
 
   deleteItem(item: any) {
+
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
     this.tipoVigiladoBloqueo = false;
-    if(this.datosTable.length == 0) {
+    if (this.datosTable.length == 0) {
       this.isAdicionar = false;
     }
+
     this.cdr.detectChanges();
+
   }
+
 }

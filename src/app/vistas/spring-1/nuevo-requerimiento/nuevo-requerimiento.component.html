@@ -41,41 +41,27 @@
           <label class="text-primary3 font-medium h-full text-xs">*Nombre del requerimiento</label>
           <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroNombreRequerimiento"
-            #nombreRequerimiento="ngModel" required
-            [ngClass]="{'border-error': nombreRequerimiento.invalid && (nombreRequerimiento.dirty || nombreRequerimiento.touched)}">
+            [(ngModel)]="filtroNombreRequerimiento">
             <option value="" disabled selected hidden>Seleccione el nombre del requerimiento</option>
             <option *ngFor="let nombre of nombreRequerimientos" [value]="nombre">{{ nombre }}</option>
           </select>
-          <div *ngIf="nombreRequerimiento.invalid && (nombreRequerimiento.dirty || nombreRequerimiento.touched)">
-            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-          </div>
         </div>
 
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Fecha Inicio</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" [(ngModel)]="fechaInicio" #fechaInicioRef="ngModel" required
-            [ngClass]="{'border-error': fechaInicioRef.invalid && (fechaInicioRef.dirty || fechaInicioRef.touched)}"
-            (change)="calcularDias()">
-          <div *ngIf="fechaInicioRef.invalid && (fechaInicioRef.dirty || fechaInicioRef.touched)">
-            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-          </div>
+            type="date" [(ngModel)]="fechaInicio" (change)="calcularDias()">
         </div>
 
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Periodo de entrega</label>
           <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroPeriodo" #periodoEntrega="ngModel" required
-            [ngClass]="{'border-error': periodoEntrega.invalid && (periodoEntrega.dirty || periodoEntrega.touched)}">
+            [(ngModel)]="filtroPeriodo">
             <option value="" disabled selected hidden>Seleccione el periodo de entrega</option>
             <option *ngFor="let periodo of periodos" [value]="periodo">{{ periodo }}</option>
           </select>
-          <div *ngIf="periodoEntrega.invalid && (periodoEntrega.dirty || periodoEntrega.touched)">
-            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-          </div>
         </div>
 
         <!-- Caja seleccionable 3 -->
@@ -123,15 +109,10 @@
           <label class="text-primary3 font-medium h-full text-xs">*Tipo de programación</label>
           <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroProgramaciones" (ngModelChange)="onProgramacionChange()" #tipoProgramacion="ngModel"
-            required
-            [ngClass]="{'border-error': tipoProgramacion.invalid && (tipoProgramacion.dirty || tipoProgramacion.touched)}">
+            [(ngModel)]="filtroProgramaciones" (ngModelChange)="onProgramacionChange()">
             <option value="" disabled selected hidden>Seleccione el tipo de programación</option>
             <option *ngFor="let programacion of programaciones" [value]="programacion">{{ programacion }}</option>
           </select>
-          <div *ngIf="tipoProgramacion.invalid && (tipoProgramacion.dirty || tipoProgramacion.touched)">
-            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-          </div>
         </div>
 
       </div>
@@ -163,15 +144,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" #fechaFinRef="ngModel" required
-              [ngClass]="{'border-error': (fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)) || errorFechas}"
-              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
-            <div *ngIf="errorFechas && fechaFinRef.valid" class="text-red-500 text-xs">
-              {{ errorFechas }}
-            </div>
-            <div *ngIf="errorFechas != '' && fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
           </div>
 
           <!-- Caja seleccionable 5 -->
@@ -179,15 +152,10 @@
             <label class="text-primary3 font-medium h-full text-xs">*Delegatura</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()" #delegaturaRef="ngModel" required
-              [ngClass]="{'border-error': delegaturaRef.invalid && (delegaturaRef.dirty || delegaturaRef.touched)}"
-              [disabled]="isAdicionar">
+              [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let delegatura of delegaturas" [value]="delegatura">{{ delegatura }}</option>
             </select>
-            <div *ngIf="delegaturaRef.invalid && (delegaturaRef.dirty || delegaturaRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
           </div>
 
           <!-- Caja seleccionable 6 -->
@@ -195,20 +163,15 @@
             <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroVigilados" #tipoVigiladosRef="ngModel" required
-              [ngClass]="{'border-error': tipoVigiladosRef.invalid && (tipoVigiladosRef.dirty || tipoVigiladosRef.touched)}"
-              [disabled]="tipoVigiladoBloqueo">
+              [(ngModel)]="filtroVigilados">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
             </select>
-            <div *ngIf="tipoVigiladosRef.invalid && (tipoVigiladosRef.dirty || tipoVigiladosRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
           </div>
 
           <!-- Botón Adicionar -->
           <div class="p-7">
-            <app-primary-button type="button" (click)="btnAdicionar(1)" [disabled]="tipoVigiladoBloqueo">Adicionar
+            <app-primary-button type="button" (click)="btnAdicionar(1)">Adicionar
             </app-primary-button>
           </div>
 
@@ -224,15 +187,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" #fechaFinRef2="ngModel" required
-              [ngClass]="{'border-error': (fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)) || errorFechas}"
-              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
-            <div *ngIf="errorFechas && fechaFinRef2.valid" class="text-red-500 text-xs">
-              {{ errorFechas }}
-            </div>
-            <div *ngIf="errorFechas != '' && fechaFinRef2.invalid && (fechaFinRef2.dirty || fechaFinRef2.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
           </div>
 
           <!-- Caja seleccionable 7 -->
@@ -240,14 +195,10 @@
             <label class="text-primary3 font-medium h-full text-xs">*Programación por dígitos NIT</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDigitos" #digitosNIT="ngModel" required
-              [ngClass]="{'border-error': digitosNIT.invalid && (digitosNIT.dirty || digitosNIT.touched)}">
+              [(ngModel)]="filtroDigitos">
               <option value="" disabled selected hidden>Seleccione la programación por dígitos NIT</option>
               <option *ngFor="let digito of digitos" [value]="digito">{{ digito }}</option>
             </select>
-            <div *ngIf="digitosNIT.invalid && (digitosNIT.dirty || digitosNIT.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
           </div>
 
           <!-- Input 10 -->
@@ -255,12 +206,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Inicial" [disabled]="!esOpcionSeleccionada()"
-              (input)="validarDigito($event)" [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
-              [ngClass]="{'border-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
-            <div *ngIf="digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="number" placeholder="Dígito(s) Inicial" [(ngModel)]="digitoInicial">
           </div>
 
           <!-- Input 11 -->
@@ -268,12 +214,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Final" [disabled]="!esOpcionSeleccionada()"
-              (input)="validarDigito($event)" [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
-              [ngClass]="{'border-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
-            <div *ngIf="digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="number" placeholder="Dígito(s) Final" [(ngModel)]="digitoFinal">
           </div>
 
           <!-- Botón Adicionar -->
@@ -292,15 +233,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" #fechaFinRef3="ngModel" required
-              [ngClass]="{'border-error': (fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)) || errorFechas}"
-              (change)="calcularDias()" [disabled]="tipoVigiladoBloqueo">
-            <div *ngIf="errorFechas && fechaFinRef3.valid" class="text-red-500 text-xs">
-              {{ errorFechas }}
-            </div>
-            <div *ngIf="errorFechas != '' && fechaFinRef3.invalid && (fechaFinRef3.dirty || fechaFinRef3.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
           </div>
 
           <!-- Input 13 -->
@@ -308,12 +241,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Programación Individual por NIT</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Digite el NIT de la empresa"
-              [(ngModel)]="programacionNIT" #programacionNITRef="ngModel" required
-              [ngClass]="{'border-error': programacionNITRef.invalid && (programacionNITRef.dirty || programacionNITRef.touched)}">
-            <div *ngIf="programacionNITRef.invalid && (programacionNITRef.dirty || programacionNITRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="number" placeholder="Digite el NIT de la empresa" [(ngModel)]="programacionNIT">
           </div>
 
           <!-- Input 14 -->
@@ -321,12 +249,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Razón social</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="text" placeholder="Digite el nombre de la razón social" [(ngModel)]="razonSocial"
-              #razonSocialRef="ngModel" required
-              [ngClass]="{'border-error': razonSocialRef.invalid && (razonSocialRef.dirty || razonSocialRef.touched)}">
-            <div *ngIf="razonSocialRef.invalid && (razonSocialRef.dirty || razonSocialRef.touched)">
-              <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-            </div>
+              type="text" placeholder="Digite el nombre de la razón social" [(ngModel)]="razonSocial">
           </div>
 
         </div>
@@ -438,12 +361,13 @@
   </div>
 
   <ng-template pTemplate="footer">
+
     <button class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 mt-2
           hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
             (click)="closeModal()">
       Cancelar
     </button>
-    <!-- Botón Guardar -->
+
     <app-primary-button type="button" class="mt-2 ms-2" (click)="editDataTable()">Guardar</app-primary-button>
 
   </ng-template>

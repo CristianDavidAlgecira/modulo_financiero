@@ -53,7 +53,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaInicio: string = '';
   fechaFin: string = '';
   diasRequerimiento: number = 0;
-  errorFechas: string = '';
 
   // Variables para digitos
   digitoInicial: number | null = null;
@@ -62,10 +61,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Variables para porgramacion individual
   programacionNIT: number | null = null;
   razonSocial: string = '';
-
-  // Constructor
-  constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef,) {
-  }
 
   // Propiedades del input: tamaño, info, etc.
   dataClass = {
@@ -84,14 +79,38 @@ export class NuevoRequerimientoComponent implements OnInit {
   contadorIDTable: number = 0;
   datosEditar: any = [];
 
-  //modals
+  // Modals
   showEditModal: boolean = false;
+
+  // Variables para ver si selecciono las casillas
+  touchedFields = {
+
+    filtroNombreRequerimiento: false,
+    fechaInicio: false,
+    filtroPeriodo: false,
+    filtroProgramaciones: false,
+    fechaFin: false,
+    filtroDelegaturas: false,
+    filtroVigilados: false,
+    filtroDigitos: false,
+    digitoInicial: false,
+    digitoFinal: false,
+
+  };
+
+  // Constructor
+  constructor(
+    private errorService: ErrorService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {
+  }
 
   ngOnInit() {
 
     const hoy = new Date();
-    const dia = hoy.getDate().toString().padStart(2, '0'); // Formatear para dos dígitos
-    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
     const anio = hoy.getFullYear().toString();
 
     this.fechaActual = `${dia}/${mes}/${anio}`;
@@ -185,7 +204,9 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   esOpcionSeleccionada(): boolean {
 
-    return this.filtroDigitos === 'Último Dígito' || this.filtroDigitos === 'Dos últimos dígitos' || this.filtroDigitos === 'Tres últimos dígitos';
+    return this.filtroDigitos === 'Último Dígito' ||
+      this.filtroDigitos === 'Dos últimos dígitos' ||
+      this.filtroDigitos === 'Tres últimos dígitos';
 
   }
 
@@ -226,10 +247,70 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
+  validateField(field: string) {
+
+    (this.touchedFields as any)[field] = true;
+
+  }
+
+  submitForm() {
+
+    this.touchedFields = {
+
+      filtroNombreRequerimiento: true,
+      fechaInicio: true,
+      filtroPeriodo: true,
+      filtroProgramaciones: true,
+      fechaFin: true,
+      filtroDelegaturas: true,
+      filtroVigilados: true,
+      filtroDigitos: true,
+      digitoInicial: true,
+      digitoFinal: true,
+
+    };
+
+  }
+
+  isFormValid(): boolean {
+
+    if (this.filtroProgramaciones === "Delegatura") {
+
+      return (
+        !!this.filtroNombreRequerimiento &&
+        !!this.fechaInicio &&
+        !!this.filtroPeriodo &&
+        !!this.filtroProgramaciones &&
+        !!this.fechaFin &&
+        !!this.filtroDelegaturas &&
+        !!this.filtroVigilados
+      );
+
+    } else if (this.filtroProgramaciones === "Programación por dígito NIT") {
+
+      return (
+        !!this.filtroNombreRequerimiento &&
+        !!this.fechaInicio &&
+        !!this.filtroPeriodo &&
+        !!this.filtroProgramaciones &&
+        !!this.fechaFin &&
+        !!this.filtroDigitos &&
+        !!this.digitoInicial &&
+        !!this.digitoFinal
+      );
+
+    }
+
+    return false;
+
+  }
+
   btnAdicionar(num: number) {
 
+    this.submitForm()
     this.isAdicionar = true;
     this.contadorIDTable += 1;
+
     switch (num) {
       case 1:
 

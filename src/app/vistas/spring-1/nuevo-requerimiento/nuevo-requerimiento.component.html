@@ -37,31 +37,47 @@
       <!-- Contenido 1 -->
       <div class="md:flex justify-center gap-4 px-4 pb-8">
 
+        <!-- Caja seleccionable 1 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Nombre del requerimiento</label>
           <select
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroNombreRequerimiento">
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="filtroNombreRequerimiento" (blur)="validateField('filtroNombreRequerimiento')"
+            [ngClass]="{'input-error': !filtroNombreRequerimiento && touchedFields['filtroNombreRequerimiento']}"
+            required>
             <option value="" disabled selected hidden>Seleccione el nombre del requerimiento</option>
             <option *ngFor="let nombre of nombreRequerimientos" [value]="nombre">{{ nombre }}</option>
           </select>
+          <p *ngIf="!filtroNombreRequerimiento && touchedFields['filtroNombreRequerimiento']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
         </div>
 
+        <!-- Input 1 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Fecha Inicio</label>
           <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date" [(ngModel)]="fechaInicio" (change)="calcularDias()">
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="date"
+            [(ngModel)]="fechaInicio"
+            (blur)="validateField('fechaInicio')"
+            (change)="calcularDias()"
+            [ngClass]="{'input-error': !fechaInicio && touchedFields['fechaInicio']}" required
+          />
+          <p *ngIf="!fechaInicio && touchedFields['fechaInicio']" class="text-red-500 text-xs mt-1">Este campo es
+            obligatorio</p>
         </div>
 
+        <!-- Caja seleccionable 2 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">*Periodo de entrega</label>
-          <select
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroPeriodo">
+          <select class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+                  [(ngModel)]="filtroPeriodo" (blur)="validateField('filtroPeriodo')"
+                  [ngClass]="{'input-error': !filtroPeriodo && touchedFields['filtroPeriodo']}" required>
             <option value="" disabled selected hidden>Seleccione el periodo de entrega</option>
             <option *ngFor="let periodo of periodos" [value]="periodo">{{ periodo }}</option>
           </select>
+          <p *ngIf="!filtroPeriodo && touchedFields['filtroPeriodo']" class="text-red-500 text-xs mt-1">Este campo es
+            obligatorio</p>
         </div>
 
         <!-- Caja seleccionable 3 -->
@@ -80,7 +96,7 @@
       <!-- Contenido 2 -->
       <div class="md:flex justify-center gap-4 px-4 pb-8">
 
-        <!-- Input 5 -->
+        <!-- Input 2 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">Número acto administrativo</label>
           <input
@@ -88,7 +104,7 @@
             type="number" placeholder="Digite el número de acto administrativo">
         </div>
 
-        <!-- Input 6 -->
+        <!-- Input 3 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">Fecha publicación</label>
           <input
@@ -96,7 +112,7 @@
             type="date">
         </div>
 
-        <!-- Input 7 -->
+        <!-- Input 4 -->
         <div class="w-full">
           <label class="text-primary3 font-medium h-full text-xs">Año de vigencia</label>
           <input
@@ -109,10 +125,14 @@
           <label class="text-primary3 font-medium h-full text-xs">*Tipo de programación</label>
           <select
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            [(ngModel)]="filtroProgramaciones" (ngModelChange)="onProgramacionChange()">
+            [(ngModel)]="filtroProgramaciones" (ngModelChange)="onProgramacionChange()"
+            (blur)="validateField('filtroProgramaciones')"
+            [ngClass]="{'input-error': !filtroProgramaciones && touchedFields['filtroProgramaciones']}" required>
             <option value="" disabled selected hidden>Seleccione el tipo de programación</option>
             <option *ngFor="let programacion of programaciones" [value]="programacion">{{ programacion }}</option>
           </select>
+          <p *ngIf="!filtroProgramaciones && touchedFields['filtroProgramaciones']" class="text-red-500 text-xs mt-1">
+            Este campo es obligatorio</p>
         </div>
 
       </div>
@@ -139,12 +159,15 @@
         <!-- Delegatura-->
         <div class="md:flex justify-center gap-4 px-4 pb-4" *ngIf="filtroProgramaciones === 'Delegatura'">
 
-          <!-- Input 8 -->
+          <!-- Input 5 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
+              type="date" [(ngModel)]="fechaFin" (blur)="validateField('fechaFin')"
+              [ngClass]="{'input-error': !fechaFin && touchedFields['fechaFin']}" required>
+            <p *ngIf="!fechaFin && touchedFields['fechaFin']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
           <!-- Caja seleccionable 5 -->
@@ -152,10 +175,14 @@
             <label class="text-primary3 font-medium h-full text-xs">*Delegatura</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()">
+              [(ngModel)]="filtroDelegaturas" (blur)="validateField('filtroDelegaturas')"
+              (change)="onDelegaturaChange()"
+              [ngClass]="{'input-error': !filtroDelegaturas && touchedFields['filtroDelegaturas']}" required>
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let delegatura of delegaturas" [value]="delegatura">{{ delegatura }}</option>
             </select>
+            <p *ngIf="!filtroDelegaturas && touchedFields['filtroDelegaturas']" class="text-red-500 text-xs mt-1">Este
+              campo es obligatorio</p>
           </div>
 
           <!-- Caja seleccionable 6 -->
@@ -163,15 +190,20 @@
             <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroVigilados">
+              [(ngModel)]="filtroVigilados" (blur)="validateField('filtroVigilados')"
+              [ngClass]="{'input-error': !filtroVigilados && touchedFields['filtroVigilados']}"
+              [disabled]="tipoVigiladoBloqueo">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
             </select>
+            <p *ngIf="!filtroVigilados && touchedFields['filtroVigilados']" class="text-red-500 text-xs mt-1">Este campo
+              es obligatorio</p>
           </div>
 
           <!-- Botón Adicionar -->
           <div class="p-7">
-            <app-primary-button type="button" (click)="btnAdicionar(1)">Adicionar
+            <app-primary-button type="button" (click)="btnAdicionar(1)" [disabled]="!isFormValid()">
+              Adicionar
             </app-primary-button>
           </div>
 
@@ -182,12 +214,15 @@
         <div class="md:flex justify-center gap-4 px-2 pb-4"
              *ngIf="filtroProgramaciones === 'Programación por dígito NIT'">
 
-          <!-- Input 9 -->
+          <!-- Input 6 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
+              type="date" [(ngModel)]="fechaFin" (blur)="validateField('fechaFin')"
+              [ngClass]="{'input-error': !fechaFin && touchedFields['fechaFin']}" required>
+            <p *ngIf="!fechaFin && touchedFields['fechaFin']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
           <!-- Caja seleccionable 7 -->
@@ -195,31 +230,43 @@
             <label class="text-primary3 font-medium h-full text-xs">*Programación por dígitos NIT</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDigitos">
+              [(ngModel)]="filtroDigitos" (blur)="validateField('filtroDigitos')"
+              [ngClass]="{'input-error': !filtroDigitos && touchedFields['filtroDigitos']}" required>
               <option value="" disabled selected hidden>Seleccione la programación por dígitos NIT</option>
               <option *ngFor="let digito of digitos" [value]="digito">{{ digito }}</option>
             </select>
+            <p *ngIf="!filtroDigitos && touchedFields['filtroDigitos']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
-          <!-- Input 10 -->
+          <!-- Input 7 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Inicial" [(ngModel)]="digitoInicial">
+              type="number" placeholder="Dígito(s) Inicial" [(ngModel)]="digitoInicial"
+              (blur)="validateField('digitoInicial')"
+              [ngClass]="{'input-error': !digitoInicial && touchedFields['digitoInicial']}" required>
+            <p *ngIf="!digitoInicial && touchedFields['digitoInicial']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
-          <!-- Input 11 -->
+          <!-- Input 8 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Final" [(ngModel)]="digitoFinal">
+              type="number" placeholder="Dígito(s) Final" [(ngModel)]="digitoFinal"
+              (blur)="validateField('digitoFinal')"
+              [ngClass]="{'input-error': !digitoFinal && touchedFields['digitoFinal']}" required>
+            <p *ngIf="!digitoFinal && touchedFields['digitoFinal']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
           <!-- Botón Adicionar -->
           <div class="p-7">
-            <app-primary-button type="button" (click)="btnAdicionar(2)">Adicionar</app-primary-button>
+            <app-primary-button type="button" (click)="btnAdicionar(2)" [disabled]="!isFormValid()">Adicionar
+            </app-primary-button>
           </div>
 
         </div>
@@ -228,15 +275,18 @@
         <div class="md:flex justify-center gap-4 px-4 pb-4"
              *ngIf="filtroProgramaciones === 'Programación individual por NIT'">
 
-          <!-- Input 12 -->
+          <!-- Input 9 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" (change)="calcularDias()">
+              type="date" [(ngModel)]="fechaFin" (blur)="validateField('fechaFin')"
+              [ngClass]="{'input-error': !fechaFin && touchedFields['fechaFin']}" required>
+            <p *ngIf="!fechaFin && touchedFields['fechaFin']" class="text-red-500 text-xs mt-1">Este campo es
+              obligatorio</p>
           </div>
 
-          <!-- Input 13 -->
+          <!-- Input 10 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Programación Individual por NIT</label>
             <input
@@ -244,12 +294,13 @@
               type="number" placeholder="Digite el NIT de la empresa" [(ngModel)]="programacionNIT">
           </div>
 
-          <!-- Input 14 -->
+          <!-- Input 11 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Razón social</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="text" placeholder="Digite el nombre de la razón social" [(ngModel)]="razonSocial">
+              type="text" placeholder="Digite el nombre completo de la razón social" [(ngModel)]="razonSocial"
+              [disabled]="true">
           </div>
 
         </div>

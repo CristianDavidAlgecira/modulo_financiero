@@ -100,7 +100,7 @@
           <label class="text-primary3 font-medium h-full text-xs">Número acto administrativo</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el número de acto administrativo">
+            type="number" placeholder="Digite el número de acto administrativo" [(ngModel)]="numeroActoAdministrativo">
         </div>
 
         <!-- Input 3 -->
@@ -108,7 +108,7 @@
           <label class="text-primary3 font-medium h-full text-xs">Fecha publicación</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="date">
+            type="date" [(ngModel)]="fechaPublicacion">
         </div>
 
         <!-- Input 4 -->
@@ -116,7 +116,7 @@
           <label class="text-primary3 font-medium h-full text-xs">Año de vigencia</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el número de año">
+            type="number" placeholder="Digite el número de año" [(ngModel)]="annioVigencia">
         </div>
 
         <!-- Caja seleccionable 4 -->
@@ -141,12 +141,14 @@
 
         <!-- Carga de archivo pdf -->
         <div class="flex flex-col w-full h-full justify-center items-start pt-6l my-auto mb-2">
+
           <p class="text-primary3 font-semibold">
             Cargar acto administrativo
           </p>
 
           <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
                            [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+
         </div>
 
       </div>
@@ -291,7 +293,8 @@
       <div class="flex justify-end p-4 space-x-4 pb-8">
 
         <!-- Botón Guardar Principal -->
-        <app-primary-button type="button" [disabled]="!habilitarGuardar">Guardar</app-primary-button>
+        <app-primary-button type="button" [disabled]="!habilitarGuardar" (click)="onGuardar()">Guardar
+        </app-primary-button>
 
         <!-- Botón Cancelar Principal -->
         <button

@@ -7,6 +7,7 @@ import {FormsModule} from "@angular/forms";
 import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
 import {DialogModule} from 'primeng/dialog';
+import {ApiMFService} from "../../../services/api/api-mf.service";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -58,9 +59,21 @@ export class NuevoRequerimientoComponent implements OnInit {
   digitoInicial: number | null = null;
   digitoFinal: number | null = null;
 
-  // Variables para porgramacion individual
+  // Variables para programacion individual
   programacionNIT: number | null = null;
   razonSocial: string = '';
+
+  // Variables para numero Acto Administrativo
+  numeroActoAdministrativo: number | null = null;
+
+  // Variables para fecha publicacion
+  fechaPublicacion: string = '';
+
+  // Variables para annio vigencia
+  annioVigencia: number | null = null;
+
+  // Variables de archivo acto administrativo
+  cargarActoAdmin: any;
 
   // Propiedades del input: tamaño, info, etc.
   dataClass = {
@@ -110,6 +123,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     private errorService: ErrorService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private apiMFService: ApiMFService,
   ) {
   }
 
@@ -131,11 +145,52 @@ export class NuevoRequerimientoComponent implements OnInit {
   OnUploadButton(file: File[]) {
 
     if (file[0]) {
-      console.log("hay archivo", file[0]);
-    } else {
-      console.log("no hay");
+
+      this.convertFilesToBase64(file)
+
+        .then((base64Array) => {
+
+          this.cargarActoAdmin = base64Array
+
+        })
+        .catch((error) => {
+
+          console.error('Error al convertir los archivos:', error);
+
+        });
+
     }
 
+  }
+
+  convertFilesToBase64(files: File[]): Promise<string[]> {
+
+    return new Promise((resolve, reject) => {
+
+      const base64Array: string[] = [];
+
+      files.forEach((file, index) => {
+
+        const reader = new FileReader();
+
+        reader.onload = (event: any) => {
+
+          const base64String = event.target.result.split(',')[1];
+          base64Array.push(base64String);
+
+          if (base64Array.length === files.length) {
+            resolve(base64Array);
+          }
+
+        };
+
+        reader.onerror = () => {
+          reject(
+            new Error(`Error al convertir el archivo ${file.name} a base64.`));
+        };
+        reader.readAsDataURL(file);
+      });
+    });
   }
 
   onDelegaturaChange() {
@@ -473,6 +528,109 @@ export class NuevoRequerimientoComponent implements OnInit {
     }
 
     this.cdr.detectChanges();
+
+  }
+
+  onGuardar() {
+
+    let fechaFinal = new Date(0);
+
+    let delegatura: Array<{
+      idDelegatura: number,
+      idTipoVigilado: number,
+      fechaFin: any,
+      estado: boolean,
+      estadoRequerimiento: number
+    }> = [];
+
+    let digitoNit;
+
+    if (this.filtroProgramaciones === 'Delegatura') {
+
+      this.datosTable.forEach((dato: any) => {
+        delegatura.push({
+
+          idDelegatura: 111,
+          idTipoVigilado: 222,
+          fechaFin: dato.fechaFin,
+          estado: true,
+          estadoRequerimiento: 285
+
+        });
+
+        const fechaActual = new Date(dato.fechaFin);
+        fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
+
+      });
+
+      console.log("Fecha final mayor:", fechaFinal);
+
+    }
+
+    // let data = {
+    //   "nombreRequerimiento": this.filtroNombreRequerimiento,
+    //   "fechaInicio": this.fechaInicio,
+    //   "fechaFin": fechaFinal,
+    //   "fechaCreacion": this.fechaActual,
+    //   "periodoEntrega": this.filtroPeriodo,
+    //   "tipoProgramacion": this.filtroProgramaciones,
+    //   "actoAdministrativo": this.numeroActoAdministrativo,
+    //   "fechaPublicacion": this.fechaPublicacion,
+    //   "annioVigencia": this.annioVigencia,
+    //   "documentoActo": this.cargarActoAdmin,
+    //   "estadoVigilado": this.filtroEstados,
+    //   "estadoRequerimiento": 285,
+    //   "estado": true,
+    //   "delegaturas": [
+    //     delegatura
+    //   ],
+    //   "digitoNIT": [
+    //     {
+    //       "idNumeroDigitos": 0,
+    //       "inicioRango": "string",
+    //       "finRango": "string",
+    //       "fechaFin": "2024-11-08",
+    //       "idRequerimiento": 0,
+    //       "estado": true,
+    //       "estadoRequerimiento": 285
+    //     }
+    //   ]
+    // };
+
+    let data = {
+      "nombreRequerimiento": 262,
+      "fechaInicio": this.fechaInicio,
+      "fechaFin": fechaFinal,
+      "fechaCreacion": "2024-11-08",
+      "periodoEntrega": 250,
+      "tipoProgramacion": 232,
+      "actoAdministrativo": this.numeroActoAdministrativo,
+      "fechaPublicacion": this.fechaPublicacion,
+      "annioVigencia": this.annioVigencia,
+      "documentoActo": this.cargarActoAdmin[0],
+      "estadoVigilado": 235,
+      "estadoRequerimiento": 285,
+      "estado": true,
+      "delegaturas":
+      delegatura
+    };
+
+    console.log(data)
+
+    this.apiMFService.createRequerimientoAPI(data).subscribe(
+      (response) => {
+        // Aquí puedes manejar la respuesta, por ejemplo:
+        // this.ShowLoadingModal = false;
+        // this.showFinalModal = true;
+        this.router.navigate(['/administracion']);
+      },
+      (error) => {
+        // this.ShowLoadingModal = false;
+        // this.showErrorModal = true;
+        // Manejo del error
+        console.error('Error al enviar los datos:', error);
+      }
+    );
 
   }
 

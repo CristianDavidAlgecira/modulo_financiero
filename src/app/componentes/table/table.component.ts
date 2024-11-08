@@ -25,7 +25,7 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(
     private router: Router,
     private apiMFService: ApiMFService,
-    private cdRef: ChangeDetectorRef, // Inyecta el ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
   ) {
   }
 

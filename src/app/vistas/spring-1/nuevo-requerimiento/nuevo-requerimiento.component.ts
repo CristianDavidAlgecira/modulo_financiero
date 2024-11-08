@@ -40,7 +40,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Seleccionable de tipo de vigilado
   vigilados: string[] = [];
   filtroVigilados: string = '';
-  tipoVigiladoBloqueo: boolean = false;
 
   // Seleccionable de programación por dígitos NIT
   digitos: string[] = ['Último Dígito', 'Dos últimos dígitos', 'Tres últimos dígitos'];
@@ -53,7 +52,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaInicio: string = '';
   fechaFin: string = '';
   diasRequerimiento: number = 0;
-  errorFechas: string = '';
+  minFechaFin: string | null = null;
 
   // Variables para digitos
   digitoInicial: number | null = null;
@@ -63,17 +62,13 @@ export class NuevoRequerimientoComponent implements OnInit {
   programacionNIT: number | null = null;
   razonSocial: string = '';
 
-  // Constructor
-  constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef,) {
-  }
-
   // Propiedades del input: tamaño, info, etc.
   dataClass = {
     textSize: 'xs', textInfo: 'Archivo PDF',
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: {[key: number]: boolean} = {};
+  errorStates: { [key: number]: boolean } = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -84,14 +79,45 @@ export class NuevoRequerimientoComponent implements OnInit {
   contadorIDTable: number = 0;
   datosEditar: any = [];
 
-  //modals
+  // Modals
   showEditModal: boolean = false;
+
+  // Variables para ver si selecciono las casillas
+  touchedFields = {
+
+    filtroNombreRequerimiento: false,
+    fechaInicio: false,
+    filtroPeriodo: false,
+    filtroProgramaciones: false,
+    fechaFin: false,
+    filtroDelegaturas: false,
+    filtroVigilados: false,
+    filtroDigitos: false,
+    digitoInicial: false,
+    digitoFinal: false,
+
+  };
+
+  // Deshabilitar cajas seleccionables
+  isDisabledDelNit: boolean = false;
+  isDisabledTodos: boolean = false;
+
+  // Deshabilitar el boton guardar
+  habilitarGuardar: boolean = false;
+
+  // Constructor
+  constructor(
+    private errorService: ErrorService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {
+  }
 
   ngOnInit() {
 
     const hoy = new Date();
-    const dia = hoy.getDate().toString().padStart(2, '0'); // Formatear para dos dígitos
-    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const dia = hoy.getDate().toString().padStart(2, '0');
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
     const anio = hoy.getFullYear().toString();
 
     this.fechaActual = `${dia}/${mes}/${anio}`;
@@ -104,7 +130,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
 
-    if(file[0]) {
+    if (file[0]) {
       console.log("hay archivo", file[0]);
     } else {
       console.log("no hay");
@@ -120,7 +146,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
-    switch(this.filtroDelegaturas) {
+    switch (this.filtroDelegaturas) {
       case 'Delegatura de Concesiones e infraestructura':
         this.vigilados = ['Todos', ...option1];
         break;
@@ -142,31 +168,37 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   onProgramacionChange(): void {
+
     this.isAdicionar = false;
-    this.tipoVigiladoBloqueo = false;
     this.setearDatosProgramacion();
     this.programacionNIT = null;
     this.razonSocial = '';
     this.datosTable = [];
     this.contadorIDTable = 0;
+    this.isDisabledDelNit = false;
+    this.isDisabledTodos = false;
+    this.habilitarGuardar = false;
+
   }
 
-  setearDatosProgramacion(isEdit?:boolean) {
+  setearDatosProgramacion(isEdit?: boolean) {
+
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroVigilados = '';
     this.digitoInicial = null;
     this.digitoFinal = null;
 
-    if(!isEdit) {
+    if (!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
     }
+
   }
 
   calcularDias(): void {
 
-    if(this.fechaInicio && this.fechaFin) {
+    if (this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -175,19 +207,20 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
-      if(this.fechaFin <= this.fechaInicio) {
-        this.errorFechas = 'La fecha de fin debe ser posterior a la fecha de inicio.';
-      } else {
-        this.errorFechas = '';
-      }
-
     }
 
   }
 
-  esOpcionSeleccionada(): boolean {
+  onFechaInicioChange(): void {
 
-    return this.filtroDigitos === 'Último Dígito' || this.filtroDigitos === 'Dos últimos dígitos' || this.filtroDigitos === 'Tres últimos dígitos';
+    if (this.fechaInicio) {
+
+      const fechaInicioObj = new Date(this.fechaInicio);
+      fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
+      this.minFechaFin = fechaInicioObj.toISOString().split('T')[0];
+      this.fechaFin = '';
+
+    }
 
   }
 
@@ -195,22 +228,22 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch(this.filtroDigitos) {
+    switch (this.filtroDigitos) {
 
       case 'Último Dígito':
-        if(valor < 0 || valor > 9 || valor.length > 1) {
+        if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
 
       case 'Dos últimos dígitos':
-        if(valor < 0 || valor > 99 || valor.length > 2) {
+        if (valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
 
       case 'Tres últimos dígitos':
-        if(valor < 0 || valor > 999 || valor.length > 3) {
+        if (valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -228,16 +261,80 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  btnAdicionar(num: number) {
-    this.isAdicionar = true;
-    this.contadorIDTable += 1;
-    console.log(this.contadorIDTable)
-    switch(num) {
-      case 1:
+  validateField(field: string) {
 
-        if(this.filtroVigilados == 'Todos') {
-          this.tipoVigiladoBloqueo = true;
-        }
+    (this.touchedFields as any)[field] = true;
+
+  }
+
+  submitForm() {
+
+    this.touchedFields = {
+
+      filtroNombreRequerimiento: true,
+      fechaInicio: true,
+      filtroPeriodo: true,
+      filtroProgramaciones: true,
+      fechaFin: true,
+      filtroDelegaturas: true,
+      filtroVigilados: true,
+      filtroDigitos: true,
+      digitoInicial: true,
+      digitoFinal: true,
+
+    };
+
+  }
+
+  isFormValid(): boolean {
+
+    if (this.filtroProgramaciones === "Delegatura") {
+
+      return (
+        !!this.filtroNombreRequerimiento &&
+        !!this.fechaInicio &&
+        !!this.filtroPeriodo &&
+        !!this.filtroProgramaciones &&
+        !!this.fechaFin &&
+        !!this.filtroDelegaturas &&
+        !!this.filtroVigilados
+      );
+
+    } else if (this.filtroProgramaciones === "Programación por dígito NIT") {
+
+      return (
+        !!this.filtroNombreRequerimiento &&
+        !!this.fechaInicio &&
+        !!this.filtroPeriodo &&
+        !!this.filtroProgramaciones &&
+        !!this.fechaFin &&
+        !!this.filtroDigitos &&
+        !!this.digitoInicial &&
+        !!this.digitoFinal
+      );
+
+    }
+
+    return false;
+
+  }
+
+  btnAdicionar(num: number) {
+
+    this.submitForm()
+    this.isAdicionar = true;
+    this.isDisabledDelNit = true;
+    this.habilitarGuardar = true;
+    this.contadorIDTable += 1;
+    this.digitoInicial = null;
+    this.digitoFinal = null;
+
+    if (this.filtroVigilados === "Todos") {
+      this.isDisabledTodos = true;
+    }
+
+    switch (num) {
+      case 1:
 
         this.headers = [{
           id: 0, title: 'ID'
@@ -300,13 +397,13 @@ export class NuevoRequerimientoComponent implements OnInit {
         break;
 
     }
-    console.log(this.datosTable)
+
     this.cdr.detectChanges();
 
   }
 
   openEditModal(data: any) {
-    console.log(data);
+
     this.datosEditar = data;
     this.fechaFin = data.fechaFin || '';
     this.fechaInicio = data.fechaInicio || '';
@@ -317,21 +414,23 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.digitoInicial = digitoInicial;
     this.digitoFinal = digitoFinal;
     this.filtroDigitos = data.programacionNIT || '';
-
     this.showEditModal = true;
+
   }
 
-  closeModal(isEdit:boolean = false) {
+  closeModal(isEdit: boolean = false) {
 
     this.setearDatosProgramacion(isEdit);
     this.showEditModal = false;
+
   }
 
   editDataTable() {
-    // Encuentra el índice del elemento a actualizar
+
     const index = this.datosTable.findIndex((dato: any) => dato.id === this.datosEditar.id);
 
     const datosDelegatura = {
+
       id: this.datosEditar.id,
       Delegatura: this.filtroDelegaturas || 'Sin dato',
       vigilado: this.filtroVigilados || 'Sin dato',
@@ -339,9 +438,11 @@ export class NuevoRequerimientoComponent implements OnInit {
       fechaFin: this.fechaFin || 'Sin dato',
       diasRequerimiento: this.diasRequerimiento || '0',
       acciones: 'Acciones'
+
     };
 
     const datosDigitoNit = {
+
       id: this.datosEditar.id,
       programacionNIT: this.filtroDigitos || 'Sin dato',
       rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
@@ -349,24 +450,30 @@ export class NuevoRequerimientoComponent implements OnInit {
       fechaFin: this.fechaFin || 'Sin dato',
       diasRequerimiento: this.diasRequerimiento || '0',
       acciones: 'Acciones'
-    };
-    // Si se encuentra el elemento, actualiza sus propiedades
-    if(index !== - 1) {
-      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
 
+    };
+
+    if (index !== -1) {
+
+      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
+
     }
+
     this.closeModal(true);
-    console.log(this.datosTable);
     this.cdr.detectChanges();
+
   }
 
   deleteItem(item: any) {
+
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
-    this.tipoVigiladoBloqueo = false;
-    if(this.datosTable.length == 0) {
+    if (this.datosTable.length == 0) {
       this.isAdicionar = false;
     }
+
     this.cdr.detectChanges();
+
   }
+
 }

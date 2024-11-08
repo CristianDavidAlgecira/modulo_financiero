@@ -40,7 +40,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Seleccionable de tipo de vigilado
   vigilados: string[] = [];
   filtroVigilados: string = '';
-  tipoVigiladoBloqueo: boolean = false;
 
   // Seleccionable de programación por dígitos NIT
   digitos: string[] = ['Último Dígito', 'Dos últimos dígitos', 'Tres últimos dígitos'];
@@ -53,6 +52,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaInicio: string = '';
   fechaFin: string = '';
   diasRequerimiento: number = 0;
+  minFechaFin: string | null = null;
 
   // Variables para digitos
   digitoInicial: number | null = null;
@@ -97,6 +97,13 @@ export class NuevoRequerimientoComponent implements OnInit {
     digitoFinal: false,
 
   };
+
+  // Deshabilitar cajas seleccionables
+  isDisabledDelNit: boolean = false;
+  isDisabledTodos: boolean = false;
+
+  // Deshabilitar el boton guardar
+  habilitarGuardar: boolean = false;
 
   // Constructor
   constructor(
@@ -163,12 +170,14 @@ export class NuevoRequerimientoComponent implements OnInit {
   onProgramacionChange(): void {
 
     this.isAdicionar = false;
-    this.tipoVigiladoBloqueo = false;
     this.setearDatosProgramacion();
     this.programacionNIT = null;
     this.razonSocial = '';
     this.datosTable = [];
     this.contadorIDTable = 0;
+    this.isDisabledDelNit = false;
+    this.isDisabledTodos = false;
+    this.habilitarGuardar = false;
 
   }
 
@@ -202,11 +211,16 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  esOpcionSeleccionada(): boolean {
+  onFechaInicioChange(): void {
 
-    return this.filtroDigitos === 'Último Dígito' ||
-      this.filtroDigitos === 'Dos últimos dígitos' ||
-      this.filtroDigitos === 'Tres últimos dígitos';
+    if (this.fechaInicio) {
+
+      const fechaInicioObj = new Date(this.fechaInicio);
+      fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
+      this.minFechaFin = fechaInicioObj.toISOString().split('T')[0];
+      this.fechaFin = '';
+
+    }
 
   }
 
@@ -309,7 +323,15 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.submitForm()
     this.isAdicionar = true;
+    this.isDisabledDelNit = true;
+    this.habilitarGuardar = true;
     this.contadorIDTable += 1;
+    this.digitoInicial = null;
+    this.digitoFinal = null;
+
+    if (this.filtroVigilados === "Todos") {
+      this.isDisabledTodos = true;
+    }
 
     switch (num) {
       case 1:
@@ -446,7 +468,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   deleteItem(item: any) {
 
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
-    this.tipoVigiladoBloqueo = false;
     if (this.datosTable.length == 0) {
       this.isAdicionar = false;
     }

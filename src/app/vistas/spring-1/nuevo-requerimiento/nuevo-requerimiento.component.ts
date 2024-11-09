@@ -57,12 +57,12 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaFinInvalida: boolean = false;
 
   // Variables para digitos
-  digitoUnico: number | null = null;
-  digitoInicial: number | null = null;
-  digitoFinal: number | null = null;
+  digitoUnico: string = '';
+  digitoInicial: string = '';
+  digitoFinal: string = '';
 
   // Variables para programacion individual
-  programacionNIT: number | null = null;
+  programacionNIT: string = '';
   razonSocial: string = '';
 
   // Variables para numero Acto Administrativo
@@ -72,7 +72,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaPublicacion: string = '';
 
   // Variables para annio vigencia
-  annioVigencia: number | null = null;
+  annioVigencia: string = '';
 
   // Variables de archivo acto administrativo
   cargarActoAdmin: any;
@@ -108,6 +108,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     filtroDelegaturas: false,
     filtroVigilados: false,
     filtroDigitos: false,
+    digitoUnico: false,
     digitoInicial: false,
     digitoFinal: false,
 
@@ -228,8 +229,6 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.isAdicionar = false;
     this.setearDatosProgramacion();
-    this.programacionNIT = null;
-    this.razonSocial = '';
     this.datosTable = [];
     this.contadorIDTable = 0;
     this.isDisabledDelNit = false;
@@ -238,9 +237,11 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.filtroDelegaturas = '';
     this.filtroVigilados = '';
     this.filtroDigitos = '';
-    this.digitoUnico = null;
-    this.digitoInicial = null;
-    this.digitoFinal = null;
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
+    this.programacionNIT = '';
+    this.razonSocial = '';
 
   }
 
@@ -249,12 +250,62 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroVigilados = '';
-    this.digitoInicial = null;
-    this.digitoFinal = null;
+    this.digitoInicial = '';
+    this.digitoFinal = '';
 
     if (!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
+    }
+
+  }
+
+  validarAnnio(event: Event): void {
+
+    const input = (event.target as HTMLInputElement);
+
+    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
+
+    this.annioVigencia = input.value;
+
+  }
+
+  validateDigitInput(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    if (this.digitoUnico) {
+
+      input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
+
+      this.digitoUnico = input.value;
+
+    } else if (this.programacionNIT) {
+
+      input.value = input.value.replace(/[^0-9]/g, '').slice(0, 14);
+
+      this.programacionNIT = input.value;
+
+    }
+
+  }
+
+  validateRangeDigitInput(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    const maxLength = this.filtroDigitos === 'Dos últimos dígitos' ? 2 : 3;
+
+    input.value = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
+
+    if (input.getAttribute('ng-reflect-name') === 'digitoInicial') {
+
+      this.digitoInicial = input.value;
+
+    } else if (input.getAttribute('ng-reflect-name') === 'digitoFinal') {
+
+      this.digitoFinal = input.value;
+
     }
 
   }
@@ -330,12 +381,6 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  navigateToAdministracion() {
-
-    this.router.navigate(['/administracion']);
-
-  }
-
   validateField(field: string) {
 
     (this.touchedFields as any)[field] = true;
@@ -354,6 +399,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       filtroDelegaturas: true,
       filtroVigilados: true,
       filtroDigitos: true,
+      digitoUnico: true,
       digitoInicial: true,
       digitoFinal: true,
 
@@ -377,16 +423,32 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     } else if (this.filtroProgramaciones === "Programación por dígito NIT") {
 
-      return (
-        !!this.filtroNombreRequerimiento &&
-        !!this.fechaInicio &&
-        !!this.filtroPeriodo &&
-        !!this.filtroProgramaciones &&
-        !!this.fechaFin &&
-        !!this.filtroDigitos &&
-        !!this.digitoInicial &&
-        !!this.digitoFinal
-      );
+      if (this.filtroDigitos === "Último Dígito") {
+
+        return (
+          !!this.filtroNombreRequerimiento &&
+          !!this.fechaInicio &&
+          !!this.filtroPeriodo &&
+          !!this.filtroProgramaciones &&
+          !!this.fechaFin &&
+          !!this.filtroDigitos &&
+          !!this.digitoUnico
+        );
+
+      } else {
+
+        return (
+          !!this.filtroNombreRequerimiento &&
+          !!this.fechaInicio &&
+          !!this.filtroPeriodo &&
+          !!this.filtroProgramaciones &&
+          !!this.fechaFin &&
+          !!this.filtroDigitos &&
+          !!this.digitoInicial &&
+          !!this.digitoFinal
+        );
+
+      }
 
     }
 
@@ -401,8 +463,6 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.isDisabledDelNit = true;
     this.habilitarGuardar = true;
     this.contadorIDTable += 1;
-    this.digitoInicial = null;
-    this.digitoFinal = null;
 
     if (this.filtroVigilados === "Todos") {
       this.isDisabledTodos = true;
@@ -475,6 +535,12 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.cdr.detectChanges();
 
+    this.fechaFin = '';
+    this.filtroVigilados = '';
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
+
   }
 
   openEditModal(data: any) {
@@ -545,6 +611,18 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
     if (this.datosTable.length == 0) {
       this.isAdicionar = false;
+      this.setearDatosProgramacion();
+      this.contadorIDTable = 0;
+      this.isDisabledDelNit = false;
+      this.isDisabledTodos = false;
+      this.habilitarGuardar = false;
+      this.filtroDelegaturas = '';
+      this.filtroVigilados = '';
+      this.digitoUnico = '';
+      this.digitoInicial = '';
+      this.digitoFinal = '';
+      this.programacionNIT = '';
+      this.razonSocial = '';
     }
 
     this.cdr.detectChanges();
@@ -633,6 +711,12 @@ export class NuevoRequerimientoComponent implements OnInit {
         console.error('Error al enviar los datos:', error);
       }
     );
+
+  }
+
+  navigateToAdministracion() {
+
+    this.router.navigate(['/administracion']);
 
   }
 

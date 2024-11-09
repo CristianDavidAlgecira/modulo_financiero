@@ -114,7 +114,8 @@
           <label class="text-primary3 font-medium h-full text-xs">Año de vigencia</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Digite el número de año" [(ngModel)]="annioVigencia">
+            type="text" placeholder="Digite el número de año" [(ngModel)]="annioVigencia" maxlength="4"
+            pattern="[0-9]{4}" (input)="validarAnnio($event)">
         </div>
 
         <!-- Caja seleccionable 4 -->
@@ -239,7 +240,8 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígito</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="number" placeholder="Dígite el número" [(ngModel)]="digitoUnico">
+                type="text" placeholder="Dígite el número" [(ngModel)]="digitoUnico" maxlength="1"
+                (input)="validateDigitInput($event)">
             </div>
 
           </div>
@@ -252,7 +254,8 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="number" placeholder="Dígite los números iniciales" [(ngModel)]="digitoInicial">
+                type="text" placeholder="Dígite los números iniciales" [(ngModel)]="digitoInicial"
+                (input)="validateRangeDigitInput($event)">
             </div>
 
             <!-- Input 9 -->
@@ -260,10 +263,12 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="number" placeholder="Dígite los números finales" [(ngModel)]="digitoFinal">
+                type="text" placeholder="Dígite los números finales" [(ngModel)]="digitoFinal"
+                (input)="validateRangeDigitInput($event)">
             </div>
 
           </div>
+
           <!-- Botón Adicionar -->
           <div class="p-7">
             <app-primary-button type="button" (click)="btnAdicionar(2)" [disabled]="!isFormValid()">Adicionar
@@ -290,10 +295,11 @@
 
           <!-- Input 11 -->
           <div class="w-full">
-            <label class="text-primary3 font-medium h-full text-xs">*Programación Individual por NIT</label>
+            <label class="text-primary3 font-medium h-full text-xs">*Ingrese el NIT</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Digite el NIT de la empresa" [(ngModel)]="programacionNIT">
+              type="text" placeholder="Dígite el número NIT de la empresa" [(ngModel)]="programacionNIT" maxlength="14"
+              (input)="validateDigitInput($event)">
           </div>
 
           <!-- Input 12 -->
@@ -367,7 +373,7 @@
       <input id="fechaFin"
              class="shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
              type="date" [(ngModel)]="fechaFin" #fechaFinRef="ngModel" required
-             [ngClass]="{'border-error': fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)}"
+             [ngClass]="{'input-error': fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)}"
              (change)="calcularDias()">
       <div *ngIf="fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)">
         <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
@@ -384,8 +390,10 @@
         <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
       </select>
     </div>
+
     <!-- digitos nit -->
     <div *ngIf="filtroProgramaciones === 'Programación por dígito NIT'" class="flex align-items-center gap-3 mb-3 mt-2">
+
       <!-- Input 10 -->
       <div class="w-full">
         <label class="text-primary3 font-medium h-full">*Dígitos Iniciales</label>
@@ -393,7 +401,7 @@
           class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
           type="number" placeholder="Dígito(s) Inicial"
           (input)="validarDigito($event)" [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
-          [ngClass]="{'border-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
+          [ngClass]="{'input-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
         <div *ngIf="digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)">
           <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
         </div>
@@ -406,11 +414,12 @@
           class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
           type="number" placeholder="Dígito(s) Final"
           (input)="validarDigito($event)" [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
-          [ngClass]="{'border-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
+          [ngClass]="{'input-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
         <div *ngIf="digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)">
           <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
         </div>
       </div>
+
     </div>
   </div>
 

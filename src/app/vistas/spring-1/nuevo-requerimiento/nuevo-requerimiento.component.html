@@ -57,10 +57,8 @@
           <label class="text-primary3 font-medium h-full text-xs">*Fecha Inicio</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
-            type="date" [(ngModel)]="fechaInicio" (change)="onFechaInicioChange()"
-            (blur)="validateField('fechaInicio')"
-            [ngClass]="{'input-error': !fechaInicio && touchedFields['fechaInicio']}"
-            required/>
+            type="date" [(ngModel)]="fechaInicio" (change)="onFechaInicioChange()" (blur)="validateField('fechaInicio')"
+            [ngClass]="{'input-error': !fechaInicio && touchedFields['fechaInicio']}" required/>
           <p *ngIf="!fechaInicio && touchedFields['fechaInicio']" class="text-red-500 text-xs mt-1">
             Este campo es obligatorio
           </p>
@@ -165,7 +163,11 @@
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" [attr.min]="minFechaFin" (change)="calcularDias()"/>
+              type="date" [(ngModel)]="fechaFin" [attr.min]="fechaInicio" (change)="calcularDias()"
+              [disabled]="!fechaInicio" [ngClass]="{'input-error': fechaFinInvalida}"/>
+            <p *ngIf="fechaFinInvalida" class="text-red-500 text-xs mt-1">
+              La fecha fin no puede ser menor o igual a la fecha de inicio.
+            </p>
           </div>
 
           <div class="w-full">
@@ -178,15 +180,19 @@
             </select>
           </div>
 
-          <!-- Caja seleccionable 6 -->
-          <div class="w-full">
-            <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
-            <select
-              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroVigilados" [disabled]="isDisabledTodos">
-              <option value="" disabled selected hidden>Seleccione la delegatura</option>
-              <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
-            </select>
+          <div class="w-full" *ngIf="filtroDelegaturas != ''">
+
+            <!-- Caja seleccionable 6 -->
+            <div class="w-full">
+              <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
+              <select
+                class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+                [(ngModel)]="filtroVigilados" [disabled]="isDisabledTodos">
+                <option value="" disabled selected hidden>Seleccione la delegatura</option>
+                <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
+              </select>
+            </div>
+
           </div>
 
           <!-- Botón Adicionar -->
@@ -208,7 +214,11 @@
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" [attr.min]="minFechaFin" (change)="calcularDias()"/>
+              type="date" [(ngModel)]="fechaFin" [attr.min]="fechaInicio" (change)="calcularDias()"
+              [disabled]="!fechaInicio" [ngClass]="{'input-error': fechaFinInvalida}"/>
+            <p *ngIf="fechaFinInvalida" class="text-red-500 text-xs mt-1">
+              La fecha fin no puede ser menor o igual a la fecha de inicio.
+            </p>
           </div>
 
           <!-- Caja seleccionable 7 -->
@@ -222,22 +232,38 @@
             </select>
           </div>
 
-          <!-- Input 7 -->
-          <div class="w-full">
-            <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
-            <input
-              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Inicial" [(ngModel)]="digitoInicial">
+          <div class="w-full" *ngIf="filtroDigitos === 'Último Dígito'">
+
+            <!-- Input 7 -->
+            <div class="w-full">
+              <label class="text-primary3 font-medium h-full text-xs">*Dígito</label>
+              <input
+                class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+                type="number" placeholder="Dígite el número" [(ngModel)]="digitoUnico">
+            </div>
+
           </div>
 
-          <!-- Input 8 -->
-          <div class="w-full">
-            <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
-            <input
-              class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="number" placeholder="Dígito(s) Final" [(ngModel)]="digitoFinal">
-          </div>
+          <div class="md:flex w-full"
+               *ngIf="filtroDigitos === 'Dos últimos dígitos' || filtroDigitos === 'Tres últimos dígitos'">
 
+            <!-- Input 8 -->
+            <div class="w-full">
+              <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
+              <input
+                class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+                type="number" placeholder="Dígite los números iniciales" [(ngModel)]="digitoInicial">
+            </div>
+
+            <!-- Input 9 -->
+            <div class="w-full">
+              <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
+              <input
+                class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+                type="number" placeholder="Dígite los números finales" [(ngModel)]="digitoFinal">
+            </div>
+
+          </div>
           <!-- Botón Adicionar -->
           <div class="p-7">
             <app-primary-button type="button" (click)="btnAdicionar(2)" [disabled]="!isFormValid()">Adicionar
@@ -250,15 +276,19 @@
         <div class="md:flex justify-center gap-4 px-4 pb-4"
              *ngIf="filtroProgramaciones === 'Programación individual por NIT'">
 
-          <!-- Input 9 -->
+          <!-- Input 10 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Fecha Fin</label>
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              type="date" [(ngModel)]="fechaFin" [attr.min]="minFechaFin" (change)="calcularDias()"/>
+              type="date" [(ngModel)]="fechaFin" [attr.min]="fechaInicio" (change)="calcularDias()"
+              [disabled]="!fechaInicio" [ngClass]="{'input-error': fechaFinInvalida}"/>
+            <p *ngIf="fechaFinInvalida" class="text-red-500 text-xs mt-1">
+              La fecha fin no puede ser menor o igual a la fecha de inicio.
+            </p>
           </div>
 
-          <!-- Input 10 -->
+          <!-- Input 11 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Programación Individual por NIT</label>
             <input
@@ -266,7 +296,7 @@
               type="number" placeholder="Digite el NIT de la empresa" [(ngModel)]="programacionNIT">
           </div>
 
-          <!-- Input 11 -->
+          <!-- Input 12 -->
           <div class="w-full">
             <label class="text-primary3 font-medium h-full text-xs">*Razón social</label>
             <input

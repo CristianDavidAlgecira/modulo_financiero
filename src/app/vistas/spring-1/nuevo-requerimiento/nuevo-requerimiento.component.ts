@@ -54,8 +54,10 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaFin: string = '';
   diasRequerimiento: number = 0;
   minFechaFin: string | null = null;
+  fechaFinInvalida: boolean = false;
 
   // Variables para digitos
+  digitoUnico: number | null = null;
   digitoInicial: number | null = null;
   digitoFinal: number | null = null;
 
@@ -233,6 +235,12 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.isDisabledDelNit = false;
     this.isDisabledTodos = false;
     this.habilitarGuardar = false;
+    this.filtroDelegaturas = '';
+    this.filtroVigilados = '';
+    this.filtroDigitos = '';
+    this.digitoUnico = null;
+    this.digitoInicial = null;
+    this.digitoFinal = null;
 
   }
 
@@ -262,7 +270,19 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
+      if (new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
+
+        this.fechaFinInvalida = true;
+        this.fechaFin = '';
+
+      } else {
+
+        this.fechaFinInvalida = false;
+
+      }
+
     }
+
 
   }
 
@@ -567,52 +587,34 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     }
 
-    // let data = {
-    //   "nombreRequerimiento": this.filtroNombreRequerimiento,
-    //   "fechaInicio": this.fechaInicio,
-    //   "fechaFin": fechaFinal,
-    //   "fechaCreacion": this.fechaActual,
-    //   "periodoEntrega": this.filtroPeriodo,
-    //   "tipoProgramacion": this.filtroProgramaciones,
-    //   "actoAdministrativo": this.numeroActoAdministrativo,
-    //   "fechaPublicacion": this.fechaPublicacion,
-    //   "annioVigencia": this.annioVigencia,
-    //   "documentoActo": this.cargarActoAdmin,
-    //   "estadoVigilado": this.filtroEstados,
-    //   "estadoRequerimiento": 285,
-    //   "estado": true,
-    //   "delegaturas": [
-    //     delegatura
-    //   ],
-    //   "digitoNIT": [
-    //     {
-    //       "idNumeroDigitos": 0,
-    //       "inicioRango": "string",
-    //       "finRango": "string",
-    //       "fechaFin": "2024-11-08",
-    //       "idRequerimiento": 0,
-    //       "estado": true,
-    //       "estadoRequerimiento": 285
-    //     }
-    //   ]
-    // };
-
     let data = {
-      "nombreRequerimiento": 262,
+      "nombreRequerimiento": this.filtroNombreRequerimiento,
       "fechaInicio": this.fechaInicio,
       "fechaFin": fechaFinal,
-      "fechaCreacion": "2024-11-08",
-      "periodoEntrega": 250,
-      "tipoProgramacion": 232,
+      "fechaCreacion": this.fechaActual,
+      "periodoEntrega": this.filtroPeriodo,
+      "tipoProgramacion": this.filtroProgramaciones,
       "actoAdministrativo": this.numeroActoAdministrativo,
       "fechaPublicacion": this.fechaPublicacion,
       "annioVigencia": this.annioVigencia,
-      "documentoActo": this.cargarActoAdmin[0],
-      "estadoVigilado": 235,
+      "documentoActo": this.cargarActoAdmin,
+      "estadoVigilado": this.filtroEstados,
       "estadoRequerimiento": 285,
       "estado": true,
-      "delegaturas":
-      delegatura
+      "delegaturas": [
+        delegatura
+      ],
+      "digitoNIT": [
+        {
+          "idNumeroDigitos": 0,
+          "inicioRango": "string",
+          "finRango": "string",
+          "fechaFin": "2024-11-08",
+          "idRequerimiento": 0,
+          "estado": true,
+          "estadoRequerimiento": 285
+        }
+      ]
     };
 
     console.log(data)

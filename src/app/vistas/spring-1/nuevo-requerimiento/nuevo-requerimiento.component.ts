@@ -250,6 +250,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroVigilados = '';
+    this.digitoUnico = '';
     this.digitoInicial = '';
     this.digitoFinal = '';
 

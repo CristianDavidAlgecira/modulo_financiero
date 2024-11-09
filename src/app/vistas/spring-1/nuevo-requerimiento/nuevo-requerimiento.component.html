@@ -394,30 +394,50 @@
     <!-- digitos nit -->
     <div *ngIf="filtroProgramaciones === 'Programación por dígito NIT'" class="flex align-items-center gap-3 mb-3 mt-2">
 
-      <!-- Input 10 -->
-      <div class="w-full">
-        <label class="text-primary3 font-medium h-full">*Dígitos Iniciales</label>
-        <input
-          class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-          type="number" placeholder="Dígito(s) Inicial"
-          (input)="validarDigito($event)" [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
-          [ngClass]="{'input-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
-        <div *ngIf="digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)">
-          <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
+      <div *ngIf="filtroDigitos === 'Último Dígito'">
+
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full">*Dígito</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="number" placeholder="Dígite el número"
+            (input)="validarDigito($event)" [(ngModel)]="digitoUnico" #digitoUnicoRef="ngModel" required
+            [ngClass]="{'input-error': digitoUnicoRef.invalid && (digitoUnicoRef.dirty || digitoUnicoRef.touched)}">
+          <div *ngIf="digitoUnicoRef.invalid && (digitoUnicoRef.dirty || digitoUnicoRef.touched)">
+            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
+          </div>
         </div>
+
       </div>
 
-      <!-- Input 11 -->
-      <div class="w-full">
-        <label class="text-primary3 font-medium h-full">*Dígitos Finales</label>
-        <input
-          class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-          type="number" placeholder="Dígito(s) Final"
-          (input)="validarDigito($event)" [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
-          [ngClass]="{'input-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
-        <div *ngIf="digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)">
-          <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
+      <div *ngIf="filtroDigitos === 'Dos últimos dígitos' || filtroDigitos === 'Tres últimos dígitos'">
+
+        <!-- Input 10 -->
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full">*Dígitos Iniciales</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="number" placeholder="Dígite los números iniciales"
+            (input)="validarDigito($event)" [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
+            [ngClass]="{'input-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
+          <div *ngIf="digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)">
+            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
+          </div>
         </div>
+
+        <!-- Input 11 -->
+        <div class="w-full">
+          <label class="text-primary3 font-medium h-full">*Dígitos Finales</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="number" placeholder="Dígite los números finales"
+            (input)="validarDigito($event)" [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
+            [ngClass]="{'input-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
+          <div *ngIf="digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)">
+            <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
+          </div>
+        </div>
+
       </div>
 
     </div>

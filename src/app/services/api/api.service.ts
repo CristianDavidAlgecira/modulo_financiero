@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,11 @@ export class ApiService {
   //Numeros digito NIT
   getTipoDigitoNIT(): Observable<any> {
     return this.http.get(`${this.baseUrl}/catalogos/MFProgramacionDigitos`);
+  }
+
+  //Estado Requerimiento
+  getEstadoRequerimiento(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/catalogos/MFEstadoRequerimiento`);
   }
 
 }

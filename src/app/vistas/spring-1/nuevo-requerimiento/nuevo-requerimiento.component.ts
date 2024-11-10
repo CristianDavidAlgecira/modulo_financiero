@@ -121,6 +121,8 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Deshabilitar el boton guardar
   habilitarGuardar: boolean = false;
 
+  error: boolean = false;
+
   // Constructor
   constructor(
     private errorService: ErrorService,
@@ -294,7 +296,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   validateRangeDigitInput(event: Event): void {
 
     const input = event.target as HTMLInputElement;
-
     const maxLength = this.filtroDigitos === 'Dos últimos dígitos' ? 2 : 3;
 
     input.value = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
@@ -309,7 +310,21 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     }
 
+    const initial = parseInt(this.digitoInicial, 10);
+    const final = parseInt(this.digitoFinal, 10);
+
+    if (!isNaN(initial) && !isNaN(final)) {
+
+      this.error = final <= initial;
+
+    } else {
+
+      this.error = false;
+
+    }
+
   }
+
 
   calcularDias(): void {
 
@@ -446,7 +461,8 @@ export class NuevoRequerimientoComponent implements OnInit {
           !!this.fechaFin &&
           !!this.filtroDigitos &&
           !!this.digitoInicial &&
-          !!this.digitoFinal
+          !!this.digitoFinal &&
+          !this.error
         );
 
       }

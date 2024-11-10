@@ -254,7 +254,9 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígitos Iniciales</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="text" placeholder="Dígite los números iniciales" [(ngModel)]="digitoInicial"
+                type="text"
+                placeholder="Dígite los números iniciales"
+                [(ngModel)]="digitoInicial"
                 (input)="validateRangeDigitInput($event)">
             </div>
 
@@ -263,8 +265,14 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="text" placeholder="Dígite los números finales" [(ngModel)]="digitoFinal"
-                (input)="validateRangeDigitInput($event)">
+                type="text"
+                placeholder="Dígite los números finales"
+                [(ngModel)]="digitoFinal"
+                (input)="validateRangeDigitInput($event)"
+                [ngClass]="{'input-error': error}">
+              <div *ngIf="error" class="text-red-500 text-xs mt-1">
+                El valor de los dígitos finales debe ser mayor o igual que los dígitos iniciales.
+              </div>
             </div>
 
           </div>

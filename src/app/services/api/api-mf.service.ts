@@ -21,9 +21,9 @@ export class ApiMFService {
   }
 
   // Obtener requerimiento por ID
-  // getRequerimientosByID(id: string): Observable<any> {
-  //   return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
-  // }
+  getRequerimientosByID(id: string): Observable<any> {
+  return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
+  }
 
   // Envio requerimiento primer creacion
   createRequerimientoAPI(data: any): Observable<any> {

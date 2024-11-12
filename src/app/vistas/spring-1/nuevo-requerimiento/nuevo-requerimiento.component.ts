@@ -20,23 +20,18 @@ import {ApiService} from "../../../services/api/api.service";
 export class NuevoRequerimientoComponent implements OnInit {
 
   // Seleccionable de nombre requerimientos
-  nombreRequerimientos: string[] = ['General Anualizada (administrativa, societaria y financiera)', 'Administrativa', 'Societario', 'Financiero', 'Modelo Negocios Especiales', 'Reporte intermedio de información y medición de indicadores', 'Tipo de Vigilado', 'Representante Legal', 'Sedes, Tramos y Puntos de servicio', 'Revisor Fiscal', 'Personal Administrativo', 'Personal Operativo', 'Accionista', 'Parafiscales', 'SISI/PESV Mensual', 'SISI/PESV Trimestral', 'SISI/PESV Anual', 'SISI/PECCIT Mensual', 'SISI/PECCIT Anual'];
   filtroNombreRequerimiento: string = '';
 
   // Seleccionable de periodos
-  periodos: string[] = ['Mensual', 'Bimensual', 'Trimestral', 'Cuatrimestral', 'Semestral', 'Anual'];
   filtroPeriodo: string = '';
 
   // Seleccionable de estado vigilado
-  estados: string[] = ['Activo', 'Inactivo'];
   filtroEstados: string = '';
 
   // Seleccionable de tipo de programación
-  programaciones: string[] = ['Delegatura', 'Programación por dígito NIT', 'Programación individual por NIT'];
   filtroProgramaciones: string = '';
 
   // Seleccionable de delegatura
-  delegaturas: string[] = ['Todas', 'Delegatura de Concesiones e infraestructura', 'Delegatura de puertos', 'Delegatura de Tránsito y Transporte Terrestre Automotor'];
   filtroDelegaturas: string = '';
 
   // Seleccionable de tipo de vigilado
@@ -44,7 +39,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   filtroVigilados: string = '';
 
   // Seleccionable de programación por dígitos NIT
-  digitos: string[] = ['Último Dígito', 'Dos últimos dígitos', 'Tres últimos dígitos'];
   filtroDigitos: string = '';
 
   // Variable para almacenar la fecha
@@ -131,7 +125,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   tipoVigiladosDatos: any;
   programacionDigitosDatos: any;
 
-
   // Constructor
   constructor(
     private errorService: ErrorService,
@@ -149,7 +142,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
     const anio = hoy.getFullYear().toString();
 
-    this.fechaActual = `${dia}/${mes}/${anio}`;
+    this.fechaActual = `${dia}-${mes}-${anio}`;
 
     this.errorService.errorStates$.subscribe((errorStates) => {
       this.errorStates = errorStates;
@@ -160,32 +153,37 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   datosMaestros(): void {
-    //respuesta nombre req
+
+    // Respuesta nombre requerimiento
     this.apiService.getTipoRequerimiento().subscribe((response1: any) => {
       this.nombreRequerimientoDatos = response1 ? response1.detalle : [];
-      console.log(':::::', this.nombreRequerimientoDatos)
     });
 
-    // Delgatura
+    // Respuesta periodo entrega
+    this.apiService.getPeriodoEntrega().subscribe((response1: any) => {
+      this.periodoEntregaDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta tipo programacion
+    this.apiService.getTipoProgramacion().subscribe((response1: any) => {
+      this.tipoProgramacionDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta estado vigilado
+    this.apiService.getEstadoVigilado().subscribe((response1: any) => {
+      this.estadoVigiladosDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta delgatura
     this.apiService.getDelegaturas().subscribe((response1: any) => {
       this.delegaturasDatos = response1 ? response1.detalle : [];
-      console.log(':::::', this.delegaturasDatos)
     });
 
-    // //respuesta nombre vigilados
-    // this.apiService.getTipoVigilado().subscribe((response1: any) => {
-    //   this.vigiladosDescripcion = response1 ? response1.detalle : [];
-    // });
-    //
-    // //respuesta digitoNIT
-    // this.apiService.getTipoDigitoNIT().subscribe((response1: any) => {
-    //   this.TipoDigitoNITDescripcion = response1 ? response1.detalle : [];
-    // });
-    //
-    // //respuesta nombre vigilados
-    // this.apiService.getEstadoRequerimiento().subscribe((response1: any) => {
-    //   this.EstadoReqHashDescripcion = response1 ? response1.detalle : [];
-    // });
+    // Respuesta programacion digitos
+    this.apiService.getTipoDigitoNIT().subscribe((response1: any) => {
+      this.programacionDigitosDatos = response1 ? response1.detalle : [];
+    });
+
   }
 
   OnUploadButton(file: File[]) {
@@ -248,19 +246,19 @@ export class NuevoRequerimientoComponent implements OnInit {
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
     switch (this.filtroDelegaturas) {
-      case '116':
+      case 'Delegatura concesiones e infraestructuras':
         this.vigilados = ['Todos', ...option1];
         break;
-      case '115':
+      case 'Delegatura Puertos':
         this.vigilados = ['Todos', ...option2];
         break;
-      case '114':
+      case 'Delegatura Tránsito y Transporte terrestre':
         this.vigilados = ['Todos', ...option3];
         break;
-      case '117':
+      case 'Delegatura de protección a usuarios':
         this.vigilados = ['Todos', ...option1, ...option2, ...option3];
         break;
-      case '118':
+      case 'Todos':
         this.vigilados = ['Todos'];
         break;
       default:
@@ -390,7 +388,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     switch (this.filtroDigitos) {
 
-      case 'Último Dígito':
+      case 'Último dígito':
         if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
@@ -443,7 +441,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if (this.filtroProgramaciones === "Delegatura") {
+    if (this.filtroProgramaciones === "232") {
 
       return (
         !!this.filtroNombreRequerimiento &&
@@ -455,9 +453,9 @@ export class NuevoRequerimientoComponent implements OnInit {
         !!this.filtroVigilados
       );
 
-    } else if (this.filtroProgramaciones === "Programación por dígito NIT") {
+    } else if (this.filtroProgramaciones === "234") {
 
-      if (this.filtroDigitos === "Último Dígito") {
+      if (this.filtroDigitos === "Último dígito") {
 
         return (
           !!this.filtroNombreRequerimiento &&
@@ -577,6 +575,61 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
+
+  obtenerIdNombreDelegatura(nombreReq: any): any {
+
+    if (this.delegaturasDatos) {
+
+      const idReq = this.delegaturasDatos.find((element: any) => {
+        return element.descripcion === nombreReq;
+      });
+
+      if (idReq) {
+
+        return idReq.id;
+
+      } else {
+
+        console.log('No se encontró el id:', nombreReq);
+        return;
+
+      }
+
+    } else {
+
+      return;
+
+    }
+
+  }
+
+  obtenerIdNombreDigitoNit(nombreReq: any): any {
+
+    if (this.programacionDigitosDatos) {
+
+      const idReq = this.programacionDigitosDatos.find((element: any) => {
+        return element.descripcion === nombreReq;
+      });
+
+      if (idReq) {
+
+        return idReq.id;
+
+      } else {
+
+        console.log('No se encontró el id:', nombreReq);
+        return;
+
+      }
+
+    } else {
+
+      return;
+
+    }
+
+  }
+
   openEditModal(data: any) {
 
     this.datosEditar = data;
@@ -630,7 +683,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     if (index !== -1) {
 
-      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
+      const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
 
     }
@@ -665,7 +718,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   onGuardar() {
 
-    let fechaFinal = new Date(0);
+    let fechaFinal = new Date();
 
     let delegatura: Array<{
       idDelegatura: number,
@@ -675,18 +728,25 @@ export class NuevoRequerimientoComponent implements OnInit {
       estadoRequerimiento: number
     }> = [];
 
-    let digitoNit;
+    let digitosNit: Array<{
+      idNumeroDigitos: number,
+      inicioRango: string,
+      finRango: string,
+      fechaFin: any,
+      estado: boolean,
+      estadoRequerimiento: number
+    }> = [];
 
-    if (this.filtroProgramaciones === 'Delegatura') {
+    if (this.filtroProgramaciones === '232') {
 
       this.datosTable.forEach((dato: any) => {
         delegatura.push({
 
-          idDelegatura: 111,
+          idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
           idTipoVigilado: 222,
           fechaFin: dato.fechaFin,
           estado: true,
-          estadoRequerimiento: 285
+          estadoRequerimiento: 289
 
         });
 
@@ -695,47 +755,56 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       });
 
-      console.log("Fecha final mayor:", fechaFinal);
+    } else if (this.filtroProgramaciones === '234') {
+
+      this.datosTable.forEach((dato: any) => {
+
+        const rango = dato.rango.split('-');
+
+        digitosNit.push({
+
+          idNumeroDigitos: this.obtenerIdNombreDigitoNit(dato.programacionNIT),
+          inicioRango: rango[0],
+          finRango: rango[1],
+          fechaFin: dato.fechaFin,
+          estado: true,
+          estadoRequerimiento: 289
+
+        });
+
+        const fechaActual = new Date(dato.fechaFin);
+        fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
+
+      });
 
     }
 
+
     let data = {
-      "nombreRequerimiento": this.filtroNombreRequerimiento,
+      "nombreRequerimiento": parseInt(this.filtroNombreRequerimiento),
       "fechaInicio": this.fechaInicio,
       "fechaFin": fechaFinal,
-      "fechaCreacion": this.fechaActual,
-      "periodoEntrega": this.filtroPeriodo,
-      "tipoProgramacion": this.filtroProgramaciones,
-      "actoAdministrativo": this.numeroActoAdministrativo,
-      "fechaPublicacion": this.fechaPublicacion,
-      "annioVigencia": this.annioVigencia,
-      "documentoActo": this.cargarActoAdmin,
-      "estadoVigilado": this.filtroEstados,
-      "estadoRequerimiento": 285,
+      "fechaCreacion": new Date(),
+      "periodoEntrega": parseInt(this.filtroPeriodo),
+      "tipoProgramacion": parseInt(this.filtroProgramaciones),
+      "actoAdministrativo": this.numeroActoAdministrativo || '',
+      "fechaPublicacion": this.fechaPublicacion || '',
+      "annioVigencia": this.annioVigencia || '',
+      "documentoActo": this.cargarActoAdmin || '',
+      "estadoVigilado": parseInt(this.filtroEstados) || '',
+      "estadoRequerimiento": 289,
       "estado": true,
-      "delegaturas": [
-        delegatura
-      ],
-      "digitoNIT": [
-        {
-          "idNumeroDigitos": 0,
-          "inicioRango": "string",
-          "finRango": "string",
-          "fechaFin": "2024-11-08",
-          "idRequerimiento": 0,
-          "estado": true,
-          "estadoRequerimiento": 285
-        }
-      ]
+      "delegaturas": delegatura,
+      "digitoNIT": digitosNit
     };
 
-    console.log(data)
-
+    console.log('data', data);
     this.apiMFService.createRequerimientoAPI(data).subscribe(
       (response) => {
         // Aquí puedes manejar la respuesta, por ejemplo:
         // this.ShowLoadingModal = false;
         // this.showFinalModal = true;
+        console.log('response', response);
         this.router.navigate(['/administracion']);
       },
       (error) => {

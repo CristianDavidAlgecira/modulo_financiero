@@ -72,7 +72,7 @@
                   [(ngModel)]="filtroPeriodo" (blur)="validateField('filtroPeriodo')"
                   [ngClass]="{'input-error': !filtroPeriodo && touchedFields['filtroPeriodo']}" required>
             <option value="" disabled selected hidden>Seleccione el periodo de entrega</option>
-            <option *ngFor="let periodo of periodos" [value]="periodo">{{ periodo }}</option>
+            <option *ngFor="let periodo of periodoEntregaDatos" [value]="periodo.id">{{ periodo.descripcion }}</option>
           </select>
           <p *ngIf="!filtroPeriodo && touchedFields['filtroPeriodo']" class="text-red-500 text-xs mt-1">Este campo es
             obligatorio</p>
@@ -85,7 +85,7 @@
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
             [(ngModel)]="filtroEstados">
             <option value="" disabled selected hidden>Seleccione el estado del vigilado</option>
-            <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+            <option *ngFor="let estado of estadoVigiladosDatos" [value]="estado.id">{{ estado.descripcion }}</option>
           </select>
         </div>
 
@@ -128,7 +128,9 @@
             (blur)="validateField('filtroProgramaciones')"
             [ngClass]="{'input-error': !filtroProgramaciones && touchedFields['filtroProgramaciones']}" required>
             <option value="" disabled selected hidden>Seleccione el tipo de programación</option>
-            <option *ngFor="let programacion of programaciones" [value]="programacion">{{ programacion }}</option>
+            <option *ngFor="let programacion of tipoProgramacionDatos"
+                    [value]="programacion.id">{{ programacion.descripcion }}
+            </option>
           </select>
           <p *ngIf="!filtroProgramaciones && touchedFields['filtroProgramaciones']" class="text-red-500 text-xs mt-1">
             Este campo es obligatorio</p>
@@ -158,7 +160,7 @@
       <div class="md:flex justify-center gap-x-4 px-4 pb-4">
 
         <!-- Delegatura-->
-        <div class="md:flex justify-center gap-4 px-4 pb-4" *ngIf="filtroProgramaciones === 'Delegatura'">
+        <div class="md:flex justify-center gap-4 px-4 pb-4" *ngIf="filtroProgramaciones === '232'">
 
           <!-- Input 5 -->
           <div class="w-full">
@@ -178,7 +180,8 @@
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()" [disabled]="isDisabledDelNit">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
-              <option *ngFor="let delegatura of delegaturasDatos" [value]="delegatura.id">{{ delegatura.descripcion }}
+              <option *ngFor="let delegatura of delegaturasDatos"
+                      [value]="delegatura.descripcion">{{ delegatura.descripcion }}
               </option>
             </select>
           </div>
@@ -210,7 +213,7 @@
 
         <!-- Digito NIT-->
         <div class="md:flex justify-center gap-4 px-2 pb-4"
-             *ngIf="filtroProgramaciones === 'Programación por dígito NIT'">
+             *ngIf="filtroProgramaciones === '234'">
 
           <!-- Input 6 -->
           <div class="w-full">
@@ -231,11 +234,13 @@
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               [(ngModel)]="filtroDigitos" (ngModelChange)="onDigitosChange()" [disabled]="isDisabledDelNit">
               <option value="" disabled selected hidden>Seleccione la programación por dígitos NIT</option>
-              <option *ngFor="let digito of digitos" [value]="digito">{{ digito }}</option>
+              <option *ngFor="let digito of programacionDigitosDatos"
+                      [value]="digito.descripcion">{{ digito.descripcion }}
+              </option>
             </select>
           </div>
 
-          <div class="w-full" *ngIf="filtroDigitos === 'Último Dígito'">
+          <div class="w-full" *ngIf="filtroDigitos === 'Último dígito'">
 
             <!-- Input 7 -->
             <div class="w-full">
@@ -281,7 +286,7 @@
 
         <!-- Individual NIT-->
         <div class="md:flex justify-center gap-4 px-4 pb-4"
-             *ngIf="filtroProgramaciones === 'Programación individual por NIT'">
+             *ngIf="filtroProgramaciones === '233'">
 
           <!-- Input 10 -->
           <div class="w-full">
@@ -381,7 +386,7 @@
         <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
       </div>
     </div>
-    <div *ngIf="filtroDelegaturas != 'Todos' && filtroVigilados != 'Todos' && filtroProgramaciones === 'Delegatura'"
+    <div *ngIf="filtroDelegaturas != 'Todos' && filtroVigilados != 'Todos' && filtroProgramaciones === '232'"
          class="flex align-items-center gap-3 mb-3">
       <label for="vigilado" class="text-primary3 font-semibold w-6rem h-full flex justify-center items-center">Tipo de
         vigilado</label>
@@ -394,9 +399,9 @@
     </div>
 
     <!-- digitos nit -->
-    <div *ngIf="filtroProgramaciones === 'Programación por dígito NIT'" class="flex align-items-center gap-3 mb-3 mt-2">
+    <div *ngIf="filtroProgramaciones === '234'" class="flex align-items-center gap-3 mb-3 mt-2">
 
-      <div *ngIf="filtroDigitos === 'Último Dígito'">
+      <div *ngIf="filtroDigitos === 'Último dígito'">
 
         <div class="w-full">
           <label class="text-primary3 font-medium h-full">*Dígito</label>

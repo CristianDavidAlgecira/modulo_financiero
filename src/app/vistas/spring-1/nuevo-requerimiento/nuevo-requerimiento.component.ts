@@ -293,38 +293,6 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  validateRangeDigitInput(event: Event): void {
-
-    const input = event.target as HTMLInputElement;
-    const maxLength = this.filtroDigitos === 'Dos últimos dígitos' ? 2 : 3;
-
-    input.value = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
-
-    if (input.getAttribute('ng-reflect-name') === 'digitoInicial') {
-
-      this.digitoInicial = input.value;
-
-    } else if (input.getAttribute('ng-reflect-name') === 'digitoFinal') {
-
-      this.digitoFinal = input.value;
-
-    }
-
-    const initial = parseInt(this.digitoInicial, 10);
-    const final = parseInt(this.digitoFinal, 10);
-
-    if (!isNaN(initial) && !isNaN(final)) {
-
-      this.error = final <= initial;
-
-    } else {
-
-      this.error = false;
-
-    }
-
-  }
-
 
   calcularDias(): void {
 

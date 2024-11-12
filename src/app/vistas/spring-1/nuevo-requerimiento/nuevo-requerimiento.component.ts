@@ -8,6 +8,7 @@ import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
 import {DialogModule} from 'primeng/dialog';
 import {ApiMFService} from "../../../services/api/api-mf.service";
+import {ApiService} from "../../../services/api/api.service";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -137,6 +138,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private apiMFService: ApiMFService,
+    private apiService: ApiService,
   ) {
   }
 
@@ -153,6 +155,37 @@ export class NuevoRequerimientoComponent implements OnInit {
       this.errorStates = errorStates;
     });
 
+    this.datosMaestros()
+
+  }
+
+  datosMaestros(): void {
+    //respuesta nombre req
+    this.apiService.getTipoRequerimiento().subscribe((response1: any) => {
+      this.nombreRequerimientoDatos = response1 ? response1.detalle : [];
+      console.log(':::::', this.nombreRequerimientoDatos)
+    });
+
+    // Delgatura
+    this.apiService.getDelegaturas().subscribe((response1: any) => {
+      this.delegaturasDatos = response1 ? response1.detalle : [];
+      console.log(':::::', this.delegaturasDatos)
+    });
+
+    // //respuesta nombre vigilados
+    // this.apiService.getTipoVigilado().subscribe((response1: any) => {
+    //   this.vigiladosDescripcion = response1 ? response1.detalle : [];
+    // });
+    //
+    // //respuesta digitoNIT
+    // this.apiService.getTipoDigitoNIT().subscribe((response1: any) => {
+    //   this.TipoDigitoNITDescripcion = response1 ? response1.detalle : [];
+    // });
+    //
+    // //respuesta nombre vigilados
+    // this.apiService.getEstadoRequerimiento().subscribe((response1: any) => {
+    //   this.EstadoReqHashDescripcion = response1 ? response1.detalle : [];
+    // });
   }
 
   OnUploadButton(file: File[]) {
@@ -215,16 +248,19 @@ export class NuevoRequerimientoComponent implements OnInit {
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
     switch (this.filtroDelegaturas) {
-      case 'Delegatura de Concesiones e infraestructura':
+      case '116':
         this.vigilados = ['Todos', ...option1];
         break;
-      case 'Delegatura de puertos':
+      case '115':
         this.vigilados = ['Todos', ...option2];
         break;
-      case 'Delegatura de Tránsito y Transporte Terrestre Automotor':
+      case '114':
         this.vigilados = ['Todos', ...option3];
         break;
-      case 'Todas':
+      case '117':
+        this.vigilados = ['Todos', ...option1, ...option2, ...option3];
+        break;
+      case '118':
         this.vigilados = ['Todos'];
         break;
       default:

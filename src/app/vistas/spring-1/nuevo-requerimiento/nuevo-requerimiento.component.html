@@ -46,7 +46,8 @@
             [ngClass]="{'input-error': !filtroNombreRequerimiento && touchedFields['filtroNombreRequerimiento']}"
             required>
             <option value="" disabled selected hidden>Seleccione el nombre del requerimiento</option>
-            <option *ngFor="let nombre of nombreRequerimientos" [value]="nombre">{{ nombre }}</option>
+            <option *ngFor="let nombre of nombreRequerimientoDatos" [value]="nombre.id">{{ nombre.descripcion }}
+            </option>
           </select>
           <p *ngIf="!filtroNombreRequerimiento && touchedFields['filtroNombreRequerimiento']"
              class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
@@ -177,7 +178,8 @@
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()" [disabled]="isDisabledDelNit">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
-              <option *ngFor="let delegatura of delegaturas" [value]="delegatura">{{ delegatura }}</option>
+              <option *ngFor="let delegatura of delegaturasDatos" [value]="delegatura.id">{{ delegatura.descripcion }}
+              </option>
             </select>
           </div>
 

@@ -121,7 +121,15 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Deshabilitar el boton guardar
   habilitarGuardar: boolean = false;
 
-  error: boolean = false;
+  // Variables datos maestros
+  nombreRequerimientoDatos: any;
+  periodoEntregaDatos: any;
+  tipoProgramacionDatos: any;
+  estadoVigiladosDatos: any;
+  delegaturasDatos: any;
+  tipoVigiladosDatos: any;
+  programacionDigitosDatos: any;
+
 
   // Constructor
   constructor(
@@ -435,8 +443,7 @@ export class NuevoRequerimientoComponent implements OnInit {
           !!this.fechaFin &&
           !!this.filtroDigitos &&
           !!this.digitoInicial &&
-          !!this.digitoFinal &&
-          !this.error
+          !!this.digitoFinal
         );
 
       }

@@ -247,6 +247,12 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
+  onDigitosChange(): void {
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
+  }
+
   setearDatosProgramacion(isEdit?: boolean) {
 
     this.fechaFin = '';

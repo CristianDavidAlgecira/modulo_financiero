@@ -227,7 +227,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Programación por dígitos NIT</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDigitos" [disabled]="isDisabledDelNit">
+              [(ngModel)]="filtroDigitos" (ngModelChange)="onDigitosChange()" [disabled]="isDisabledDelNit">
               <option value="" disabled selected hidden>Seleccione la programación por dígitos NIT</option>
               <option *ngFor="let digito of digitos" [value]="digito">{{ digito }}</option>
             </select>

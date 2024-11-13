@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import {ApiMFService} from "../../../services/api/api-mf.service";
 import {CommonModule, formatDate} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -8,6 +8,7 @@ import {NoNegativeGlobal} from "../../../validator/noNegative.validator";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
 import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {ApiMuvService} from "../../../services/api/api-muv.service";
 
 @Component({
   selector: 'app-ver-detalle',
@@ -17,12 +18,11 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
   styleUrl: './ver-detalle.component.css',
 })
 export class VerDetalleComponent {
-  constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder, private apiMFService: ApiMFService, private apiService: ApiService, private cdr: ChangeDetectorRef // Inyectar ChangeDetectorRef
+  constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder, private apiMFService: ApiMFService, private apiMUVService: ApiMuvService, private apiService: ApiService, private cdr: ChangeDetectorRef // Inyectar ChangeDetectorRef
   ) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {id: string};
-
 
     if(state && state.id) {
 
@@ -80,42 +80,48 @@ export class VerDetalleComponent {
     this.getRequerimiento();
   }
 
-  getRequerimiento(): void {
+  async getRequerimiento(): Promise<void> {
     // traer los datos de la consulta
-    this.apiMFService.getRequerimientosByID(this.idSubject.getValue()).subscribe((response) => {
-
-      this.datosMaestros();
+    try {
+      // Traer los datos de la consulta
+      const response = await firstValueFrom(this.apiMFService.getRequerimientosByID(this.idSubject.getValue()));
+      await this.datosMaestros(response);
       this.data = response;
       console.log(this.data);
       this.isloading = false;
       this.actuTable(response);
-
-    }, (error) => {
+    } catch(error) {
       this.cdr.detectChanges(); // Forzar la detección de cambios
       console.error('Error fetching user data', error);
-    });
+    }
   }
 
-  datosMaestros(): void {
-    //respuesta nombre req
-    this.apiService.getDelegaturas().subscribe((response1: any) => {
-      this.delegaturasDescripcion = response1 ? response1.detalle : [];
-    });
+  async datosMaestros(data: any): Promise<void> {
+    let num;
+    if(data.tipoProgramacion === 232) {
+      num = data.delegaturas[0].idDelegatura === 114 ? 1 : data.delegaturas[0].idDelegatura === 116 ? 2 : 3;
+    }
 
-    //respuesta nombre vigilados
-    this.apiService.getTipoVigilado().subscribe((response1: any) => {
-      this.vigiladosDescripcion = response1 ? response1.detalle : [];
-    });
+    try {
+      // respuesta TipoVigilados
+      const vigiladosResponse: any = await firstValueFrom(this.apiMUVService.getTipoVigilados(num));
+      this.vigiladosDescripcion = vigiladosResponse ? vigiladosResponse : [];
 
-    //respuesta digitoNIT
-    this.apiService.getTipoDigitoNIT().subscribe((response1: any) => {
-      this.TipoDigitoNITDescripcion = response1 ? response1.detalle : [];
-    });
+      // respuesta nombre req
+      const delegaturasResponse: any = await firstValueFrom(this.apiService.getDelegaturas());
+      this.delegaturasDescripcion = delegaturasResponse ? delegaturasResponse.detalle : [];
 
-    //respuesta nombre vigilados
-    this.apiService.getEstadoRequerimiento().subscribe((response1: any) => {
-      this.EstadoReqHashDescripcion = response1 ? response1.detalle : [];
-    });
+      // respuesta digitoNIT
+      const digitoNITResponse: any = await firstValueFrom(this.apiService.getTipoDigitoNIT());
+      this.TipoDigitoNITDescripcion = digitoNITResponse ? digitoNITResponse.detalle : [];
+
+      // respuesta nombre vigilados
+      const estadoRequerimientoResponse: any = await firstValueFrom(this.apiService.getEstadoRequerimiento());
+      this.EstadoReqHashDescripcion = estadoRequerimientoResponse ? estadoRequerimientoResponse.detalle : [];
+
+    } catch(error) {
+      console.error('Error fetching maestro data', error);
+    }
   }
 
   //Get nombre delegatura
@@ -144,6 +150,7 @@ export class VerDetalleComponent {
   //Get nombre vigilado
   getnombreVig(idVig: number): any {
     // Busca el elemento que coincida con el id
+    console.log(this.vigiladosDescripcion)
     if(this.vigiladosDescripcion) {
 
       const nombreReq = this.vigiladosDescripcion.find((element: any) => {
@@ -237,8 +244,7 @@ export class VerDetalleComponent {
         estado: this.getnombreEstado(dato.estadoRequerimiento) || 'Sin dato',
       }));
 
-    }
-    else if(data.tipoProgramacion === 234) {
+    } else if(data.tipoProgramacion === 234) {
 
       this.headers = [{
         id: 0, title: 'ID'
@@ -263,8 +269,7 @@ export class VerDetalleComponent {
         estado: this.getnombreEstado(dato.estadoRequerimiento) || 'Sin dato',
       }));
 
-    }
-    else {
+    } else {
 
       this.headers = [{
         id: 0, title: 'Nombre del requerimiento'

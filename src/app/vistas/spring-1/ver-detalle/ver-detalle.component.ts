@@ -10,6 +10,7 @@ import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
 
+
 @Component({
   selector: 'app-ver-detalle',
   standalone: true,

@@ -98,8 +98,9 @@ export class VerDetalleComponent {
   }
 
   async datosMaestros(data: any): Promise<void> {
-    let num;
+    let num = 0;
     if(data.tipoProgramacion === 232) {
+      console.log("entro")
       num = data.delegaturas[0].idDelegatura === 114 ? 1 : data.delegaturas[0].idDelegatura === 116 ? 2 : 3;
     }
 

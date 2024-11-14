@@ -26,11 +26,11 @@ export class ApiMFService {
   }
 
   // Envio requerimiento primer creacion
-  // createRequerimientoAPI(data: any): Observable<any> {
-  //   return this.http.post(`${this.baseUrl}/api/requerimiento`, data, {
-  //     responseType: 'text',
-  //   });
-  // }
+  createRequerimientoAPI(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/requerimiento/nuevo-requerimiento`, data, {
+      responseType: 'text',
+    });
+  }
 
   // Envio requerimiento programacion por delegatura
   // createContratos(data1: any): Observable<any> {

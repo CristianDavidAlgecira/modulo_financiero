@@ -7,6 +7,8 @@ import {FormsModule} from "@angular/forms";
 import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
 import {DialogModule} from 'primeng/dialog';
+import {ApiMFService} from "../../../services/api/api-mf.service";
+import {ApiService} from "../../../services/api/api.service";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -18,23 +20,18 @@ import {DialogModule} from 'primeng/dialog';
 export class NuevoRequerimientoComponent implements OnInit {
 
   // Seleccionable de nombre requerimientos
-  nombreRequerimientos: string[] = ['General Anualizada (administrativa, societaria y financiera)', 'Administrativa', 'Societario', 'Financiero', 'Modelo Negocios Especiales', 'Reporte intermedio de información y medición de indicadores', 'Tipo de Vigilado', 'Representante Legal', 'Sedes, Tramos y Puntos de servicio', 'Revisor Fiscal', 'Personal Administrativo', 'Personal Operativo', 'Accionista', 'Parafiscales', 'SISI/PESV Mensual', 'SISI/PESV Trimestral', 'SISI/PESV Anual', 'SISI/PECCIT Mensual', 'SISI/PECCIT Anual'];
   filtroNombreRequerimiento: string = '';
 
   // Seleccionable de periodos
-  periodos: string[] = ['Mensual', 'Bimensual', 'Trimestral', 'Cuatrimestral', 'Semestral', 'Anual'];
   filtroPeriodo: string = '';
 
   // Seleccionable de estado vigilado
-  estados: string[] = ['Activo', 'Inactivo'];
   filtroEstados: string = '';
 
   // Seleccionable de tipo de programación
-  programaciones: string[] = ['Delegatura', 'Programación por dígito NIT', 'Programación individual por NIT'];
   filtroProgramaciones: string = '';
 
   // Seleccionable de delegatura
-  delegaturas: string[] = ['Todas', 'Delegatura de Concesiones e infraestructura', 'Delegatura de puertos', 'Delegatura de Tránsito y Transporte Terrestre Automotor'];
   filtroDelegaturas: string = '';
 
   // Seleccionable de tipo de vigilado
@@ -42,7 +39,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   filtroVigilados: string = '';
 
   // Seleccionable de programación por dígitos NIT
-  digitos: string[] = ['Último Dígito', 'Dos últimos dígitos', 'Tres últimos dígitos'];
   filtroDigitos: string = '';
 
   // Variable para almacenar la fecha
@@ -53,14 +49,28 @@ export class NuevoRequerimientoComponent implements OnInit {
   fechaFin: string = '';
   diasRequerimiento: number = 0;
   minFechaFin: string | null = null;
+  fechaFinInvalida: boolean = false;
 
   // Variables para digitos
-  digitoInicial: number | null = null;
-  digitoFinal: number | null = null;
+  digitoUnico: string = '';
+  digitoInicial: string = '';
+  digitoFinal: string = '';
 
-  // Variables para porgramacion individual
-  programacionNIT: number | null = null;
+  // Variables para programacion individual
+  programacionNIT: string = '';
   razonSocial: string = '';
+
+  // Variables para numero Acto Administrativo
+  numeroActoAdministrativo: number | null = null;
+
+  // Variables para fecha publicacion
+  fechaPublicacion: string = '';
+
+  // Variables para annio vigencia
+  annioVigencia: string = '';
+
+  // Variables de archivo acto administrativo
+  cargarActoAdmin: any;
 
   // Propiedades del input: tamaño, info, etc.
   dataClass = {
@@ -93,6 +103,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     filtroDelegaturas: false,
     filtroVigilados: false,
     filtroDigitos: false,
+    digitoUnico: false,
     digitoInicial: false,
     digitoFinal: false,
 
@@ -105,11 +116,22 @@ export class NuevoRequerimientoComponent implements OnInit {
   // Deshabilitar el boton guardar
   habilitarGuardar: boolean = false;
 
+  // Variables datos maestros
+  nombreRequerimientoDatos: any;
+  periodoEntregaDatos: any;
+  tipoProgramacionDatos: any;
+  estadoVigiladosDatos: any;
+  delegaturasDatos: any;
+  tipoVigiladosDatos: any;
+  programacionDigitosDatos: any;
+
   // Constructor
   constructor(
     private errorService: ErrorService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private apiMFService: ApiMFService,
+    private apiService: ApiService,
   ) {
   }
 
@@ -120,10 +142,46 @@ export class NuevoRequerimientoComponent implements OnInit {
     const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
     const anio = hoy.getFullYear().toString();
 
-    this.fechaActual = `${dia}/${mes}/${anio}`;
+    this.fechaActual = `${dia}-${mes}-${anio}`;
 
     this.errorService.errorStates$.subscribe((errorStates) => {
       this.errorStates = errorStates;
+    });
+
+    this.datosMaestros()
+
+  }
+
+  datosMaestros(): void {
+
+    // Respuesta nombre requerimiento
+    this.apiService.getTipoRequerimiento().subscribe((response1: any) => {
+      this.nombreRequerimientoDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta periodo entrega
+    this.apiService.getPeriodoEntrega().subscribe((response1: any) => {
+      this.periodoEntregaDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta tipo programacion
+    this.apiService.getTipoProgramacion().subscribe((response1: any) => {
+      this.tipoProgramacionDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta estado vigilado
+    this.apiService.getEstadoVigilado().subscribe((response1: any) => {
+      this.estadoVigiladosDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta delgatura
+    this.apiService.getDelegaturas().subscribe((response1: any) => {
+      this.delegaturasDatos = response1 ? response1.detalle : [];
+    });
+
+    // Respuesta programacion digitos
+    this.apiService.getTipoDigitoNIT().subscribe((response1: any) => {
+      this.programacionDigitosDatos = response1 ? response1.detalle : [];
     });
 
   }
@@ -131,11 +189,52 @@ export class NuevoRequerimientoComponent implements OnInit {
   OnUploadButton(file: File[]) {
 
     if (file[0]) {
-      console.log("hay archivo", file[0]);
-    } else {
-      console.log("no hay");
+
+      this.convertFilesToBase64(file)
+
+        .then((base64Array) => {
+
+          this.cargarActoAdmin = base64Array
+
+        })
+        .catch((error) => {
+
+          console.error('Error al convertir los archivos:', error);
+
+        });
+
     }
 
+  }
+
+  convertFilesToBase64(files: File[]): Promise<string[]> {
+
+    return new Promise((resolve, reject) => {
+
+      const base64Array: string[] = [];
+
+      files.forEach((file, index) => {
+
+        const reader = new FileReader();
+
+        reader.onload = (event: any) => {
+
+          const base64String = event.target.result.split(',')[1];
+          base64Array.push(base64String);
+
+          if (base64Array.length === files.length) {
+            resolve(base64Array);
+          }
+
+        };
+
+        reader.onerror = () => {
+          reject(
+            new Error(`Error al convertir el archivo ${file.name} a base64.`));
+        };
+        reader.readAsDataURL(file);
+      });
+    });
   }
 
   onDelegaturaChange() {
@@ -147,16 +246,19 @@ export class NuevoRequerimientoComponent implements OnInit {
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
     switch (this.filtroDelegaturas) {
-      case 'Delegatura de Concesiones e infraestructura':
+      case 'Delegatura concesiones e infraestructuras':
         this.vigilados = ['Todos', ...option1];
         break;
-      case 'Delegatura de puertos':
+      case 'Delegatura Puertos':
         this.vigilados = ['Todos', ...option2];
         break;
-      case 'Delegatura de Tránsito y Transporte Terrestre Automotor':
+      case 'Delegatura Tránsito y Transporte terrestre':
         this.vigilados = ['Todos', ...option3];
         break;
-      case 'Todas':
+      case 'Delegatura de protección a usuarios':
+        this.vigilados = ['Todos', ...option1, ...option2, ...option3];
+        break;
+      case 'Todos':
         this.vigilados = ['Todos'];
         break;
       default:
@@ -171,14 +273,26 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.isAdicionar = false;
     this.setearDatosProgramacion();
-    this.programacionNIT = null;
-    this.razonSocial = '';
     this.datosTable = [];
     this.contadorIDTable = 0;
     this.isDisabledDelNit = false;
     this.isDisabledTodos = false;
     this.habilitarGuardar = false;
+    this.filtroDelegaturas = '';
+    this.filtroVigilados = '';
+    this.filtroDigitos = '';
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
+    this.programacionNIT = '';
+    this.razonSocial = '';
 
+  }
+
+  onDigitosChange(): void {
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
   }
 
   setearDatosProgramacion(isEdit?: boolean) {
@@ -186,8 +300,9 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.fechaFin = '';
     this.diasRequerimiento = 0;
     this.filtroVigilados = '';
-    this.digitoInicial = null;
-    this.digitoFinal = null;
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
 
     if (!isEdit) {
       this.filtroDelegaturas = '';
@@ -195,6 +310,37 @@ export class NuevoRequerimientoComponent implements OnInit {
     }
 
   }
+
+  validarAnnio(event: Event): void {
+
+    const input = (event.target as HTMLInputElement);
+
+    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
+
+    this.annioVigencia = input.value;
+
+  }
+
+  validateDigitInput(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    if (this.digitoUnico) {
+
+      input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
+
+      this.digitoUnico = input.value;
+
+    } else if (this.programacionNIT) {
+
+      input.value = input.value.replace(/[^0-9]/g, '').slice(0, 14);
+
+      this.programacionNIT = input.value;
+
+    }
+
+  }
+
 
   calcularDias(): void {
 
@@ -207,7 +353,19 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
+      if (new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
+
+        this.fechaFinInvalida = true;
+        this.fechaFin = '';
+
+      } else {
+
+        this.fechaFinInvalida = false;
+
+      }
+
     }
+
 
   }
 
@@ -230,7 +388,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     switch (this.filtroDigitos) {
 
-      case 'Último Dígito':
+      case 'Último dígito':
         if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
@@ -255,12 +413,6 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  navigateToAdministracion() {
-
-    this.router.navigate(['/administracion']);
-
-  }
-
   validateField(field: string) {
 
     (this.touchedFields as any)[field] = true;
@@ -279,6 +431,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       filtroDelegaturas: true,
       filtroVigilados: true,
       filtroDigitos: true,
+      digitoUnico: true,
       digitoInicial: true,
       digitoFinal: true,
 
@@ -288,7 +441,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if (this.filtroProgramaciones === "Delegatura") {
+    if (this.filtroProgramaciones === "232") {
 
       return (
         !!this.filtroNombreRequerimiento &&
@@ -300,18 +453,34 @@ export class NuevoRequerimientoComponent implements OnInit {
         !!this.filtroVigilados
       );
 
-    } else if (this.filtroProgramaciones === "Programación por dígito NIT") {
+    } else if (this.filtroProgramaciones === "234") {
 
-      return (
-        !!this.filtroNombreRequerimiento &&
-        !!this.fechaInicio &&
-        !!this.filtroPeriodo &&
-        !!this.filtroProgramaciones &&
-        !!this.fechaFin &&
-        !!this.filtroDigitos &&
-        !!this.digitoInicial &&
-        !!this.digitoFinal
-      );
+      if (this.filtroDigitos === "Último dígito") {
+
+        return (
+          !!this.filtroNombreRequerimiento &&
+          !!this.fechaInicio &&
+          !!this.filtroPeriodo &&
+          !!this.filtroProgramaciones &&
+          !!this.fechaFin &&
+          !!this.filtroDigitos &&
+          !!this.digitoUnico
+        );
+
+      } else {
+
+        return (
+          !!this.filtroNombreRequerimiento &&
+          !!this.fechaInicio &&
+          !!this.filtroPeriodo &&
+          !!this.filtroProgramaciones &&
+          !!this.fechaFin &&
+          !!this.filtroDigitos &&
+          !!this.digitoInicial &&
+          !!this.digitoFinal
+        );
+
+      }
 
     }
 
@@ -326,8 +495,6 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.isDisabledDelNit = true;
     this.habilitarGuardar = true;
     this.contadorIDTable += 1;
-    this.digitoInicial = null;
-    this.digitoFinal = null;
 
     if (this.filtroVigilados === "Todos") {
       this.isDisabledTodos = true;
@@ -400,6 +567,67 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.cdr.detectChanges();
 
+    this.fechaFin = '';
+    this.filtroVigilados = '';
+    this.digitoUnico = '';
+    this.digitoInicial = '';
+    this.digitoFinal = '';
+
+  }
+
+
+  obtenerIdNombreDelegatura(nombreReq: any): any {
+
+    if (this.delegaturasDatos) {
+
+      const idReq = this.delegaturasDatos.find((element: any) => {
+        return element.descripcion === nombreReq;
+      });
+
+      if (idReq) {
+
+        return idReq.id;
+
+      } else {
+
+        console.log('No se encontró el id:', nombreReq);
+        return;
+
+      }
+
+    } else {
+
+      return;
+
+    }
+
+  }
+
+  obtenerIdNombreDigitoNit(nombreReq: any): any {
+
+    if (this.programacionDigitosDatos) {
+
+      const idReq = this.programacionDigitosDatos.find((element: any) => {
+        return element.descripcion === nombreReq;
+      });
+
+      if (idReq) {
+
+        return idReq.id;
+
+      } else {
+
+        console.log('No se encontró el id:', nombreReq);
+        return;
+
+      }
+
+    } else {
+
+      return;
+
+    }
+
   }
 
   openEditModal(data: any) {
@@ -455,7 +683,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     if (index !== -1) {
 
-      const updatedData = this.filtroProgramaciones === 'Delegatura' ? datosDelegatura : datosDigitoNit;
+      const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
 
     }
@@ -470,9 +698,128 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
     if (this.datosTable.length == 0) {
       this.isAdicionar = false;
+      this.setearDatosProgramacion();
+      this.contadorIDTable = 0;
+      this.isDisabledDelNit = false;
+      this.isDisabledTodos = false;
+      this.habilitarGuardar = false;
+      this.filtroDelegaturas = '';
+      this.filtroVigilados = '';
+      this.digitoUnico = '';
+      this.digitoInicial = '';
+      this.digitoFinal = '';
+      this.programacionNIT = '';
+      this.razonSocial = '';
     }
 
     this.cdr.detectChanges();
+
+  }
+
+  onGuardar() {
+
+    let fechaFinal = new Date();
+
+    let delegatura: Array<{
+      idDelegatura: number,
+      idTipoVigilado: number,
+      fechaFin: any,
+      estado: boolean,
+      estadoRequerimiento: number
+    }> = [];
+
+    let digitosNit: Array<{
+      idNumeroDigitos: number,
+      inicioRango: string,
+      finRango: string,
+      fechaFin: any,
+      estado: boolean,
+      estadoRequerimiento: number
+    }> = [];
+
+    if (this.filtroProgramaciones === '232') {
+
+      this.datosTable.forEach((dato: any) => {
+        delegatura.push({
+
+          idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
+          idTipoVigilado: 222,
+          fechaFin: dato.fechaFin,
+          estado: true,
+          estadoRequerimiento: 289
+
+        });
+
+        const fechaActual = new Date(dato.fechaFin);
+        fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
+
+      });
+
+    } else if (this.filtroProgramaciones === '234') {
+
+      this.datosTable.forEach((dato: any) => {
+
+        const rango = dato.rango.split('-');
+
+        digitosNit.push({
+
+          idNumeroDigitos: this.obtenerIdNombreDigitoNit(dato.programacionNIT),
+          inicioRango: rango[0],
+          finRango: rango[1],
+          fechaFin: dato.fechaFin,
+          estado: true,
+          estadoRequerimiento: 289
+
+        });
+
+        const fechaActual = new Date(dato.fechaFin);
+        fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
+
+      });
+
+    }
+
+
+    let data = {
+      "nombreRequerimiento": parseInt(this.filtroNombreRequerimiento),
+      "fechaInicio": this.fechaInicio,
+      "fechaFin": fechaFinal,
+      "fechaCreacion": new Date(),
+      "periodoEntrega": parseInt(this.filtroPeriodo),
+      "tipoProgramacion": parseInt(this.filtroProgramaciones),
+      "actoAdministrativo": this.numeroActoAdministrativo || '',
+      "fechaPublicacion": this.fechaPublicacion || '',
+      "annioVigencia": this.annioVigencia || '',
+      "documentoActo": this.cargarActoAdmin || '',
+      "estadoVigilado": parseInt(this.filtroEstados) || '',
+      "estadoRequerimiento": 289,
+      "estado": true,
+      "delegaturas": delegatura,
+      "digitoNIT": digitosNit
+    };
+
+    console.log('data', data);
+    this.apiMFService.createRequerimientoAPI(data).subscribe(
+      (response) => {
+        // Aquí puedes manejar la respuesta, por ejemplo:
+        // this.ShowLoadingModal = false;
+        // this.showFinalModal = true;
+        console.log('response', response);
+        this.router.navigate(['/administracion']);
+      },
+      (error) => {
+        // this.ShowLoadingModal = false;
+        // this.showErrorModal = true;
+        // Manejo del error
+        console.error('Error al enviar los datos:', error);
+      }
+    );
+
+  }
+
+  navigateToAdministracion() {
+
+    this.router.navigate(['/administracion']);
 
   }
 

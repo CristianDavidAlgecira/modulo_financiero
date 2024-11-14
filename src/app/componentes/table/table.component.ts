@@ -25,7 +25,7 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(
     private router: Router,
     private apiMFService: ApiMFService,
-    private cdRef: ChangeDetectorRef, // Inyecta el ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
   ) {
   }
 
@@ -87,7 +87,6 @@ export class TableComponent implements OnInit, OnChanges {
     this.apiMFService.getRequerimientosAPI()
       .subscribe(
         (response) => {
-          console.log(response);
           this.data = response;
           this.applyFilter()
           this.cdRef.detectChanges(); // Forzar la detección de cambios

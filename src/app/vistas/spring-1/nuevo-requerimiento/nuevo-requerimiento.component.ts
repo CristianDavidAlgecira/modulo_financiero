@@ -743,7 +743,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         delegatura.push({
 
           idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
-          idTipoVigilado: 222,
+          idTipoVigilado: 32,
           fechaFin: dato.fechaFin,
           estado: true,
           estadoRequerimiento: 289

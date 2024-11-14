@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import {ApiMFService} from "../../../services/api/api-mf.service";
@@ -17,19 +17,19 @@ import {ApiMuvService} from "../../../services/api/api-muv.service";
   templateUrl: './ver-detalle.component.html',
   styleUrl: './ver-detalle.component.css',
 })
-export class VerDetalleComponent {
+export class VerDetalleComponent implements OnInit, AfterViewInit {
   constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder, private apiMFService: ApiMFService, private apiMUVService: ApiMuvService, private apiService: ApiService, private cdr: ChangeDetectorRef // Inyectar ChangeDetectorRef
   ) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as {id: string};
+    const state = navigation?.extras.state as { id: string };
 
-    if(state && state.id) {
+    if (state && state.id) {
 
       this.setId(state.id); // Establecer nuevo ID
     } else {
       const storedId = localStorage.getItem('id');
-      if(storedId) {
+      if (storedId) {
         this.setId(storedId); // Establecer ID desde localStorage
       }
     }
@@ -90,15 +90,15 @@ export class VerDetalleComponent {
       console.log(this.data);
       this.isloading = false;
       this.actuTable(response);
-    } catch(error) {
+    } catch (error) {
       this.cdr.detectChanges(); // Forzar la detección de cambios
       console.error('Error fetching user data', error);
     }
   }
 
   async datosMaestros(data: any): Promise<void> {
-    let num;
-    if(data.tipoProgramacion === 232) {
+    let num = 0;
+    if (data.tipoProgramacion === 232) {
       num = data.delegaturas[0].idDelegatura === 114 ? 1 : data.delegaturas[0].idDelegatura === 116 ? 2 : 3;
     }
 
@@ -119,7 +119,7 @@ export class VerDetalleComponent {
       const estadoRequerimientoResponse: any = await firstValueFrom(this.apiService.getEstadoRequerimiento());
       this.EstadoReqHashDescripcion = estadoRequerimientoResponse ? estadoRequerimientoResponse.detalle : [];
 
-    } catch(error) {
+    } catch (error) {
       console.error('Error fetching maestro data', error);
     }
   }
@@ -127,14 +127,14 @@ export class VerDetalleComponent {
   //Get nombre delegatura
   getnombreDel(idReq: number): any {
     // Busca el elemento que coincida con el id
-    if(this.delegaturasDescripcion) {
+    if (this.delegaturasDescripcion) {
 
       const nombreReq = this.delegaturasDescripcion.find((element: any) => {
         return parseInt(element.id) === idReq; // Compara ambos como números
       });
 
       // Asegúrate de que formaPago no sea undefined
-      if(nombreReq) {
+      if (nombreReq) {
         return nombreReq.descripcion;
       } else {
         console.log('No se encontró el id:', idReq); // Para depurar si no encuentra coincidencia
@@ -151,14 +151,14 @@ export class VerDetalleComponent {
   getnombreVig(idVig: number): any {
     // Busca el elemento que coincida con el id
     console.log(this.vigiladosDescripcion)
-    if(this.vigiladosDescripcion) {
+    if (this.vigiladosDescripcion) {
 
       const nombreReq = this.vigiladosDescripcion.find((element: any) => {
         return parseInt(element.id) === idVig; // Compara ambos como números
       });
 
       // Asegúrate de que formaPago no sea undefined
-      if(nombreReq) {
+      if (nombreReq) {
         return nombreReq.descripcion;
       } else {
         console.log('No se encontró el id:', idVig); // Para depurar si no encuentra coincidencia
@@ -174,14 +174,14 @@ export class VerDetalleComponent {
   //Get nombre de tipo digito nit
   getnombreTipoDigitoNit(idNit: number): any {
     // Busca el elemento que coincida con el id
-    if(this.TipoDigitoNITDescripcion) {
+    if (this.TipoDigitoNITDescripcion) {
 
       const nombreReq = this.TipoDigitoNITDescripcion.find((element: any) => {
         return parseInt(element.id) === idNit; // Compara ambos como números
       });
 
       // Asegúrate de que formaPago no sea undefined
-      if(nombreReq) {
+      if (nombreReq) {
         return nombreReq.descripcion;
       } else {
         console.log('No se encontró el id:', idNit); // Para depurar si no encuentra coincidencia
@@ -197,14 +197,14 @@ export class VerDetalleComponent {
   //Get nombre de estado req
   getnombreEstado(idEstado: number): any {
     // Busca el elemento que coincida con el id
-    if(this.EstadoReqHashDescripcion) {
+    if (this.EstadoReqHashDescripcion) {
 
       const nombreReq = this.EstadoReqHashDescripcion.find((element: any) => {
         return parseInt(element.id) === idEstado; // Compara ambos como números
       });
 
       // Asegúrate de que formaPago no sea undefined
-      if(nombreReq) {
+      if (nombreReq) {
         return nombreReq.descripcion;
       } else {
         console.log('No se encontró el id:', idEstado); // Para depurar si no encuentra coincidencia
@@ -219,7 +219,7 @@ export class VerDetalleComponent {
 
   actuTable(data: any): void {
 
-    if(data.tipoProgramacion === 232) {
+    if (data.tipoProgramacion === 232) {
 
       this.headers = [{
         id: 0, title: 'ID'
@@ -244,7 +244,7 @@ export class VerDetalleComponent {
         estado: this.getnombreEstado(dato.estadoRequerimiento) || 'Sin dato',
       }));
 
-    } else if(data.tipoProgramacion === 234) {
+    } else if (data.tipoProgramacion === 234) {
 
       this.headers = [{
         id: 0, title: 'ID'

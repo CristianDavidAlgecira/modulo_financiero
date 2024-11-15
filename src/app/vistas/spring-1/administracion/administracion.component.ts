@@ -40,25 +40,37 @@ export class AdministracionComponent implements OnInit {
   }
 
   onInputChange(inputName?: string, event?: Event): void {
+
     if (inputName && event) {
+
       const input = (event.target as HTMLInputElement).value;
 
       if (inputName === 'filtroNumero' || inputName === 'filtroAnio') {
+
         const sanitizedInput = input.replace(/[^0-9]/g, '');
 
         if (inputName === 'filtroNumero') {
+
           this.filtroNumero = sanitizedInput;
+
         } else if (inputName === 'filtroAnio') {
+
           this.filtroAnio = sanitizedInput;
+
         }
+
       }
+
     }
 
     this.filtroGlobal = `${this.filtroNombre}|${this.filtroNumero}|${this.filtroAnio}`;
+
   }
 
   navigateToNuevoRequerimiento() {
+
     this.router.navigate(['/nuevo-requerimiento']);
+
   }
 
 }

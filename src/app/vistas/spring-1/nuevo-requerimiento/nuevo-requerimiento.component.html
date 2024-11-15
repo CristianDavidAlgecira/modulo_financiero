@@ -178,7 +178,7 @@
             <label class="text-primary3 font-medium h-full text-xs">*Delegatura</label>
             <select
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-              [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()" [disabled]="isDisabledDelNit">
+              [(ngModel)]="filtroDelegaturas" (change)="onDelegaturaChange()">
               <option value="" disabled selected hidden>Seleccione la delegatura</option>
               <option *ngFor="let delegatura of delegaturasDatos"
                       [value]="delegatura.descripcion">{{ delegatura.descripcion }}
@@ -186,7 +186,7 @@
             </select>
           </div>
 
-          <div class="w-full" *ngIf="filtroDelegaturas != ''">
+          <div class="w-full" *ngIf="filtroDelegaturas != '' && tipoVigiladosDatos && vigilados">
 
             <!-- Caja seleccionable 6 -->
             <div class="w-full">

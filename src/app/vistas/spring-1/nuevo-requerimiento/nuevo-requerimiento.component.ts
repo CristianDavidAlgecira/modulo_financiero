@@ -163,7 +163,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta tipo programacion
     this.apiService.getTipoProgramacion().subscribe((response1: any) => {
-      this.tipoProgramacionDatos = response1 ? response1.detalle : [];
+      this.tipoProgramacionDatos = response1 ? response1.detalle.filter((registro:any) => registro.descripcion !== "Todos los Vigilados") : [];
     });
 
     // Respuesta estado vigilado
@@ -173,7 +173,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta delgatura
     this.apiService.getDelegaturas().subscribe((response1: any) => {
-      this.delegaturasDatos = response1 ? response1.detalle : [];
+      this.delegaturasDatos = response1 ? response1.detalle.filter((registro:any) => registro.descripcion !== "Delegatura de protección a usuarios") : [];
     });
 
     // Respuesta programacion digitos
@@ -181,7 +181,15 @@ export class NuevoRequerimientoComponent implements OnInit {
       this.programacionDigitosDatos = response1 ? response1.detalle : [];
     });
 
+    // obtener tipo vigilado
+    this.apiMUVService.getTipoVigilados(0).subscribe((response1: any) => {
+      this.tipoVigiladosDatos = response1 ? response1 : [];
+    });
+
+
+
   }
+
 
   OnUploadButton(file: File[]) {
 
@@ -230,62 +238,37 @@ export class NuevoRequerimientoComponent implements OnInit {
     });
   }
 
-  async onDelegaturaChange() {
+  onDelegaturaChange() {
     let num = 0;
     this.vigilados = [];
-    const option1 = ['OPERADORES TRANSPORTE MULTIMODAL', 'AUTORIDADES DE TRANSITO', 'EMPRESAS DE TRANSPORTE ESPECIAL', 'EMPRESAS DE TRANSPORTE DE CARGA', 'EMPRESAS DE TRANSPORTE MIXTO NACIONAL (VEHICULO TIPO CARRO)', 'EMPRESAS CARROCERAS PARA VEHÍCULOS DE SERVICIO PÚBLICO DE PASAJEROS', 'SISTEMAS DE TRANSPORTE POR CABLE', 'CENTROS INTEGRALES DE ATENCION A CONDUCTORES', 'EMPRESAS DE PASAJEROS POR CARRETERA', 'ORGANISMOS DE TRANSITO', 'CENTROS DE DIAGNOSTICO AUTOMOTOR', 'CENTROS DE RECONOCIMIENTO DE CONDUCTORES', 'CENTRO DE ENSENANZA AUTOMOVILISTICA', 'SERVICIOS CONEXOS', 'ENTIDADES DESINTEGRADORAS', 'SISTEMA INTEGRADO DE TRANSPORTE MASIVO', 'SISTEMAS INTEGRADO DE TRANSPORTE PÚBLICO', 'SISTEMA ESTRATÉGICO DE TRANSPORTE PÚBLICO', 'SERVICIO DE TRANSPORTE PÚBLICO MASIVO DE PASAJEROS POR METRO LIGERO, TREN LIGERO, TRANVÍA Y TREN-TRAM', 'TRANSPORTE TERRESTRE AUTOMOTOR CON RADIO DE ACCIÓN MUNICIPAL, DISTRITAL O METROPOLITANO', 'CONCESIONARIOS DE SERVICIOS DE LOS ORGANISMOS DE TRÁNSITO'];
 
-    const option2 = ['INFRAESTRUCTURA PORTUARIA MARITIMA', 'INFRAESTRUCTURA PORTUARIA FLUVIAL', 'EMPRESAS DE TRANSPORTE FLUVIAL', 'EMPRESAS DE TRANSPORTE MARITIMO', 'OPERADOR PORTUARIO MARITIMO', 'OPERADOR PORTUARIO FLUVIAL', 'LINEA NAVIERA', 'AGENCIA MARÍTIMA', 'ZONAS DE ENTURNAMIENTO PORTUARIAS', 'INFRAESTRUCTURA NO CONCESIONADA'];
-
-    const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
-
-    // Definir los vigilados según el filtro de delegaturas, combinando con datos de la API
-    switch(this.filtroDelegaturas) {
-      case 'Delegatura concesiones e infraestructuras':
-        num = 2;
-        //this.vigilados = ['Todos', ...option1];
-        break;
-      case 'Delegatura Puertos':
-        num = 3;
-        //this.vigilados = ['Todos', ...option2];
-        break;
-      case 'Delegatura Tránsito y Transporte terrestre':
-        num = 1;
-        //this.vigilados = ['Todos', ...option3];
-        break;
-      case 'Delegatura de protección a usuarios':
-        num = 0;
-        this.vigilados = [];
-        break;
-      case 'Todos':
-        this.vigilados = [{id: 49, value: 'Todos'}];
-        break;
-      default:
-        this.vigilados = [];
-    }
-
-    // Resetear el filtro de vigilados
-    this.filtroVigilados = '';
-
-    if(this.filtroDelegaturas !== 'Delegatura de protección a usuarios') {
-      // Obtener datos desde la API
-      const vigiladosResponse: any = await firstValueFrom(this.apiMUVService.getTipoVigilados(num));
-      this.tipoVigiladosDatos = vigiladosResponse ? vigiladosResponse : [];
-
-      console.log(this.tipoVigiladosDatos);
-      this.tipoVigiladosDatos.forEach((data: any) => this.vigilados.push({
-        id: data.id, value: data.descripcion
-      }));
-
-    } else {
-      this.filtroVigilados = 'Todos';
-    }
 
     this.vigilados.push({
       id: 49, value: 'Todos'
     });
 
+    if(this.filtroDelegaturas && this.filtroDelegaturas !== 'Todos') {
+
+      num = this.delegaturasDatos.find((item: any) => item.descripcion == this.filtroDelegaturas).detalle
+
+
+      // Agregar los datos obtenidos al array de vigilados
+      this.vigilados.push(...this.tipoVigiladosDatos
+        .filter((data: any) => data.idDelegatura == num)
+        .map((data: any) => ({
+          id: data.id, value: data.descripcion
+        }))
+      );
+
+    }
+
+    // Resetear el filtro de vigilados
+    this.filtroVigilados = '';
+
+
   }
+
+
 
   onProgramacionChange(): void {
 
@@ -592,7 +575,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   obtenerIdNombreDelegatura(nombreReq: any): any {
-
+    let num = 0;
     if(nombreReq === 'Todos') {
 
       return 49;
@@ -845,7 +828,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       "digitoNIT": digitosNit
     };
 
-    console.log('data', data);
+
     this.apiMFService.createRequerimientoAPI(data).subscribe((response) => {
       // Aquí puedes manejar la respuesta, por ejemplo:
       // this.ShowLoadingModal = false;

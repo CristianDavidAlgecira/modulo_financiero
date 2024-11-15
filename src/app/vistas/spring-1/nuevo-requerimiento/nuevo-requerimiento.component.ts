@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
@@ -9,6 +9,9 @@ import {TableProgramacionesComponent} from "../../../componentes/table-programac
 import {DialogModule} from 'primeng/dialog';
 import {ApiMFService} from "../../../services/api/api-mf.service";
 import {ApiService} from "../../../services/api/api.service";
+import {catchError, debounceTime, distinctUntilChanged, firstValueFrom, of, switchMap, timeout} from "rxjs";
+import {ApiMuvService} from "../../../services/api/api-muv.service";
+import {data} from "autoprefixer";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -35,7 +38,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   filtroDelegaturas: string = '';
 
   // Seleccionable de tipo de vigilado
-  vigilados: string[] = [];
+  vigilados: any = [];
   filtroVigilados: string = '';
 
   // Seleccionable de programación por dígitos NIT
@@ -78,7 +81,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: { [key: number]: boolean } = {};
+  errorStates: {[key: number]: boolean} = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -126,13 +129,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   programacionDigitosDatos: any;
 
   // Constructor
-  constructor(
-    private errorService: ErrorService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private apiMFService: ApiMFService,
-    private apiService: ApiService,
-  ) {
+  constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef, private apiMFService: ApiMFService, private apiService: ApiService, private apiMUVService: ApiMuvService,) {
   }
 
   ngOnInit() {
@@ -188,20 +185,17 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
 
-    if (file[0]) {
+    if(file[0]) {
 
-      this.convertFilesToBase64(file)
+      this.convertFilesToBase64(file).then((base64Array) => {
 
-        .then((base64Array) => {
+        this.cargarActoAdmin = base64Array[0]
 
-          this.cargarActoAdmin = base64Array
+      }).catch((error) => {
 
-        })
-        .catch((error) => {
+        console.error('Error al convertir los archivos:', error);
 
-          console.error('Error al convertir los archivos:', error);
-
-        });
+      });
 
     }
 
@@ -222,50 +216,74 @@ export class NuevoRequerimientoComponent implements OnInit {
           const base64String = event.target.result.split(',')[1];
           base64Array.push(base64String);
 
-          if (base64Array.length === files.length) {
+          if(base64Array.length === files.length) {
             resolve(base64Array);
           }
 
         };
 
         reader.onerror = () => {
-          reject(
-            new Error(`Error al convertir el archivo ${file.name} a base64.`));
+          reject(new Error(`Error al convertir el archivo ${file.name} a base64.`));
         };
         reader.readAsDataURL(file);
       });
     });
   }
 
-  onDelegaturaChange() {
-
+  async onDelegaturaChange() {
+    let num = 0;
+    this.vigilados = [];
     const option1 = ['OPERADORES TRANSPORTE MULTIMODAL', 'AUTORIDADES DE TRANSITO', 'EMPRESAS DE TRANSPORTE ESPECIAL', 'EMPRESAS DE TRANSPORTE DE CARGA', 'EMPRESAS DE TRANSPORTE MIXTO NACIONAL (VEHICULO TIPO CARRO)', 'EMPRESAS CARROCERAS PARA VEHÍCULOS DE SERVICIO PÚBLICO DE PASAJEROS', 'SISTEMAS DE TRANSPORTE POR CABLE', 'CENTROS INTEGRALES DE ATENCION A CONDUCTORES', 'EMPRESAS DE PASAJEROS POR CARRETERA', 'ORGANISMOS DE TRANSITO', 'CENTROS DE DIAGNOSTICO AUTOMOTOR', 'CENTROS DE RECONOCIMIENTO DE CONDUCTORES', 'CENTRO DE ENSENANZA AUTOMOVILISTICA', 'SERVICIOS CONEXOS', 'ENTIDADES DESINTEGRADORAS', 'SISTEMA INTEGRADO DE TRANSPORTE MASIVO', 'SISTEMAS INTEGRADO DE TRANSPORTE PÚBLICO', 'SISTEMA ESTRATÉGICO DE TRANSPORTE PÚBLICO', 'SERVICIO DE TRANSPORTE PÚBLICO MASIVO DE PASAJEROS POR METRO LIGERO, TREN LIGERO, TRANVÍA Y TREN-TRAM', 'TRANSPORTE TERRESTRE AUTOMOTOR CON RADIO DE ACCIÓN MUNICIPAL, DISTRITAL O METROPOLITANO', 'CONCESIONARIOS DE SERVICIOS DE LOS ORGANISMOS DE TRÁNSITO'];
 
     const option2 = ['INFRAESTRUCTURA PORTUARIA MARITIMA', 'INFRAESTRUCTURA PORTUARIA FLUVIAL', 'EMPRESAS DE TRANSPORTE FLUVIAL', 'EMPRESAS DE TRANSPORTE MARITIMO', 'OPERADOR PORTUARIO MARITIMO', 'OPERADOR PORTUARIO FLUVIAL', 'LINEA NAVIERA', 'AGENCIA MARÍTIMA', 'ZONAS DE ENTURNAMIENTO PORTUARIAS', 'INFRAESTRUCTURA NO CONCESIONADA'];
 
     const option3 = ['INFRAESTRUCTURA AEROPORTUARIA CONCESIONADA', 'INFRAESTRUCTURA AEROPORTUARIA NO CONCESIONADA', 'EMPRESAS DE TRANSPORTE AEREO', 'INFRAESTRUCTURA FERREA CONCESIONADA', 'INFRAESTRUCTURA FERREA NO CONCESIONADA', 'OPERADORES FERREOS', 'TERMINALES DE TRANSPORTE TERRESTRE AUTOMOTOR DE PASAJEROS POR CARRETERA', 'INFRAESTRUCTURA CARRETERA CONCESIONADA', 'INFRAESTRUCTURA CARRETERA NO CONCESIONADA'];
 
-    switch (this.filtroDelegaturas) {
+    // Definir los vigilados según el filtro de delegaturas, combinando con datos de la API
+    switch(this.filtroDelegaturas) {
       case 'Delegatura concesiones e infraestructuras':
-        this.vigilados = ['Todos', ...option1];
+        num = 2;
+        //this.vigilados = ['Todos', ...option1];
         break;
       case 'Delegatura Puertos':
-        this.vigilados = ['Todos', ...option2];
+        num = 3;
+        //this.vigilados = ['Todos', ...option2];
         break;
       case 'Delegatura Tránsito y Transporte terrestre':
-        this.vigilados = ['Todos', ...option3];
+        num = 1;
+        //this.vigilados = ['Todos', ...option3];
         break;
       case 'Delegatura de protección a usuarios':
-        this.vigilados = ['Todos', ...option1, ...option2, ...option3];
+        num = 0;
+        this.vigilados = [];
         break;
       case 'Todos':
-        this.vigilados = ['Todos'];
+        this.vigilados = [{id: 49, value: 'Todos'}];
         break;
       default:
         this.vigilados = [];
     }
 
+    // Resetear el filtro de vigilados
     this.filtroVigilados = '';
+
+    if(this.filtroDelegaturas !== 'Delegatura de protección a usuarios') {
+      // Obtener datos desde la API
+      const vigiladosResponse: any = await firstValueFrom(this.apiMUVService.getTipoVigilados(num));
+      this.tipoVigiladosDatos = vigiladosResponse ? vigiladosResponse : [];
+
+      console.log(this.tipoVigiladosDatos);
+      this.tipoVigiladosDatos.forEach((data: any) => this.vigilados.push({
+        id: data.id, value: data.descripcion
+      }));
+
+    } else {
+      this.filtroVigilados = 'Todos';
+    }
+
+    this.vigilados.push({
+      id: 49, value: 'Todos'
+    });
 
   }
 
@@ -304,7 +322,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.digitoInicial = '';
     this.digitoFinal = '';
 
-    if (!isEdit) {
+    if(!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
     }
@@ -325,26 +343,44 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const input = event.target as HTMLInputElement;
 
-    if (this.digitoUnico) {
+    if(this.digitoUnico) {
 
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
 
       this.digitoUnico = input.value;
-
-    } else if (this.programacionNIT) {
-
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 14);
 
       this.programacionNIT = input.value;
+
+    } else if(this.programacionNIT) {
+
+      this.razonSocial = '';
+      console.log(this.programacionNIT.length>=8)
+      if(this.programacionNIT && this.programacionNIT.length >= 8) {
+        this.apiMUVService.getEmpresasByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
+          console.error('Error al enviar los datos:', error);
+          return of(null);
+        })).subscribe((response: any) => {
+          if(response && response.length > 0) {
+            console.log(response)
+            this.razonSocial = response[0].razonSocial;
+          } else {
+            this.razonSocial = '';
+            //alertar de que no existe
+          }
+        });
+      } else {
+        this.razonSocial = ''; // Reinicia razonSocial si el valor es inválido
+      }
+
 
     }
 
   }
 
-
   calcularDias(): void {
 
-    if (this.fechaInicio && this.fechaFin) {
+    if(this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -353,7 +389,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
-      if (new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
+      if(new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
 
         this.fechaFinInvalida = true;
         this.fechaFin = '';
@@ -366,12 +402,11 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     }
 
-
   }
 
   onFechaInicioChange(): void {
 
-    if (this.fechaInicio) {
+    if(this.fechaInicio) {
 
       const fechaInicioObj = new Date(this.fechaInicio);
       fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
@@ -386,22 +421,28 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch (this.filtroDigitos) {
+    switch(this.filtroDigitos) {
 
-      case 'Último dígito':
-        if (valor < 0 || valor > 9 || valor.length > 1) {
+      case
+      'Último dígito'
+      :
+        if(valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
 
-      case 'Dos últimos dígitos':
-        if (valor < 0 || valor > 99 || valor.length > 2) {
+      case
+      'Dos últimos dígitos'
+      :
+        if(valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
 
-      case 'Tres últimos dígitos':
-        if (valor < 0 || valor > 999 || valor.length > 3) {
+      case
+      'Tres últimos dígitos'
+      :
+        if(valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -441,44 +482,19 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if (this.filtroProgramaciones === "232") {
+    if(this.filtroProgramaciones === "232") {
 
-      return (
-        !!this.filtroNombreRequerimiento &&
-        !!this.fechaInicio &&
-        !!this.filtroPeriodo &&
-        !!this.filtroProgramaciones &&
-        !!this.fechaFin &&
-        !!this.filtroDelegaturas &&
-        !!this.filtroVigilados
-      );
+      return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDelegaturas && !!this.filtroVigilados);
 
-    } else if (this.filtroProgramaciones === "234") {
+    } else if(this.filtroProgramaciones === "234") {
 
-      if (this.filtroDigitos === "Último dígito") {
+      if(this.filtroDigitos === "Último dígito") {
 
-        return (
-          !!this.filtroNombreRequerimiento &&
-          !!this.fechaInicio &&
-          !!this.filtroPeriodo &&
-          !!this.filtroProgramaciones &&
-          !!this.fechaFin &&
-          !!this.filtroDigitos &&
-          !!this.digitoUnico
-        );
+        return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDigitos && !!this.digitoUnico);
 
       } else {
 
-        return (
-          !!this.filtroNombreRequerimiento &&
-          !!this.fechaInicio &&
-          !!this.filtroPeriodo &&
-          !!this.filtroProgramaciones &&
-          !!this.fechaFin &&
-          !!this.filtroDigitos &&
-          !!this.digitoInicial &&
-          !!this.digitoFinal
-        );
+        return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDigitos && !!this.digitoInicial && !!this.digitoFinal);
 
       }
 
@@ -496,11 +512,11 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.habilitarGuardar = true;
     this.contadorIDTable += 1;
 
-    if (this.filtroVigilados === "Todos") {
+    if(this.filtroVigilados === "Todos") {
       this.isDisabledTodos = true;
     }
 
-    switch (num) {
+    switch(num) {
       case 1:
 
         this.headers = [{
@@ -575,16 +591,47 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-
   obtenerIdNombreDelegatura(nombreReq: any): any {
 
-    if (this.delegaturasDatos) {
+    if(nombreReq === 'Todos') {
 
-      const idReq = this.delegaturasDatos.find((element: any) => {
+      return 49;
+    } else {
+      if(this.delegaturasDatos) {
+
+        const idReq = this.delegaturasDatos.find((element: any) => {
+          return element.descripcion === nombreReq;
+        });
+
+        if(idReq) {
+
+          return idReq.id;
+
+        } else {
+
+          console.log('No se encontró el id:', nombreReq);
+          return;
+
+        }
+
+      } else {
+
+        return;
+
+      }
+    }
+
+  }
+
+  obtenerIdNombreDigitoNit(nombreReq: any): any {
+
+    if(this.programacionDigitosDatos) {
+
+      const idReq = this.programacionDigitosDatos.find((element: any) => {
         return element.descripcion === nombreReq;
       });
 
-      if (idReq) {
+      if(idReq) {
 
         return idReq.id;
 
@@ -603,29 +650,34 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  obtenerIdNombreDigitoNit(nombreReq: any): any {
+  obtenerTipoVigilado(nombreReq: any): any {
 
-    if (this.programacionDigitosDatos) {
+    if(nombreReq === 'Todos') {
 
-      const idReq = this.programacionDigitosDatos.find((element: any) => {
-        return element.descripcion === nombreReq;
-      });
+      return 49;
+    } else {
+      if(this.tipoVigiladosDatos) {
 
-      if (idReq) {
+        const idReq = this.tipoVigiladosDatos.find((element: any) => {
+          return element.descripcion === nombreReq;
+        });
 
-        return idReq.id;
+        if(idReq) {
+
+          return idReq.id;
+
+        } else {
+
+          console.log('No se encontró el id:', nombreReq);
+          return;
+
+        }
 
       } else {
 
-        console.log('No se encontró el id:', nombreReq);
         return;
 
       }
-
-    } else {
-
-      return;
-
     }
 
   }
@@ -681,7 +733,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     };
 
-    if (index !== -1) {
+    if(index !== - 1) {
 
       const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
@@ -696,7 +748,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   deleteItem(item: any) {
 
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
-    if (this.datosTable.length == 0) {
+    if(this.datosTable.length == 0) {
       this.isAdicionar = false;
       this.setearDatosProgramacion();
       this.contadorIDTable = 0;
@@ -721,11 +773,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     let fechaFinal = new Date();
 
     let delegatura: Array<{
-      idDelegatura: number,
-      idTipoVigilado: number,
-      fechaFin: any,
-      estado: boolean,
-      estadoRequerimiento: number
+      idDelegatura: number, idTipoVigilado: number, fechaFin: any, estado: boolean, estadoRequerimiento: number
     }> = [];
 
     let digitosNit: Array<{
@@ -737,16 +785,16 @@ export class NuevoRequerimientoComponent implements OnInit {
       estadoRequerimiento: number
     }> = [];
 
-    if (this.filtroProgramaciones === '232') {
+    if(this.filtroProgramaciones === '232') {
 
       this.datosTable.forEach((dato: any) => {
         delegatura.push({
 
           idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
-          idTipoVigilado: 5,
+          idTipoVigilado: this.obtenerTipoVigilado(dato.vigilado),
           fechaFin: dato.fechaFin,
           estado: true,
-          estadoRequerimiento: 289
+          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289
 
         });
 
@@ -755,7 +803,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       });
 
-    } else if (this.filtroProgramaciones === '234') {
+    } else if(this.filtroProgramaciones === '234') {
 
       this.datosTable.forEach((dato: any) => {
 
@@ -768,7 +816,7 @@ export class NuevoRequerimientoComponent implements OnInit {
           finRango: rango[1],
           fechaFin: dato.fechaFin,
           estado: true,
-          estadoRequerimiento: 289
+          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289
 
         });
 
@@ -778,7 +826,6 @@ export class NuevoRequerimientoComponent implements OnInit {
       });
 
     }
-
 
     let data = {
       "nombreRequerimiento": parseInt(this.filtroNombreRequerimiento),
@@ -792,28 +839,25 @@ export class NuevoRequerimientoComponent implements OnInit {
       "annioVigencia": this.annioVigencia || '',
       "documentoActo": this.cargarActoAdmin || '',
       "estadoVigilado": parseInt(this.filtroEstados) || '',
-      "estadoRequerimiento": 289,
+      "estadoRequerimiento": new Date() >= new Date(fechaFinal) ? 290 : 289,
       "estado": true,
       "delegaturas": delegatura,
       "digitoNIT": digitosNit
     };
 
     console.log('data', data);
-    this.apiMFService.createRequerimientoAPI(data).subscribe(
-      (response) => {
-        // Aquí puedes manejar la respuesta, por ejemplo:
-        // this.ShowLoadingModal = false;
-        // this.showFinalModal = true;
-        console.log('response', response);
-        this.router.navigate(['/administracion']);
-      },
-      (error) => {
-        // this.ShowLoadingModal = false;
-        // this.showErrorModal = true;
-        // Manejo del error
-        console.error('Error al enviar los datos:', error);
-      }
-    );
+    this.apiMFService.createRequerimientoAPI(data).subscribe((response) => {
+      // Aquí puedes manejar la respuesta, por ejemplo:
+      // this.ShowLoadingModal = false;
+      // this.showFinalModal = true;
+      console.log('response', response);
+      this.router.navigate(['/administracion']);
+    }, (error) => {
+      // this.ShowLoadingModal = false;
+      // this.showErrorModal = true;
+      // Manejo del error
+      console.error('Error al enviar los datos:', error);
+    });
 
   }
 

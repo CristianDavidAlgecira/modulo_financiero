@@ -142,12 +142,15 @@ export class TableComponent implements OnInit, OnChanges {
       const [nombre, numero, anio] = this.filtro.split('|');
 
       datos = datos.filter((item: any) => {
-        const matchNombre = nombre ? item.nombreRequerimiento.toLowerCase().includes(nombre.toLowerCase()) : true;
-        const matchNumero = numero ? item.numeroRequerimiento.toString().includes(numero) : true;
-        const matchAnio = anio ? item.anio.toString().includes(anio) : true;
+
+        const matchNombre = nombre ? item.tipoRequerimientoDescripcion.toLowerCase().includes(nombre.toLowerCase()) : true;
+        const matchNumero = numero ? item.actoAdministrativo ? item.actoAdministrativo.toString().includes(numero) : false : true;
+        const matchAnio = anio ? item.annioVigencia ? item.annioVigencia.toString().includes(anio) : false : true;
 
         return matchNombre && matchNumero && matchAnio;
+
       });
+
     }
 
     this.pageLength = datos.length;

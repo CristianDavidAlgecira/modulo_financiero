@@ -22,12 +22,12 @@ export class ApiMFService {
 
   // Obtener requerimiento por ID
   getRequerimientosByID(id: string): Observable<any> {
-  return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
+    return this.http.get(`${this.baseUrl}/api/requerimiento/by-id/${id}`);
   }
 
   // Envio requerimiento primer creacion
   createRequerimientoAPI(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/requerimiento/nuevo-requerimiento`, data, {
+    return this.http.post(`${this.baseUrl}/api/requerimiento`, data, {
       responseType: 'text',
     });
   }

@@ -10,6 +10,7 @@ import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
 
+
 @Component({
   selector: 'app-ver-detalle',
   standalone: true,
@@ -98,8 +99,11 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   async datosMaestros(data: any): Promise<void> {
     let num = 0;
+
     if (data.tipoProgramacion === 232) {
+      
       num = data.delegaturas[0].idDelegatura === 114 ? 1 : data.delegaturas[0].idDelegatura === 116 ? 2 : 3;
+      
     }
 
     try {

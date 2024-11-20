@@ -73,4 +73,10 @@ export class AdministracionComponent implements OnInit {
 
   }
 
+  navigateToVisualizarArchivo() {
+
+    this.router.navigate(['/visualizar-archivo']);
+
+  }
+
 }

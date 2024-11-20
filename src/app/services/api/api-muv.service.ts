@@ -19,4 +19,9 @@ export class ApiMuvService {
     return this.http.get(`${this.baseUrl}/api/muv/tipo-vigilado/?idDelegatura=${idDelegatura}`);
   }
 
+  // Obtener EMPRESAS BY NIT
+  getEmpresasByNIT(nit?:any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/empresasByNit/?nit=${nit}`);
+  }
+
 }

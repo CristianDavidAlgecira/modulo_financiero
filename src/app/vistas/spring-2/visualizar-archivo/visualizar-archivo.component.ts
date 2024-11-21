@@ -19,12 +19,6 @@ import {PaginatorModule} from "primeng/paginator";
 })
 export class VisualizarArchivoComponent implements OnInit {
 
-  // Constructor
-  constructor(
-    private errorService: ErrorService
-  ) {
-  }
-
   // Propiedad de objeto para manejar errores
   errorStates: { [key: number]: boolean } = {};
 
@@ -42,6 +36,12 @@ export class VisualizarArchivoComponent implements OnInit {
 
   // Índice de la hoja seleccionada para mostrar (paginador)
   selectedSheetIndex: number = 0;
+
+  // Constructor
+  constructor(
+    private errorService: ErrorService
+  ) {
+  }
 
   ngOnInit() {
 

@@ -315,7 +315,7 @@
             <input
               class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
               type="text" placeholder="Digite el nombre completo de la razón social" [(ngModel)]="razonSocial"
-              [disabled]="true">
+              [disabled]="true" (input)="validateDigitInput($event)">
           </div>
 
         </div>

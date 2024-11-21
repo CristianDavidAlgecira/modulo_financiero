@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
@@ -9,9 +9,8 @@ import {TableProgramacionesComponent} from "../../../componentes/table-programac
 import {DialogModule} from 'primeng/dialog';
 import {ApiMFService} from "../../../services/api/api-mf.service";
 import {ApiService} from "../../../services/api/api.service";
-import {catchError, debounceTime, distinctUntilChanged, firstValueFrom, of, switchMap, timeout} from "rxjs";
+import {catchError, of, timeout} from "rxjs";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
-import {data} from "autoprefixer";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
@@ -81,7 +80,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: {[key: number]: boolean} = {};
+  errorStates: { [key: number]: boolean } = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -163,7 +162,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta tipo programacion
     this.apiService.getTipoProgramacion().subscribe((response1: any) => {
-      this.tipoProgramacionDatos = response1 ? response1.detalle.filter((registro:any) => registro.descripcion !== "Todos los Vigilados") : [];
+      this.tipoProgramacionDatos = response1 ? response1.detalle.filter((registro: any) => registro.descripcion !== "Todos los Vigilados") : [];
     });
 
     // Respuesta estado vigilado
@@ -173,7 +172,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta delgatura
     this.apiService.getDelegaturas().subscribe((response1: any) => {
-      this.delegaturasDatos = response1 ? response1.detalle.filter((registro:any) => registro.descripcion !== "Delegatura de protección a usuarios") : [];
+      this.delegaturasDatos = response1 ? response1.detalle.filter((registro: any) => registro.descripcion !== "Delegatura de protección a usuarios") : [];
     });
 
     // Respuesta programacion digitos
@@ -187,13 +186,12 @@ export class NuevoRequerimientoComponent implements OnInit {
     });
 
 
-
   }
 
 
   OnUploadButton(file: File[]) {
 
-    if(file[0]) {
+    if (file[0]) {
 
       this.convertFilesToBase64(file).then((base64Array) => {
 
@@ -224,7 +222,7 @@ export class NuevoRequerimientoComponent implements OnInit {
           const base64String = event.target.result.split(',')[1];
           base64Array.push(base64String);
 
-          if(base64Array.length === files.length) {
+          if (base64Array.length === files.length) {
             resolve(base64Array);
           }
 
@@ -247,7 +245,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       id: 49, value: 'Todos'
     });
 
-    if(this.filtroDelegaturas && this.filtroDelegaturas !== 'Todos') {
+    if (this.filtroDelegaturas && this.filtroDelegaturas !== 'Todos') {
 
       num = this.delegaturasDatos.find((item: any) => item.descripcion == this.filtroDelegaturas).detalle
 
@@ -267,7 +265,6 @@ export class NuevoRequerimientoComponent implements OnInit {
 
 
   }
-
 
 
   onProgramacionChange(): void {
@@ -291,9 +288,11 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   onDigitosChange(): void {
+
     this.digitoUnico = '';
     this.digitoInicial = '';
     this.digitoFinal = '';
+
   }
 
   setearDatosProgramacion(isEdit?: boolean) {
@@ -305,7 +304,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.digitoInicial = '';
     this.digitoFinal = '';
 
-    if(!isEdit) {
+    if (!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
     }
@@ -326,7 +325,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const input = event.target as HTMLInputElement;
 
-    if(this.digitoUnico) {
+    if (this.digitoUnico) {
 
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
 
@@ -335,18 +334,19 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.programacionNIT = input.value;
 
-    } else if(this.programacionNIT) {
+    } else if (this.programacionNIT) {
 
       this.razonSocial = '';
-      console.log(this.programacionNIT.length>=8)
-      if(this.programacionNIT && this.programacionNIT.length >= 8) {
+      console.log(this.programacionNIT.length >= 8)
+      if (this.programacionNIT && this.programacionNIT.length >= 8) {
         this.apiMUVService.getEmpresasByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
           console.error('Error al enviar los datos:', error);
           return of(null);
         })).subscribe((response: any) => {
-          if(response && response.length > 0) {
+          if (response && response.length > 0) {
             console.log(response)
             this.razonSocial = response[0].razonSocial;
+            this.habilitarGuardar = this.razonSocial.trim().length > 0;
           } else {
             this.razonSocial = '';
             //alertar de que no existe
@@ -363,7 +363,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   calcularDias(): void {
 
-    if(this.fechaInicio && this.fechaFin) {
+    if (this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -372,7 +372,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
-      if(new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
+      if (new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
 
         this.fechaFinInvalida = true;
         this.fechaFin = '';
@@ -389,7 +389,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   onFechaInicioChange(): void {
 
-    if(this.fechaInicio) {
+    if (this.fechaInicio) {
 
       const fechaInicioObj = new Date(this.fechaInicio);
       fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
@@ -404,12 +404,12 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const valor = event.target.value;
 
-    switch(this.filtroDigitos) {
+    switch (this.filtroDigitos) {
 
       case
       'Último dígito'
       :
-        if(valor < 0 || valor > 9 || valor.length > 1) {
+        if (valor < 0 || valor > 9 || valor.length > 1) {
           event.target.value = '';
         }
         break;
@@ -417,7 +417,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       case
       'Dos últimos dígitos'
       :
-        if(valor < 0 || valor > 99 || valor.length > 2) {
+        if (valor < 0 || valor > 99 || valor.length > 2) {
           event.target.value = '';
         }
         break;
@@ -425,7 +425,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       case
       'Tres últimos dígitos'
       :
-        if(valor < 0 || valor > 999 || valor.length > 3) {
+        if (valor < 0 || valor > 999 || valor.length > 3) {
           event.target.value = '';
         }
         break;
@@ -465,13 +465,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if(this.filtroProgramaciones === "232") {
+    if (this.filtroProgramaciones === "232") {
 
       return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDelegaturas && !!this.filtroVigilados);
 
-    } else if(this.filtroProgramaciones === "234") {
+    } else if (this.filtroProgramaciones === "234") {
 
-      if(this.filtroDigitos === "Último dígito") {
+      if (this.filtroDigitos === "Último dígito") {
 
         return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDigitos && !!this.digitoUnico);
 
@@ -495,11 +495,11 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.habilitarGuardar = true;
     this.contadorIDTable += 1;
 
-    if(this.filtroVigilados === "Todos") {
+    if (this.filtroVigilados === "Todos") {
       this.isDisabledTodos = true;
     }
 
-    switch(num) {
+    switch (num) {
       case 1:
 
         this.headers = [{
@@ -552,7 +552,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         const datosDigitoNit = {
           id: this.contadorIDTable,
           programacionNIT: this.filtroDigitos || 'Sin dato',
-          rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
+          rango: (this.digitoInicial && this.digitoFinal) ? `${this.digitoInicial}-${this.digitoFinal}` : (this.digitoUnico || 'Sin dato'),
           fechaInicio: this.fechaInicio || 'Sin dato',
           fechaFin: this.fechaFin || 'Sin dato',
           diasRequerimiento: this.diasRequerimiento || '0',
@@ -576,17 +576,17 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   obtenerIdNombreDelegatura(nombreReq: any): any {
     let num = 0;
-    if(nombreReq === 'Todos') {
+    if (nombreReq === 'Todos') {
 
       return 49;
     } else {
-      if(this.delegaturasDatos) {
+      if (this.delegaturasDatos) {
 
         const idReq = this.delegaturasDatos.find((element: any) => {
           return element.descripcion === nombreReq;
         });
 
-        if(idReq) {
+        if (idReq) {
 
           return idReq.id;
 
@@ -608,13 +608,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   obtenerIdNombreDigitoNit(nombreReq: any): any {
 
-    if(this.programacionDigitosDatos) {
+    if (this.programacionDigitosDatos) {
 
       const idReq = this.programacionDigitosDatos.find((element: any) => {
         return element.descripcion === nombreReq;
       });
 
-      if(idReq) {
+      if (idReq) {
 
         return idReq.id;
 
@@ -635,17 +635,17 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   obtenerTipoVigilado(nombreReq: any): any {
 
-    if(nombreReq === 'Todos') {
+    if (nombreReq === 'Todos') {
 
       return 49;
     } else {
-      if(this.tipoVigiladosDatos) {
+      if (this.tipoVigiladosDatos) {
 
         const idReq = this.tipoVigiladosDatos.find((element: any) => {
           return element.descripcion === nombreReq;
         });
 
-        if(idReq) {
+        if (idReq) {
 
           return idReq.id;
 
@@ -676,6 +676,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     const [digitoInicial, digitoFinal] = data.rango ? data.rango.split("-") : '';
     this.digitoInicial = digitoInicial;
     this.digitoFinal = digitoFinal;
+    this.digitoUnico = digitoInicial;
     this.filtroDigitos = data.programacionNIT || '';
     this.showEditModal = true;
 
@@ -708,7 +709,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       id: this.datosEditar.id,
       programacionNIT: this.filtroDigitos || 'Sin dato',
-      rango: `${this.digitoInicial}-${this.digitoFinal}` || 'Sin dato',
+      rango: (this.digitoInicial && this.digitoFinal) ? `${this.digitoInicial}-${this.digitoFinal}` : (this.digitoUnico || 'Sin dato'),
       fechaInicio: this.fechaInicio || 'Sin dato',
       fechaFin: this.fechaFin || 'Sin dato',
       diasRequerimiento: this.diasRequerimiento || '0',
@@ -716,7 +717,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     };
 
-    if(index !== - 1) {
+    if (index !== -1) {
 
       const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
@@ -731,7 +732,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   deleteItem(item: any) {
 
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
-    if(this.datosTable.length == 0) {
+    if (this.datosTable.length == 0) {
       this.isAdicionar = false;
       this.setearDatosProgramacion();
       this.contadorIDTable = 0;
@@ -765,10 +766,11 @@ export class NuevoRequerimientoComponent implements OnInit {
       finRango: string,
       fechaFin: any,
       estado: boolean,
-      estadoRequerimiento: number
+      estadoRequerimiento: number,
+      digitoUnico: string,
     }> = [];
 
-    if(this.filtroProgramaciones === '232') {
+    if (this.filtroProgramaciones === '232') {
 
       this.datosTable.forEach((dato: any) => {
         delegatura.push({
@@ -786,7 +788,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       });
 
-    } else if(this.filtroProgramaciones === '234') {
+    } else if (this.filtroProgramaciones === '234') {
 
       this.datosTable.forEach((dato: any) => {
 
@@ -799,7 +801,8 @@ export class NuevoRequerimientoComponent implements OnInit {
           finRango: rango[1],
           fechaFin: dato.fechaFin,
           estado: true,
-          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289
+          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289,
+          digitoUnico: rango[0],
 
         });
 

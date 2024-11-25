@@ -1,0 +1,11 @@
+/* Estilo adicional para celdas vacías */
+.empty {
+  background-color: transparent !important;
+  color: transparent !important;
+  padding: 0px !important;
+}
+.header {
+  font-weight: bold;
+  color: #004884;
+  font-size: 16px !important;
+}

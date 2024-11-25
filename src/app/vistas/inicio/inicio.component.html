@@ -1,7 +1,25 @@
-<app-header/>
-<div class="mt-[12px] mb-[13px] pl-[18px] sm:mt-[32px] sm:mb-[22px] sm:pl-[86px]">
-  <img src="/assets/super_transporte.png" class="w-auto sm:h-[48px] h-[35px]" alt="">
+
+
+<div class="bg-gray-50/50 w-full h-full overflow-x-hidden">
+  <app-header/>
+  <!-- side bar azul -->
+  <app-menu-navegacion></app-menu-navegacion>
+  <!-- indicador - marcador seccion -->
+  <div class="px-4 bg-[#333333] padding-title">
+    <div class="flex items-center">
+      <p class="text-white title-module">
+        <b>Financiero</b>
+      </p>
+    </div>
+  </div>
+
+  <div class="z-4">
+    <div class="">
+      <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
+      <router-outlet />
+    </div>
+  </div>
+  <div class="text-blue-gray-600 z-1">
+    <app-footer />
+  </div>
 </div>
-<app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
-<router-outlet/>
-<app-footer/>

@@ -109,25 +109,34 @@ export class VisualizarArchivoComponent implements OnInit {
   private readSheetWithStyles(sheet: XLSX.WorkSheet): any {
     const range = XLSX.utils.decode_range(sheet["!ref"] || "");
 
+    // Obtener información de columnas y filas ocultas
+    const hiddenColumns = (sheet['!cols'] || []).map(col => col?.hidden || false);
+    const hiddenRows = (sheet['!rows'] || []).map(row => row?.hidden || false);
+
     const styledData: any[] = [];
     for (let row = range.s.r; row <= range.e.r; ++row) {
+      if (hiddenRows[row]) {
+        continue; // Salta filas ocultas
+      }
+
       const rowData: any[] = [];
       for (let col = range.s.c; col <= range.e.c; ++col) {
+        if (hiddenColumns[col]) {
+          continue; // Salta columnas ocultas
+        }
+
         const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
         const cell = sheet[cellAddress];
 
         if (cell) {
           const style = cell.s || {};
 
-
-          // Crear un objeto con el valor de la celda y los estilos
           const cellData = {
-            value: cell.v || "", // El valor de la celda
-            color: style.fgColor?.rgb || null, // Color de fondo (fgColor)
+            value: cell.v || "",
+            color: style.fill?.fgColor?.rgb || null, // Color de fondo
             fontColor: style.font?.color?.rgb || null, // Color de texto
           };
 
-          // Agregar la celda con su estilo a la fila
           rowData.push(cellData);
         } else {
           rowData.push(null);
@@ -137,6 +146,7 @@ export class VisualizarArchivoComponent implements OnInit {
     }
     return styledData;
   }
+
 
 
 

@@ -1,18 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import * as XLSX from 'xlsx';
 import {PaginatorModule} from "primeng/paginator";
-
 
 @Component({
   selector: 'app-visualizar-archivo',
   standalone: true,
   imports: [
     FileUploadComponent,
-    ReactiveFormsModule,
     NgIf,
     NgForOf,
     PaginatorModule
@@ -21,16 +18,6 @@ import {PaginatorModule} from "primeng/paginator";
   styleUrl: './visualizar-archivo.component.css'
 })
 export class VisualizarArchivoComponent implements OnInit {
-
-  // Constructor
-  constructor(
-    private errorService: ErrorService,
-    private fb: FormBuilder,
-  ) {
-  }
-
-  // Formulario
-  formGroup1!: FormGroup;
 
   // Propiedad de objeto para manejar errores
   errorStates: { [key: number]: boolean } = {};
@@ -50,35 +37,44 @@ export class VisualizarArchivoComponent implements OnInit {
   // Índice de la hoja seleccionada para mostrar (paginador)
   selectedSheetIndex: number = 0;
 
+  // Constructor
+  constructor(
+    private errorService: ErrorService
+  ) {
+  }
+
   ngOnInit() {
-    this.formGroup1 = this.fb.group({
-      1: [null, Validators.required],
-    });
 
     this.errorService.errorStates$.subscribe((errorStates) => {
       this.errorStates = errorStates;
     });
+
   }
 
   onFileSelected(file: File[]) {
+
     this.selectedFile = file[0];
 
   }
 
   OnUploadButton(file: File[]) {
+
     if (file[0]) {
+
       console.log("hay archivo", file[0]);
-
       this.loadExcelFile();
-    } else {
-      console.log("no hay");
 
+    } else {
+
+      console.log("no hay");
       this.sheetsData = [];
+
     }
 
   }
 
   loadExcelFile() {
+
     if (this.selectedFile) {
       const reader = new FileReader();
 
@@ -104,11 +100,14 @@ export class VisualizarArchivoComponent implements OnInit {
 
       reader.readAsArrayBuffer(this.selectedFile);
     }
+
   }
 
   // Cambiar la hoja seleccionada
   selectSheet(index: number) {
+
     this.selectedSheetIndex = index;
+
   }
 
 }

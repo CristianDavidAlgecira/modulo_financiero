@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup1" class="px-4 md:pl-16 md:pe-16 mt-6 active1 mb-6">
+<div class="px-4 md:pl-16 md:pe-16 mt-6 active1 mb-6">
 
   <div class="flex flex-col w-full h-full justify-center items-start pt-6 my-auto mb-2">
     <p class="text-primary3 font-semibold">
@@ -10,30 +10,29 @@
                      (uploadFile)="OnUploadButton($event)"/>
   </div>
 
-</form>
+  <div class="flex flex-col w-full h-full justify-center items-start pt-6 my-auto mb-2">
 
-<div class="flex flex-col w-full h-full justify-center items-start pt-6 my-auto mb-2">
+    <!-- Paginador para seleccionar la hoja -->
+    <label for="sheetSelect" class="mb-4 font-semibold">Seleccionar Hoja:</label>
+    <select id="sheetSelect" [(ngModel)]="selectedSheetIndex" (ngModelChange)="selectSheet($event)">
+      <option *ngFor="let sheet of sheetsData; let i = index" [value]="i">
+        Hoja {{ i + 1 }} - {{ sheet.name }}
+      </option>
+    </select>
 
-  <!-- Paginador para seleccionar la hoja -->
-  <label for="sheetSelect" class="mb-4 font-semibold">Seleccionar Hoja:</label>
-  <select id="sheetSelect" [(ngModel)]="selectedSheetIndex" (ngModelChange)="selectSheet($event)">
-    <option *ngFor="let sheet of sheetsData; let i = index" [value]="i">
-      Hoja {{ i + 1 }} - {{ sheet.name }}
-    </option>
-  </select>
+    <!-- Mostrar solo la hoja seleccionada -->
+    <div *ngIf="sheetsData.length > 0">
+      <h3 class="font-semibold mt-8 mb-4">Hoja {{ selectedSheetIndex + 1 }}
+        - {{ sheetsData[selectedSheetIndex].name }}</h3>
 
-  <!-- Mostrar solo la hoja seleccionada -->
-  <div *ngIf="sheetsData.length > 0">
-    <h3 class="font-semibold mt-8 mb-4">Hoja {{ selectedSheetIndex + 1 }}
-      - {{ sheetsData[selectedSheetIndex].name }}</h3>
+      <!-- Tabla con los datos de la hoja seleccionada -->
+      <table class="table-auto border-collapse w-full">
+        <tr *ngFor="let row of sheetsData[selectedSheetIndex].data">
+          <td *ngFor="let cell of row" class="border px-4 py-2">{{ cell }}</td>
+        </tr>
+      </table>
+    </div>
 
-    <!-- Tabla con los datos de la hoja seleccionada -->
-    <table class="table-auto border-collapse w-full">
-      <tr *ngFor="let row of sheetsData[selectedSheetIndex].data">
-        <td *ngFor="let cell of row" class="border px-4 py-2">{{ cell }}</td>
-      </tr>
-    </table>
   </div>
 
 </div>
-

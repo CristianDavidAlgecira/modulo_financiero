@@ -6,6 +6,7 @@ import {VerDetalleComponent} from './vistas/spring-1/ver-detalle/ver-detalle.com
 import LoginComponent from "./vistas/login/login.component";
 import {AuthGuard} from "./auth.guard";
 import {AuthLoginComponent} from "./layout/login/auth-login.component";
+import {VisualizarArchivoComponent} from "./vistas/spring-2/visualizar-archivo/visualizar-archivo.component";
 
 export const routes: Routes = [
 
@@ -26,6 +27,11 @@ export const routes: Routes = [
       {
         path: 'detalle-requerimientos',
         loadComponent: () => VerDetalleComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'visualizar-archivo',
+        loadComponent: () => VisualizarArchivoComponent,
         canActivate: [AuthGuard],
       },
       {

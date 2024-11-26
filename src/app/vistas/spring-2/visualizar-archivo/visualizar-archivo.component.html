@@ -1,4 +1,4 @@
-<div class="px-4 md:pl-16 md:pe-16 mt-6 active1 mb-6">
+<div class="px-4 md:pl-16 md:pe-16 mt-6 active1 pb-12 mb-4">
 
   <div class="flex flex-col w-full h-full justify-center items-start pt-6 my-auto mb-2">
     <p class="text-primary3 font-semibold">
@@ -26,11 +26,26 @@
         - {{ sheetsData[selectedSheetIndex].name }}</h3>
 
       <!-- Tabla con los datos de la hoja seleccionada -->
-      <table class="table-auto border-collapse w-full">
-        <tr *ngFor="let row of sheetsData[selectedSheetIndex].data">
-          <td *ngFor="let cell of row" class="border px-4 py-2">{{ cell }}</td>
-        </tr>
-      </table>
+      <div class="w-full px-4 pb-8 mb-4">
+        <table class="border border-gray-300 rounded-md w-auto h-full overflow-x-auto text-sm text-left">
+          <tbody>
+          <tr *ngFor="let row of sheetsData[selectedSheetIndex].data; let rowIndex = index">
+            <ng-container *ngFor="let cell of processRow(row)">
+              <td
+                *ngIf="cell.visible"
+                [attr.colspan]="cell.colspan"
+                class="border border-gray-300 px-2 py-1 text-center"
+                [class]="getCellClass(cell.value)"
+                [style.background-color]="cell.color ? '#' + cell.color : ''"
+                [style.color]="cell.fontColor ? '#' + cell.fontColor : ''"
+              >
+                {{ cell.value || '' }}
+              </td>
+            </ng-container>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
   </div>

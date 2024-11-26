@@ -6,11 +6,12 @@ import {BreadcrumbComponent} from "../../componentes/breadcrumb/breadcrumb.compo
 import {Subscription} from "rxjs";
 import {BreadcrumbService} from "../../services/breadcrumb/breadcrumb.service";
 import {CommonModule} from "@angular/common";
+import MenuNavegacionComponent from "../../componentes/menu-navegacion/menu-navegacion.component";
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [FooterComponent, HeaderComponent, RouterOutlet, BreadcrumbComponent, CommonModule],
+  imports: [FooterComponent, HeaderComponent, RouterOutlet, BreadcrumbComponent, CommonModule, MenuNavegacionComponent],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css'
 })

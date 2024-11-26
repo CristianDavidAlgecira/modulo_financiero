@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "modulo_financiero": {
+    "modulo-financiero": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -11,34 +11,26 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/modulo_financiero",
+            "outputPath": "dist/modulo-financiero",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "src/custom-theme.scss",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
               "src/styles.css"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -50,16 +42,19 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
+              "namedChunks": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -74,16 +69,19 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "modulo_financiero:build:production"
+              "buildTarget": "modulo-financiero:build:production"
             },
             "development": {
-              "buildTarget": "modulo_financiero:build:development"
+              "buildTarget": "modulo-financiero:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "modulo-financiero:build"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
@@ -95,20 +93,23 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
-                "glob": "**/*",
+                "glob": "*/",
                 "input": "public"
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "4f5aad5f-9be8-4a64-93db-3ea5626ce9a9"
+    "analytics": "c80b556b-c27b-49d0-a6da-6d6618c2d631"
   }
 }

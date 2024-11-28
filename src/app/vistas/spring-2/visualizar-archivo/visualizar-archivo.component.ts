@@ -36,7 +36,7 @@ export class VisualizarArchivoComponent implements OnInit {
       {
         "sheetName": "Identificación del Vigilado",
         "ranges": {
-          "Identificación del Vigilado": ["F9:F29"]
+          "Identificación del Vigilado": ["F9:F33"]
         }
       },
       {

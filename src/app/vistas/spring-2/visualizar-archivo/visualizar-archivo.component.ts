@@ -34,9 +34,9 @@ export class VisualizarArchivoComponent implements OnInit {
         }
       },
       {
-        "sheetName": "Identifiación del Vigilado",
+        "sheetName": "Identificación del Vigilado",
         "ranges": {
-          "Identifiación del Vigilado": ["F9:F29"]
+          "Identificación del Vigilado": ["F9:F29"]
         }
       },
       {
@@ -112,9 +112,7 @@ export class VisualizarArchivoComponent implements OnInit {
   }
 
   OnUploadButton(file: File[]) {
-
     if (file[0]) {
-
       this.ApiMFService.uploadFileAPI(file[0], this.validationRanges).subscribe({
         next: (response) => {
           console.log('Archivo subido con éxito:', response);
@@ -123,9 +121,7 @@ export class VisualizarArchivoComponent implements OnInit {
           console.error('Error al subir el archivo:', err);
         }
       });
-
     }
-
   }
 
 }

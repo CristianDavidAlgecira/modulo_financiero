@@ -152,8 +152,19 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta nombre requerimiento
     this.apiService.getTipoRequerimiento().subscribe((response1: any) => {
-      this.nombreRequerimientoDatos = response1 ? response1.detalle : [];
+      const opcionesPermitidas = [
+        "Administrativa",
+        "Financiero",
+        "General Anualizada (administrativa,societaria y financiera)",
+        "Modelo Negocios Especiales",
+        "Reporte intermedio de información y medición de indicadores",
+        "Societario"
+      ];
+      this.nombreRequerimientoDatos = response1 ? response1.detalle.filter((registro: any) =>
+        opcionesPermitidas.includes(registro.descripcion)
+      ) : [];
     });
+
 
     // Respuesta periodo entrega
     this.apiService.getPeriodoEntrega().subscribe((response1: any) => {
@@ -836,7 +847,6 @@ export class NuevoRequerimientoComponent implements OnInit {
       // Aquí puedes manejar la respuesta, por ejemplo:
       // this.ShowLoadingModal = false;
       // this.showFinalModal = true;
-      console.log('response', response);
       this.router.navigate(['/administracion']);
     }, (error) => {
       // this.ShowLoadingModal = false;

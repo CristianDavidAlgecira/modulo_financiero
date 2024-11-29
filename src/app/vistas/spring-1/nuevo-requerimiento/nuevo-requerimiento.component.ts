@@ -341,6 +341,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
 
       this.digitoUnico = input.value;
+
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 14);
 
       this.programacionNIT = input.value;
@@ -370,6 +371,24 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     }
 
+  }
+
+  validateDigitInputRange(event: Event, type: 'inicial' | 'final'): void {
+    const input = event.target as HTMLInputElement;
+    const maxLength = this.filtroDigitos === 'Dos últimos dígitos' ? 2 : 3;
+
+    // Limpia el valor para que solo acepte números y limita la longitud
+    const cleanValue = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
+
+    // Actualiza el valor correspondiente según el tipo de input
+    if (type === 'inicial') {
+      this.digitoInicial = cleanValue;
+    } else if (type === 'final') {
+      this.digitoFinal = cleanValue;
+    }
+
+    // Actualiza el valor del input con el valor limpio
+    input.value = cleanValue;
   }
 
   calcularDias(): void {
@@ -406,43 +425,6 @@ export class NuevoRequerimientoComponent implements OnInit {
       fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
       this.minFechaFin = fechaInicioObj.toISOString().split('T')[0];
       this.fechaFin = '';
-
-    }
-
-  }
-
-  validarDigito(event: any): void {
-
-    const valor = event.target.value;
-
-    switch (this.filtroDigitos) {
-
-      case
-      'Último dígito'
-      :
-        if (valor < 0 || valor > 9 || valor.length > 1) {
-          event.target.value = '';
-        }
-        break;
-
-      case
-      'Dos últimos dígitos'
-      :
-        if (valor < 0 || valor > 99 || valor.length > 2) {
-          event.target.value = '';
-        }
-        break;
-
-      case
-      'Tres últimos dígitos'
-      :
-        if (valor < 0 || valor > 999 || valor.length > 3) {
-          event.target.value = '';
-        }
-        break;
-
-      default:
-        event.target.value = '';
 
     }
 
@@ -678,6 +660,26 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   openEditModal(data: any) {
 
+    let num = 0;
+    this.vigilados = [];
+
+    if (data.Delegatura) {
+
+      num = this.delegaturasDatos.find((item: any) => item.descripcion == data.Delegatura).detalle
+
+      // Agregar los datos obtenidos al array de vigilados
+      this.vigilados.push(...this.tipoVigiladosDatos
+        .filter((data: any) => data.idDelegatura == num)
+        .map((data: any) => ({
+          id: data.id, value: data.descripcion
+        }))
+      );
+
+    }
+
+    // Resetear el filtro de vigilados
+    this.filtroVigilados = '';
+
     this.datosEditar = data;
     this.fechaFin = data.fechaFin || '';
     this.fechaInicio = data.fechaInicio || '';
@@ -693,7 +695,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  closeModal(isEdit: boolean = false) {
+  closeModal(isEdit: boolean = true) {
 
     this.setearDatosProgramacion(isEdit);
     this.showEditModal = false;

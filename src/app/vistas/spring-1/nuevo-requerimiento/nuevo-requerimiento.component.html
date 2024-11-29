@@ -262,7 +262,8 @@
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
                 type="text" placeholder="Dígite los números iniciales" [(ngModel)]="digitoInicial"
-                [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3">
+                [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3"
+                (input)="validateDigitInputRange($event, 'inicial')">
             </div>
 
             <!-- Input 9 -->
@@ -270,8 +271,9 @@
               <label class="text-primary3 font-medium h-full text-xs">*Dígitos Finales</label>
               <input
                 class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-                type="text" placeholder="Dígite los números finales"
-                [(ngModel)]="digitoFinal" [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3">
+                type="text" placeholder="Dígite los números finales" [(ngModel)]="digitoFinal"
+                [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3"
+                (input)="validateDigitInputRange($event, 'final')">
             </div>
 
           </div>
@@ -375,26 +377,23 @@
   <div class="w-full h-full px-2 py-4">
     <!-- fecha fin -->
     <div class="flex align-items-center gap-3 mb-3">
-      <label for="fechaFin" class="text-primary3 font-semibold w-6rem h-full flex justify-center items-center">Fecha
-        Fin</label>
-      <input id="fechaFin"
-             class="shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-             type="date" [(ngModel)]="fechaFin" #fechaFinRef="ngModel" required
-             [ngClass]="{'input-error': fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)}"
-             (change)="calcularDias()">
-      <div *ngIf="fechaFinRef.invalid && (fechaFinRef.dirty || fechaFinRef.touched)">
-        <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
-      </div>
+      <label class="text-primary3 font-medium h-full text-xs">Fecha Fin</label>
+      <input
+        class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+        type="date" [(ngModel)]="fechaFin" [attr.min]="fechaInicio" (change)="calcularDias()"
+        [disabled]="!fechaInicio" [ngClass]="{'input-error': fechaFinInvalida}"/>
+      <p *ngIf="fechaFinInvalida" class="text-red-500 text-xs mt-1">
+        La fecha fin no puede ser menor o igual a la fecha de inicio.
+      </p>
     </div>
     <div *ngIf="filtroDelegaturas != 'Todos' && filtroVigilados != 'Todos' && filtroProgramaciones === '232'"
          class="flex align-items-center gap-3 mb-3">
-      <label for="vigilado" class="text-primary3 font-semibold w-6rem h-full flex justify-center items-center">Tipo de
-        vigilado</label>
-      <select id="vigilado"
-              class="shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent flex justify-center items-center"
-              [(ngModel)]="filtroVigilados" required>
-        <option value="" disabled selected hidden>Seleccione el tipo de vigilado</option>
-        <option *ngFor="let vigilado of vigilados" [value]="vigilado">{{ vigilado }}</option>
+      <label class="text-primary3 font-medium h-full text-xs">*Tipo de vigilado</label>
+      <select
+        class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+        [(ngModel)]="filtroVigilados" [disabled]="isDisabledTodos">
+        <option value="" disabled selected hidden>Seleccione la delegatura</option>
+        <option *ngFor="let vigilado of vigilados" [value]="vigilado.value">{{ vigilado.value }}</option>
       </select>
     </div>
 
@@ -407,8 +406,9 @@
           <label class="text-primary3 font-medium h-full">*Dígito</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Dígite el número"
-            (input)="validarDigito($event)" [(ngModel)]="digitoUnico" #digitoUnicoRef="ngModel" required
+            type="text" placeholder="Dígite el número"
+            [(ngModel)]="digitoUnico" #digitoUnicoRef="ngModel" required
+            (input)="validateDigitInput($event)"
             [ngClass]="{'input-error': digitoUnicoRef.invalid && (digitoUnicoRef.dirty || digitoUnicoRef.touched)}">
           <div *ngIf="digitoUnicoRef.invalid && (digitoUnicoRef.dirty || digitoUnicoRef.touched)">
             <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
@@ -424,8 +424,10 @@
           <label class="text-primary3 font-medium h-full">*Dígitos Iniciales</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Dígite los números iniciales"
-            (input)="validarDigito($event)" [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
+            type="text" placeholder="Dígite los números iniciales"
+            [(ngModel)]="digitoInicial" #digitoInicialRef="ngModel" required
+            (input)="validateDigitInputRange($event, 'inicial')"
+            [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3"
             [ngClass]="{'input-error': digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)}">
           <div *ngIf="digitoInicialRef.invalid && (digitoInicialRef.dirty || digitoInicialRef.touched)">
             <span class="text-red-500 text-xs">Este campo es obligatorio.</span>
@@ -437,8 +439,10 @@
           <label class="text-primary3 font-medium h-full">*Dígitos Finales</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
-            type="number" placeholder="Dígite los números finales"
-            (input)="validarDigito($event)" [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
+            type="text" placeholder="Dígite los números finales"
+            [(ngModel)]="digitoFinal" #digitoFinalRef="ngModel" required
+            (input)="validateDigitInputRange($event, 'final')"
+            [maxlength]="filtroDigitos === 'Dos últimos dígitos' ? 2 : 3"
             [ngClass]="{'input-error': digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)}">
           <div *ngIf="digitoFinalRef.invalid && (digitoFinalRef.dirty || digitoFinalRef.touched)">
             <span class="text-red-500 text-xs">Este campo es obligatorio.</span>

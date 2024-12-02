@@ -3,15 +3,11 @@ import {PrimaryButtonComponent} from "../../../componentes/primary-button/primar
 import {TableComponent} from "../../../componentes/table/table.component";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-administracion',
-  standalone: true,
-  imports: [
-    PrimaryButtonComponent,
-    TableComponent,
-    FormsModule
-  ],
+  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule, AlertComponent],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'
 })

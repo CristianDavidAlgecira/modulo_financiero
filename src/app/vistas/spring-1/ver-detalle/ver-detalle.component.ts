@@ -9,11 +9,12 @@ import {TableProgramacionesComponent} from "../../../componentes/table-programac
 import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
+import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-ver-detalle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableProgramacionesComponent, ProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, TableProgramacionesComponent, ProgressSpinnerModule, AlertComponent],
   templateUrl: './ver-detalle.component.html',
   styleUrl: './ver-detalle.component.css',
 })
@@ -38,11 +39,17 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   data: any;
   anioPublicacion: string = '';
   anulado: boolean = false;
+  loadingAnulado: boolean = false;
   private idSubject = new BehaviorSubject<string>('0'); // Inicializa con '0'
   id$ = this.idSubject.asObservable(); // Observable para observar cambios
   // Headers table
   headers: any = [];
   datosTable: any = [];
+
+  //modals
+  showErrorModal: boolean = false;
+  showModalConfirm: boolean = false;
+  showModal: boolean = false;
 
   //loader
   isloading: boolean = true;
@@ -96,6 +103,12 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   async datosMaestros(data: any): Promise<void> {
     let num = 0;
+
+    if(data.estadoRequerimiento === 291) {
+      this.anulado = true;
+    } else {
+      this.anulado = false;
+    }
 
     if (data.tipoProgramacion === 232) {
 
@@ -214,7 +227,6 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   getnombreEstado(idEstado: number): any {
     // Busca el elemento que coincida con el id
     if (this.EstadoReqHashDescripcion) {
-
       const nombreReq = this.EstadoReqHashDescripcion.find((element: any) => {
         return parseInt(element.id) === idEstado; // Compara ambos como números
       });
@@ -322,6 +334,17 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   regresar() {
     this.router.navigate(['/administracion']);
+  }
+
+  async anularSolicitud() {
+    this.loadingAnulado = true;
+    const response = await firstValueFrom(this.apiMFService.anularReq(this.idSubject.getValue()));
+    this.loadingAnulado = false;
+    this.anulado = true;
+    this.showModal = true;
+
+    this.cdr.detectChanges();
+
   }
 
   formatField(value: any): string {

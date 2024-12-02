@@ -1,13 +1,30 @@
 <div class="px-4 md:pl-16 md:pe-16 mt-6 active1 pb-12 mb-4">
 
-  <div class="flex flex-col w-full h-full justify-center items-start pt-6 my-auto mb-2">
-    <p class="text-primary3 font-semibold">
-      Cargar el archivo correspondiente*
-    </p>
+  <div class="sm:flex sm:flex-wrap sm:w-auto w-full justify-start">
 
-    <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".xlsx"
-                     [error]="errorStates[1]" (fileSelected)="onFileSelected($event)"
-                     (uploadFile)="OnUploadButton($event)"/>
+    <div class="flex flex-col sm:w-auto w-full h-full justify-center items-start pt-6 my-auto mb-2">
+      <p class="text-primary3 font-semibold">
+        Cargar el archivo correspondiente*
+      </p>
+
+      <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".xlsx"
+                       [error]="errorStates[1]" (fileSelected)="onFileSelected($event)"
+                       (uploadFile)="OnUploadButton($event)"/>
+
+    </div>
+
+    <div class="w-auto justify-start p-4 md:ms-64 mt-10">
+
+      <button
+        class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateToAdministracion()">Regresar
+      </button>
+
+      <app-primary-button type="button">Siguiente
+      </app-primary-button>
+
+    </div>
+
   </div>
 
 </div>

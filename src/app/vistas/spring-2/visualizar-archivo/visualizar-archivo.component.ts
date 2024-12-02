@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
 import {ApiMFService} from "../../../services/api/api-mf.service";
+import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-visualizar-archivo',
   standalone: true,
-  imports: [FileUploadComponent],
+    imports: [FileUploadComponent, PrimaryButtonComponent],
   templateUrl: './visualizar-archivo.component.html',
   styleUrl: './visualizar-archivo.component.css'
 })
@@ -93,7 +95,8 @@ export class VisualizarArchivoComponent implements OnInit {
   // Constructor
   constructor(
     private errorService: ErrorService,
-    private ApiMFService: ApiMFService
+    private ApiMFService: ApiMFService,
+    private router: Router
   ) {
   }
 
@@ -122,6 +125,12 @@ export class VisualizarArchivoComponent implements OnInit {
         }
       });
     }
+  }
+
+  navigateToAdministracion() {
+
+    this.router.navigate(['/administracion']);
+
   }
 
 }

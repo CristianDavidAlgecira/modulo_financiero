@@ -9,11 +9,12 @@ import {TableProgramacionesComponent} from "../../../componentes/table-programac
 import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
+import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-ver-detalle',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableProgramacionesComponent, ProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, TableProgramacionesComponent, ProgressSpinnerModule, AlertComponent],
   templateUrl: './ver-detalle.component.html',
   styleUrl: './ver-detalle.component.css',
 })
@@ -44,6 +45,11 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   // Headers table
   headers: any = [];
   datosTable: any = [];
+
+  //modals
+  showErrorModal: boolean = false;
+  showModalConfirm: boolean = false;
+  showModal: boolean = false;
 
   //loader
   isloading: boolean = true;
@@ -330,11 +336,12 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/administracion']);
   }
 
-  async anularSolicitud(id: number) {
+  async anularSolicitud() {
     this.loadingAnulado = true;
-    const response = await firstValueFrom(this.apiMFService.anularReq(this.idSubject.getValue() || id));
+    const response = await firstValueFrom(this.apiMFService.anularReq(this.idSubject.getValue()));
     this.loadingAnulado = false;
     this.anulado = true;
+    this.showModal = true;
 
     this.cdr.detectChanges();
 

@@ -32,6 +32,14 @@ export class ApiMFService {
     });
   }
 
+  // Anular requerimiento
+  anularReq(idRequerimiento:string|number): Observable<any> {
+
+    return this.http.put(`${this.baseUrl}/api/requerimiento/anular/${idRequerimiento}`, {
+
+    });
+  }
+
   // Subir archivo excel
   uploadFileAPI(file: File, validationRanges: any): Observable<any> {
     const formData = new FormData();

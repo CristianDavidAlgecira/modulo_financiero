@@ -38,6 +38,7 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   data: any;
   anioPublicacion: string = '';
   anulado: boolean = false;
+  loadingAnulado: boolean = false;
   private idSubject = new BehaviorSubject<string>('0'); // Inicializa con '0'
   id$ = this.idSubject.asObservable(); // Observable para observar cambios
   // Headers table
@@ -96,6 +97,12 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   async datosMaestros(data: any): Promise<void> {
     let num = 0;
+
+    if(data.estadoRequerimiento === 291) {
+      this.anulado = true;
+    } else {
+      this.anulado = false;
+    }
 
     if (data.tipoProgramacion === 232) {
 
@@ -214,7 +221,6 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   getnombreEstado(idEstado: number): any {
     // Busca el elemento que coincida con el id
     if (this.EstadoReqHashDescripcion) {
-
       const nombreReq = this.EstadoReqHashDescripcion.find((element: any) => {
         return parseInt(element.id) === idEstado; // Compara ambos como números
       });
@@ -322,6 +328,16 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   regresar() {
     this.router.navigate(['/administracion']);
+  }
+
+  async anularSolicitud(id: number) {
+    this.loadingAnulado = true;
+    const response = await firstValueFrom(this.apiMFService.anularReq(this.idSubject.getValue() || id));
+    this.loadingAnulado = false;
+    this.anulado = true;
+
+    this.cdr.detectChanges();
+
   }
 
   formatField(value: any): string {

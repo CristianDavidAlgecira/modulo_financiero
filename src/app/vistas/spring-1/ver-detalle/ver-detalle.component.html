@@ -130,14 +130,9 @@
       <!-- Botones de filtros -->
       <div class="flex justify-end p-4 space-x-4">
         <!-- Botón anular -->
-        <button *ngIf="!anulado" (click)="true"
+        <button *ngIf="!anulado" (click)="anularSolicitud(data.id)" [disabled]="loadingAnulado"
                 class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
           Anular requerimiento
-        </button>
-        <!-- Botón reanudar -->
-        <button *ngIf="anulado" (click)="true"
-                class="bg-primary1 text-white inline-flex items-center justify-center px-8 py-1 hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
-          Recuperar requerimiento
         </button>
         <!-- Botón regresar -->
         <button (click)="regresar()"

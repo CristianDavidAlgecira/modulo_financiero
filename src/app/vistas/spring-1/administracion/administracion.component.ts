@@ -75,4 +75,10 @@ export class AdministracionComponent implements OnInit {
 
   }
 
+  navigateToConsultarEntregas() {
+
+    this.router.navigate(['/consultar-entregas']);
+
+  }
+
 }

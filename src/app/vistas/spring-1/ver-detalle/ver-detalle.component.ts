@@ -3,8 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import {ApiMFService} from "../../../services/api/api-mf.service";
 import {CommonModule, formatDate} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NoNegativeGlobal} from "../../../validator/noNegative.validator";
+import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {TableProgramacionesComponent} from "../../../componentes/table-programaciones/table-programaciones.component";
 import {ApiService} from "../../../services/api/api.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
@@ -37,7 +36,6 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
   }
 
   data: any;
-  anioPublicacion: string = '';
   anulado: boolean = false;
   loadingAnulado: boolean = false;
   private idSubject = new BehaviorSubject<string>('0'); // Inicializa con '0'
@@ -351,18 +349,6 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
     return formatDate(value, 'dd/MM/yyyy', 'en-US', 'UTC');
 
-  }
-
-  //para mostrar fecha de bd en el form
-  formatearFechaParaDatetimeLocal(fecha: string): string {
-    const fechaObj = new Date(fecha);
-    const year = fechaObj.getFullYear();
-    const month = (fechaObj.getMonth() + 1).toString().padStart(2, '0'); // Mes de 0 a 11, por eso se suma 1
-    const day = fechaObj.getDate().toString().padStart(2, '0');
-    const hours = fechaObj.getHours().toString().padStart(2, '0');
-    const minutes = fechaObj.getMinutes().toString().padStart(2, '0');
-
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
 }

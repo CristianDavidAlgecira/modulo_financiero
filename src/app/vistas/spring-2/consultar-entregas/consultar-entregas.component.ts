@@ -1,38 +1,33 @@
 import {Component, OnInit} from '@angular/core';
 import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
-import {TableComponent} from "../../../componentes/table/table.component";
-import {Router} from "@angular/router";
-import {FormsModule} from "@angular/forms";
-import {AlertComponent} from "../../../componentes/alert/alert.component";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {
+  TableConsultarEntregasComponent
+} from "../../../componentes/table-consultar-entregas/table-consultar-entregas.component";
 
 @Component({
-  selector: 'app-administracion',
-  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule],
-  templateUrl: './administracion.component.html',
-  styleUrl: './administracion.component.css'
+  selector: 'app-consultar-entregas',
+  standalone: true,
+  imports: [
+    PrimaryButtonComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    TableConsultarEntregasComponent
+  ],
+  templateUrl: './consultar-entregas.component.html',
+  styleUrl: './consultar-entregas.component.css'
 })
-export class AdministracionComponent implements OnInit {
+export class ConsultarEntregasComponent implements OnInit {
 
   filtroNombre: string = '';
   filtroNumero: string = '';
   filtroAnio: string = '';
   filtroGlobal: string = '';
 
-  constructor(
-    private router: Router
-  ) {
+  constructor() {
   }
 
   ngOnInit() {
-  }
-
-  limpiarFiltros() {
-
-    this.filtroNombre = '';
-    this.filtroNumero = '';
-    this.filtroAnio = '';
-    this.filtroGlobal = '';
-
   }
 
   onInputChange(inputName?: string, event?: Event): void {
@@ -63,9 +58,13 @@ export class AdministracionComponent implements OnInit {
 
   }
 
-  navigateToNuevoRequerimiento() {
 
-    this.router.navigate(['/nuevo-requerimiento']);
+  limpiarFiltros() {
+
+    this.filtroNombre = '';
+    this.filtroNumero = '';
+    this.filtroAnio = '';
+    this.filtroGlobal = '';
 
   }
 

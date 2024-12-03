@@ -7,6 +7,12 @@ import LoginComponent from "./vistas/login/login.component";
 import {AuthGuard} from "./auth.guard";
 import {AuthLoginComponent} from "./layout/login/auth-login.component";
 import {VisualizarArchivoComponent} from "./vistas/spring-2/visualizar-archivo/visualizar-archivo.component";
+import {ConsultarEntregasComponent} from "./vistas/spring-2/consultar-entregas/consultar-entregas.component";
+import {
+  VerDetalleConsultarEntregasComponent
+} from "./vistas/spring-2/ver-detalle-consultar-entregas/ver-detalle-consultar-entregas.component";
+import {OtrosAnexosComponent} from "./vistas/spring-2/otros-anexos/otros-anexos.component";
+import {OtrosAspectosComponent} from "./vistas/spring-2/otros-aspectos/otros-aspectos.component";
 
 export const routes: Routes = [
 
@@ -32,6 +38,26 @@ export const routes: Routes = [
       {
         path: 'visualizar-archivo',
         loadComponent: () => VisualizarArchivoComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'consultar-entregas',
+        loadComponent: () => ConsultarEntregasComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'ver-detalle-consultar-entregas',
+        loadComponent: () => VerDetalleConsultarEntregasComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'otros-anexos',
+        loadComponent: () => OtrosAnexosComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'otros-aspectos',
+        loadComponent: () => OtrosAspectosComponent,
         canActivate: [AuthGuard],
       },
       {
@@ -63,7 +89,6 @@ export const routes: Routes = [
     redirectTo: 'administracion'
 
   }
-
 
 
 ];

@@ -7,7 +7,7 @@ import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-administracion',
-  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule, AlertComponent],
+  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'
 })
@@ -66,18 +66,6 @@ export class AdministracionComponent implements OnInit {
   navigateToNuevoRequerimiento() {
 
     this.router.navigate(['/nuevo-requerimiento']);
-
-  }
-
-  navigateToVisualizarArchivo() {
-
-    this.router.navigate(['/visualizar-archivo']);
-
-  }
-
-  navigateToConsultarEntregas() {
-
-    this.router.navigate(['/consultar-entregas']);
 
   }
 

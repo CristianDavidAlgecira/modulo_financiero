@@ -11,11 +11,12 @@ import {ApiMFService} from "../../../services/api/api-mf.service";
 import {ApiService} from "../../../services/api/api.service";
 import {catchError, of, timeout} from "rxjs";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
+import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-nuevo-requerimiento',
   standalone: true,
-  imports: [PrimaryButtonComponent, FileUploadComponent, FormsModule, NgForOf, NgIf, NgClass, TableProgramacionesComponent, DialogModule, CommonModule],
+  imports: [PrimaryButtonComponent, FileUploadComponent, FormsModule, NgForOf, NgIf, NgClass, TableProgramacionesComponent, DialogModule, CommonModule, AlertComponent],
   templateUrl: './nuevo-requerimiento.component.html',
   styleUrl: './nuevo-requerimiento.component.css'
 })
@@ -93,6 +94,10 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   // Modals
   showEditModal: boolean = false;
+  showLoadingModal: boolean = false;
+  showFinalModal: boolean = false;
+  showErrorModal: boolean = false;
+
 
   // Variables para ver si selecciono las casillas
   touchedFields = {
@@ -767,6 +772,8 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   onGuardar() {
 
+    this.showLoadingModal = true;
+
     let fechaFinal = new Date();
 
     let delegatura: Array<{
@@ -847,12 +854,12 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     this.apiMFService.createRequerimientoAPI(data).subscribe((response) => {
       // Aquí puedes manejar la respuesta, por ejemplo:
-      // this.ShowLoadingModal = false;
-      // this.showFinalModal = true;
-      this.router.navigate(['/administracion']);
+      this.showLoadingModal = false;
+      this.showFinalModal = true;
+
     }, (error) => {
-      // this.ShowLoadingModal = false;
-      // this.showErrorModal = true;
+      this.showLoadingModal = false;
+      this.showErrorModal = true;
       // Manejo del error
       console.error('Error al enviar los datos:', error);
     });
@@ -860,7 +867,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   }
 
   navigateToAdministracion() {
-
+    this.showFinalModal = false;
     this.router.navigate(['/administracion']);
 
   }

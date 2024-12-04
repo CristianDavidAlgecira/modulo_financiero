@@ -4,7 +4,7 @@ import {AuthService} from '../../services/auth/auth.service';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-header-bar',
+  selector: 'app-header',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',

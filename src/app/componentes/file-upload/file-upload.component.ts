@@ -52,6 +52,7 @@ export class FileUploadComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 
+
     if (changes['error'] && changes['error'].currentValue) {
       this.cd.detectChanges();
       console.log(this.error);

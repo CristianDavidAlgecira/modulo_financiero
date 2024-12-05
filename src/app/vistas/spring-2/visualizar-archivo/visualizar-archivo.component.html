@@ -28,3 +28,30 @@
   </div>
 
 </div>
+
+<!-- modal error -->
+<app-alert [showModal]="showErrorModal" title="Error en la conexión" textColor="text-error" [showSubtitle]="false"
+           [message]="'Estamos experimentando inconvenientes técnicos con el envió de la solicitud, por favor intente más tarde'"
+           buttonText="Continuar" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="error"
+           (close)="showErrorModal = false" (closeByButton1)="showErrorModal = false"
+           (closeByIcon)="showErrorModal = false"
+           (closeByBackdrop)="showErrorModal = false" (close)="showErrorModal = false"></app-alert>
+
+
+<!-- modal de loading -->
+<app-alert [showModal]="showLoadingModal" title="Verificando datos" subtitle="Un momento por favor."
+           message="Se está validando el archivo excel" [showFirstButton]="false" [showCancelButton]="false"
+           TypeAlert="loader"></app-alert>
+
+<!-- Modal enviar y validar -->
+<app-alert [showModal]="showValidado" title="validación exitosamente" textColor="text-success"
+           [showSubtitle]="false" [message]="'archivo excel validado, clic en en enviar y validar para continuar con el cargue de información'" buttonText="Enviar y validar"
+           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
+           (closeByButton1)="ValidSaveExcel()" (closeByButton2)="onCloseModal()"
+           (closeByBackdrop)="onCloseModal()"></app-alert>
+
+<app-alert [showModal]="showError" title="documento invalido" textColor="text-error"
+           [showSubtitle]="false" [message]="messageNoValidado" buttonText="Continuar"
+           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
+           (closeByButton1)="onCloseModal()" (closeByButton2)="onCloseModal()"
+           (closeByBackdrop)="onCloseModal()" (close)="onCloseModal()"></app-alert>

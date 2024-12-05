@@ -32,6 +32,7 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   // Variables para ver si selecciono las casillas
   touchedFields = {
 
+    niffOtros: false,
     emailRespuesta: false,
     emailConfirmar: false,
 
@@ -64,6 +65,7 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
 
     this.touchedFields = {
 
+      niffOtros: true,
       emailRespuesta: true,
       emailConfirmar: true,
 
@@ -80,6 +82,10 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
 
   }
 
+  isNotEmpty(value: string): boolean {
+    return value.trim().length > 0;
+  }
+
   validateForm(field: string): void {
 
     (this.touchedFields as any) [field] = true;
@@ -90,6 +96,7 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   actualizarInputs(): void {
 
     this.isDisabled =
+      !this.isNotEmpty(this.niffOtros) ||
       !this.isValidEmail(this.emailRespuesta) ||
       !this.isValidEmail(this.emailConfirmar) ||
       this.emailRespuesta.trim().length === 0 ||
@@ -135,7 +142,9 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   }
 
   navigateTo(route: string): void {
+
     this.router.navigate([route]);
+
   }
 
 }

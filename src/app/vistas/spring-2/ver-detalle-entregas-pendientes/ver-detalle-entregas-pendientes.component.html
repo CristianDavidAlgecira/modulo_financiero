@@ -10,22 +10,18 @@
         <div class="w-full">
           <label class="text-primary3 font-semibold h-full text-xs">*NIFF - OTROS</label>
           <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
-            type="text" [(ngModel)]="niffOtros" (blur)="validateField('niffOtros')"
-            [ngClass]="{'input-error': !niffOtros && touchedFields['niffOtros']}" required/>
-          <p *ngIf="!niffOtros && touchedFields['niffOtros']" class="text-red-500 text-xs mt-1">
-            Este campo es obligatorio
-          </p>
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-gray-200"
+            type="text" [(ngModel)]="niffOtros" disabled/>
         </div>
 
         <div class="w-full">
           <label class="text-primary3 font-semibold h-full text-xs">*E-mail de respuesta</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
-            type="text" [(ngModel)]="emailRespuesta" (blur)="validateField('emailRespuesta')"
-            [ngClass]="{'input-error': !emailRespuesta && touchedFields['emailRespuesta']}" required/>
-          <p *ngIf="!emailRespuesta && touchedFields['emailRespuesta']" class="text-red-500 text-xs mt-1">
-            Este campo es obligatorio
+            type="email" [(ngModel)]="emailRespuesta" (input)="actualizarInputs()" (blur)="validateForm('emailRespuesta')"
+            [ngClass]="{'input-error': !isValidEmail(emailRespuesta) && touchedFields['emailRespuesta']}" required/>
+          <p *ngIf="!isValidEmail(emailRespuesta) && touchedFields['emailRespuesta']" class="text-red-500 text-xs mt-1">
+            El correo debe tener una estructura válida
           </p>
         </div>
 
@@ -33,10 +29,10 @@
           <label class="text-primary3 font-semibold h-full text-xs">*Confirmar e-mail de respuesta</label>
           <input
             class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
-            type="text" [(ngModel)]="emailConfirmar" (blur)="validateField('emailConfirmar')"
-            [ngClass]="{'input-error': !emailConfirmar && touchedFields['emailConfirmar']}" required/>
-          <p *ngIf="!emailConfirmar && touchedFields['emailConfirmar']" class="text-red-500 text-xs mt-1">
-            Este campo es obligatorio
+            type="email" [(ngModel)]="emailConfirmar" (input)="actualizarInputs()" (blur)="validateForm('emailConfirmar')"
+            [ngClass]="{'input-error': !isValidEmail(emailConfirmar) && touchedFields['emailConfirmar']}" required/>
+          <p *ngIf="!isValidEmail(emailConfirmar) && touchedFields['emailConfirmar']" class="text-red-500 text-xs mt-1">
+            El correo debe tener una estructura válida
           </p>
         </div>
 
@@ -64,7 +60,8 @@
 
     <div class="sm:flex justify-center p-4 space-x-4">
 
-      <app-primary-button class="h-full mt-9" type="button" (click)="btnGuardar()">Guardar
+      <app-primary-button class="h-full mt-9" type="button" (click)="btnGuardar()" [disabled]="isDisabled">
+        Guardar
       </app-primary-button>
 
       <button
@@ -78,3 +75,32 @@
   </div>
 
 </div>
+
+<!-- Modal de loading -->
+<app-alert
+  [showModal]="showLoadingModal"
+  title="Verificando datos"
+  subtitle="Un momento por favor."
+  message="Se está guardando los datos enviados"
+  [showFirstButton]="false"
+  [showCancelButton]="false"
+  TypeAlert="loader">
+</app-alert>
+
+<!-- Modal final -->
+<app-alert
+  [showModal]="showFinalModal"
+  title="Solicitud guardada exitosamente"
+  textColor="text-success"
+  [showSubtitle]="false"
+  [message]="'Su requerimiento ha sido creado con éxito.'"
+  buttonText="Continuar"
+  [isIcon]="false"
+  [showFirstButton]="true"
+  [showCancelButton]="false"
+  TypeAlert="success"
+  (close)="navigateTo('entregas-pendientes')"
+  (closeByButton1)="navigateTo('entregas-pendientes')"
+  (closeByButton2)="navigateTo('entregas-pendientes')"
+  (closeByBackdrop)="navigateTo('entregas-pendientes')">
+</app-alert>

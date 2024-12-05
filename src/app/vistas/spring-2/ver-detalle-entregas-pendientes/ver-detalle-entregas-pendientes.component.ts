@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {NgClass, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
+import {AlertComponent} from "../../../componentes/alert/alert.component";
 
 @Component({
   selector: 'app-ver-detalle-entregas-pendientes',
@@ -13,7 +14,8 @@ import {PaginatorModule} from "primeng/paginator";
     FileUploadComponent,
     NgIf,
     PaginatorModule,
-    NgClass
+    NgClass,
+    AlertComponent
   ],
   templateUrl: './ver-detalle-entregas-pendientes.component.html',
   styleUrl: './ver-detalle-entregas-pendientes.component.css'
@@ -30,7 +32,6 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   // Variables para ver si selecciono las casillas
   touchedFields = {
 
-    niffOtros: false,
     emailRespuesta: false,
     emailConfirmar: false,
 
@@ -44,6 +45,13 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   // Propiedad de objeto para manejar errores
   errorStates: { [key: number]: boolean } = {};
 
+  // Propiedad para cambiar el boton guardar
+  isDisabled: boolean = true;
+
+  // Propiedad de los modales
+  showLoadingModal: boolean = false;
+  showFinalModal: boolean = false;
+
   constructor(
     private router: Router
   ) {
@@ -52,27 +60,63 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   ngOnInit() {
   }
 
-  validateField(field: string) {
-
-    (this.touchedFields as any)[field] = true;
-
-  }
-
   submitForm() {
 
     this.touchedFields = {
 
-      niffOtros: true,
       emailRespuesta: true,
       emailConfirmar: true,
 
     };
 
+    this.actualizarInputs();
+
   }
 
-  btnGuardar() {
+  isValidEmail(email: string): boolean {
 
-    this.submitForm()
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+
+  }
+
+  validateForm(field: string): void {
+
+    (this.touchedFields as any) [field] = true;
+    this.actualizarInputs();
+
+  }
+
+  actualizarInputs(): void {
+
+    this.isDisabled =
+      !this.isValidEmail(this.emailRespuesta) ||
+      !this.isValidEmail(this.emailConfirmar) ||
+      this.emailRespuesta.trim().length === 0 ||
+      this.emailConfirmar.trim().length === 0;
+
+  }
+
+  btnGuardar(): void {
+
+    this.submitForm();
+
+    if (!this.isDisabled) {
+
+      this.showLoadingModal = true;
+
+      setTimeout(() => {
+        this.showLoadingModal = false;
+        this.showFinalModal = true;
+      }, 4000);
+
+      console.log('Formulario enviado con éxito');
+
+    } else {
+
+      console.log('Por favor corrige los errores antes de enviar');
+
+    }
 
   }
 

@@ -21,4 +21,10 @@ export class VerDetalleEntregasPendientesComponent implements OnInit {
   ngOnInit() {
   }
 
+  navigateTo(route: string): void {
+
+    this.router.navigate([route]);
+
+  }
+
 }

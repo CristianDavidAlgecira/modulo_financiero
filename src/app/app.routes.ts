@@ -18,6 +18,9 @@ import {
   VerDetalleEntregasPendientesComponent
 } from "./vistas/spring-2/ver-detalle-entregas-pendientes/ver-detalle-entregas-pendientes.component";
 import {IniciarReporteComponent} from "./vistas/spring-2/iniciar-reporte/iniciar-reporte.component";
+import {
+  AnexoEntregasPendientesComponent
+} from "./vistas/spring-2/anexo-entregas-pendientes/anexo-entregas-pendientes.component";
 
 export const routes: Routes = [
 
@@ -79,6 +82,11 @@ export const routes: Routes = [
       {
         path: 'iniciar-reporte',
         loadComponent: () => IniciarReporteComponent,
+
+      },
+      {
+        path: 'anexo-entregas-pendientes',
+        loadComponent: () => AnexoEntregasPendientesComponent,
 
       },
       {

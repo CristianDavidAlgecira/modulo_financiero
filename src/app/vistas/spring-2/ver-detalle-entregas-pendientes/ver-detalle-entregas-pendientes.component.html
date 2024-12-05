@@ -1,0 +1,80 @@
+<div class="w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Por favor seleccione los archivos a subir</h3>
+
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-6">
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*NIFF - OTROS</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="text" [(ngModel)]="niffOtros" (blur)="validateField('niffOtros')"
+            [ngClass]="{'input-error': !niffOtros && touchedFields['niffOtros']}" required/>
+          <p *ngIf="!niffOtros && touchedFields['niffOtros']" class="text-red-500 text-xs mt-1">
+            Este campo es obligatorio
+          </p>
+        </div>
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*E-mail de respuesta</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="text" [(ngModel)]="emailRespuesta" (blur)="validateField('emailRespuesta')"
+            [ngClass]="{'input-error': !emailRespuesta && touchedFields['emailRespuesta']}" required/>
+          <p *ngIf="!emailRespuesta && touchedFields['emailRespuesta']" class="text-red-500 text-xs mt-1">
+            Este campo es obligatorio
+          </p>
+        </div>
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Confirmar e-mail de respuesta</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="text" [(ngModel)]="emailConfirmar" (blur)="validateField('emailConfirmar')"
+            [ngClass]="{'input-error': !emailConfirmar && touchedFields['emailConfirmar']}" required/>
+          <p *ngIf="!emailConfirmar && touchedFields['emailConfirmar']" class="text-red-500 text-xs mt-1">
+            Este campo es obligatorio
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="sm:flex justify-center p-4 space-x-4">
+
+      <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+        <p class="text-primary3 font-semibold">
+          Cargar archivo
+        </p>
+
+        <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                         [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+
+      </div>
+
+      <app-primary-button class="h-full mt-9" type="button">Descargar formulario
+      </app-primary-button>
+
+    </div>
+
+    <div class="sm:flex justify-center p-4 space-x-4">
+
+      <app-primary-button class="h-full mt-9" type="button" (click)="btnGuardar()">Guardar
+      </app-primary-button>
+
+      <button
+        class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 h-full mt-9
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateTo('entregas-pendientes')"> Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

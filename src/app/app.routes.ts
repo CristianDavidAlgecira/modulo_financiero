@@ -13,6 +13,10 @@ import {OtrosAnexosComponent} from "./vistas/spring-2/otros-anexos/otros-anexos.
 import {OtrosAspectosComponent} from "./vistas/spring-2/otros-aspectos/otros-aspectos.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {ErrorAutenticationComponent} from "./vistas/auth/error-autentication/error-autentication.component";
+import {EntregasPendientesComponent} from "./vistas/spring-2/entregas-pendientes/entregas-pendientes.component";
+import {
+  VerDetalleEntregasPendientesComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/ver-detalle-entregas-pendientes.component";
 
 export const routes: Routes = [
 
@@ -24,7 +28,7 @@ export const routes: Routes = [
         path: 'administracion',
         loadComponent: () => AdministracionComponent,
         canActivate: [AuthGuard],
-        data: { permission: ['MSF_SF_LISTAR_SOLICITUD_TR', 'MSF_SF_LISTAR_SOLICITUD_GD', 'MSF_SF_LISTAR_SOLICITUD_ST'] }
+        data: {permission: ['MSF_SF_LISTAR_SOLICITUD_TR', 'MSF_SF_LISTAR_SOLICITUD_GD', 'MSF_SF_LISTAR_SOLICITUD_ST']}
       },
       {
         path: 'nuevo-requerimiento',
@@ -47,8 +51,18 @@ export const routes: Routes = [
 
       },
       {
+        path: 'entregas-pendientes',
+        loadComponent: () => EntregasPendientesComponent,
+
+      },
+      {
         path: 'ver-detalle-consultar-entregas',
         loadComponent: () => VerDetalleConsultarEntregasComponent,
+
+      },
+      {
+        path: 'ver-detalle-entregas-pendientes',
+        loadComponent: () => VerDetalleEntregasPendientesComponent,
 
       },
       {

@@ -4,6 +4,7 @@ import {PrimaryButtonComponent} from "../../../componentes/primary-button/primar
 import {
   TableEntregasPendientesComponent
 } from "../../../componentes/table-entregas-pendientes/table-entregas-pendientes.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-entregas-pendientes',
@@ -23,7 +24,9 @@ export class EntregasPendientesComponent implements OnInit {
   filtroAnio: string = '';
   filtroGlobal: string = '';
 
-  constructor() {
+  constructor(
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
@@ -64,6 +67,12 @@ export class EntregasPendientesComponent implements OnInit {
     this.filtroNumero = '';
     this.filtroAnio = '';
     this.filtroGlobal = '';
+
+  }
+
+  navigateTo(route: string): void {
+
+    this.router.navigate([route]);
 
   }
 

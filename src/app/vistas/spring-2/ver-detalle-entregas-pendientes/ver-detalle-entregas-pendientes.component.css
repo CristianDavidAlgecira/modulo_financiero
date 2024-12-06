@@ -31,3 +31,31 @@ ul {
 ul li {
   margin-bottom: 5px;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.link-style {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-style:hover {
+  color: darkblue;
+  text-decoration: underline;
+}

@@ -43,33 +43,7 @@
             <li><a class="link-style">Flujo de Efectivo (Directo e Indirecto)</a></li>
             <li><a class="link-style">Estado de Cambios en el Patrimonio</a></li>
             <li><a class="link-style">Dictamen del Revisor Fiscal</a></li>
-            <li><a class="link-style" (click)="navigateTo('otros-anexos')">Otros Anexos</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="section indicators">
-      <h3>Gestión de Indicadores</h3>
-      <div class="info-grid">
-        <div>
-          <h4 class="mb-6"><strong>Detalle del Reporte</strong></h4>
-          <ul>
-            <li>Indicadores Financieros</li>
-            <li>Comparativo de la Situación Financiera</li>
-            <li>Comparativo del Estado de Resultado</li>
-            <li>Indicadores de Desempeño</li>
-            <li>Indicadores de Liquidez</li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="mb-6"><strong>Anexos</strong></h4>
-          <ul>
-            <li><a class="link-style">Indicadores de Rentabilidad</a></li>
-            <li><a class="link-style">Indicadores de Endeudamiento</a></li>
-            <li><a class="link-style">Aspectos de Gestión</a></li>
-            <li><a class="link-style">Aspectos de la Deuda</a></li>
-            <li><a class="link-style" (click)="navigateTo('otros-aspectos')">Otros Aspectos</a></li>
+            <li><a class="link-style" (click)="navigateTo('anexo-entregas-pendientes')">Anexos</a></li>
           </ul>
         </div>
       </div>
@@ -77,16 +51,10 @@
 
     <div class="flex justify-center p-4 space-x-4">
 
-      <app-primary-button type="button">Ver Certificado
-      </app-primary-button>
-
-      <app-primary-button type="button">Análisis Individual
-      </app-primary-button>
-
       <button
         class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
           hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
-        (click)="navigateTo('consultar-entregas')"> Regresar
+        (click)="navigateTo('entregas-pendientes')"> Regresar
       </button>
 
     </div>

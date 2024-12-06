@@ -1,48 +1,62 @@
 <div class="container-navbar-menu-govco blue-menu-govco">
-    <nav class="navbar navbar-expand-lg navbar-menu-govco flex" role="navigation" aria-label="Menú ejemplo entidad"
-        #navbarMenu>
-        <div class="container-logo-header-govco">
-            <span class="logo-header-govco"></span>
-            <div class="container-search-header-govco">
+  <nav class="navbar navbar-expand-lg navbar-menu-govco flex" role="navigation" aria-label="Menú ejemplo entidad"
+       #navbarMenu>
+    <div class="container-logo-header-govco">
+      <span class="logo-header-govco"></span>
+      <div class="container-search-header-govco">
 
-            </div>
+      </div>
+    </div>
+    <div class="container-fluid container-second-navbar-menu-govco">
+      <button class="navbar-toggler button-responsive-menu-govco collapsed" type="button" (click)="toggleMenu()"
+              [attr.aria-expanded]="menuCollapsed ? 'false' : 'true'">
+        <span class="icon-bars-menu-govco"></span>
+      </button>
+      <div class="desktop_nav navbar-collapse navbar-collapse-menu-govco" id="navbarScroll"
+           style="margin-top: -21px;">
+        <ul class="navbar-nav navbar-nav-menu-govco ms-auto flex">
+          <li class="nav-item" *ngIf="hasPermission">
+            <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
+               routerLink="/" routerLinkActive="active" aria-current="page" type="button"
+               role="button">
+              <span class="text-item-menu-govco">Inicio</span>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="hasPermission">
+            <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
+               routerLink="/vigilado" routerLinkActive="active" aria-current="page" type="button"
+               role="button">
+              <span class="text-item-menu-govco">Inicio</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+      <div class="movile_nav"
+           [ngClass]="{'collapse': menuCollapsed, 'navbar-collapse': true, 'navbar-collapse-menu-govco': true}"
+           id="navbarScroll">
+        <div class="container-search-icon-menu-govco navbar-toggler">
+          <a class="navbar-brand navbar-toggler icon-entidad-menu-govco" type="button" role="button"></a>
+          <button class="icon-user-alt-menu-govco" (click)="toggleMenu()"></button>
         </div>
-        <div class="container-fluid container-second-navbar-menu-govco">
-            <button class="navbar-toggler button-responsive-menu-govco collapsed" type="button" (click)="toggleMenu()"
-                [attr.aria-expanded]="menuCollapsed ? 'false' : 'true'">
-                <span class="icon-bars-menu-govco"></span>
-            </button>
-            <div class="desktop_nav navbar-collapse navbar-collapse-menu-govco" id="navbarScroll"
-                style="margin-top: -21px;">
-                <ul class="navbar-nav navbar-nav-menu-govco ms-auto flex">
-                    <li class="nav-item">
-                        <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
-                            routerLink="/" routerLinkActive="active" aria-current="page" type="button"
-                            role="button">
-                            <span class="text-item-menu-govco">Inicio</span>
-                        </a>
-                    </li>
+        <ul class="navbar-nav navbar-nav-menu-govco ms-auto">
+          <li class="nav-item" *ngIf="hasPermission">
+            <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
+               routerLink="/" routerLinkActive="active" aria-current="page" type="button"
+               role="button">
+              <span class="text-item-menu-govco">Inicio</span>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="hasPermission">
+            <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
+               routerLink="/vigilado" routerLinkActive="active" aria-current="page" type="button"
+               role="button">
+              <span class="text-item-menu-govco">Inicio</span>
+            </a>
+          </li>
 
-                </ul>
-            </div>
-            <div class="movile_nav"
-                [ngClass]="{'collapse': menuCollapsed, 'navbar-collapse': true, 'navbar-collapse-menu-govco': true}"
-                id="navbarScroll">
-                <div class="container-search-icon-menu-govco navbar-toggler">
-                    <a class="navbar-brand navbar-toggler icon-entidad-menu-govco" type="button" role="button"></a>
-                    <button class="icon-user-alt-menu-govco" (click)="toggleMenu()"></button>
-                </div>
-                <ul class="navbar-nav navbar-nav-menu-govco ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link dir-menu-govco active" [routerLinkActiveOptions]="{ exact: true }"
-                            routerLink="/" routerLinkActive="active" aria-current="page" type="button"
-                            role="button">
-                            <span class="text-item-menu-govco">Inicio</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </div>

@@ -4,10 +4,12 @@ import {TableComponent} from "../../../componentes/table/table.component";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {AlertComponent} from "../../../componentes/alert/alert.component";
+import {AuthService} from "../../../services/auth/auth.service";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-administracion',
-  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule],
+  standalone: true, imports: [PrimaryButtonComponent, TableComponent, FormsModule, CommonModule, AlertComponent],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'
 })
@@ -17,10 +19,17 @@ export class AdministracionComponent implements OnInit {
   filtroNumero: string = '';
   filtroAnio: string = '';
   filtroGlobal: string = '';
+  user: any;
+  hasPermission: boolean = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
   ) {
+    this.user = this.authService.getUserInfo();
+    this.hasPermission = this.authService.hasPermission(
+      'MF_LISTAR_REQUERIMIENTOS'
+    );
   }
 
   ngOnInit() {

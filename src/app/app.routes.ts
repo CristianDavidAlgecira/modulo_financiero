@@ -36,16 +36,20 @@ export const routes: Routes = [
         path: 'administracion',
         loadComponent: () => AdministracionComponent,
         canActivate: [AuthGuard],
-        data: {permission: ['MSF_SF_LISTAR_SOLICITUD_TR', 'MSF_SF_LISTAR_SOLICITUD_GD', 'MSF_SF_LISTAR_SOLICITUD_ST']}
+        data: {permission: ['MF_LISTAR_REQUERIMIENTOS', 'MF_ACCESO_TOTAL\\']}
       },
       {
         path: 'nuevo-requerimiento',
         loadComponent: () => NuevoRequerimientoComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_CREAR_REQUERIMIENTOS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'detalle-requerimientos',
         loadComponent: () => VerDetalleComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_LISTAR_REQUERIMIENTOS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {

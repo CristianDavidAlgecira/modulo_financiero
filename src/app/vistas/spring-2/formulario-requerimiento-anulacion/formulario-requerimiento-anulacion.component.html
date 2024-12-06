@@ -1,5 +1,22 @@
 <div class="sm:w-full mb-12 pb-8">
 
+  <!-- Modal -->
+  <app-alert [showModal]="showModalInicial"
+             title="Política de Términos, Datos Personales y Condiciones de Uso"
+             [showSubtitle]="false"
+             [message]="'Autorización de notificación electrónica'"
+             buttonText="Acepto"
+             cancelButtonText="No Acepto"
+             [isIcon]="false"
+             [showFirstButton]="true"
+             [showCancelButton]="true"
+             TypeAlert="info"
+             (closeByButton1)="onAccept()"
+             (closeByButton2)="onDecline()"
+             (close)="preventClose()"
+             (closeByBackdrop)="preventClose()">
+  </app-alert>
+
   <div class="report-container">
 
     <h2 class="text-center">FORMULARIO DE REQUERIMIENTO DE ANULACIÓN</h2>
@@ -14,7 +31,7 @@
       <h3>Datos personales</h3>
 
       <!-- Contenido 1 -->
-      <div class="md:flex justify-center gap-4 px-4 pb-8">
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-4">
 
         <!-- Input 1 -->
         <div class="w-full">
@@ -50,15 +67,310 @@
 
       </div>
 
+      <!-- Contenido 2 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Input 3 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Nombres</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="nombres" (blur)="validateField('nombres')"
+            [ngClass]="{'input-error': !nombres && touchedFields['nombres']}">
+          <p *ngIf="!nombres && touchedFields['nombres']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Input 4 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Primer Apellido</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="primerApellido" (blur)="validateField('primerApellido')"
+            [ngClass]="{'input-error': !primerApellido && touchedFields['primerApellido']}">
+          <p *ngIf="!primerApellido && touchedFields['primerApellido']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Input 5 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Segundo Apellido</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="segundoApellido" (blur)="validateField('segundoApellido')"
+            [ngClass]="{'input-error': !segundoApellido && touchedFields['segundoApellido']}">
+          <p *ngIf="!segundoApellido && touchedFields['segundoApellido']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
+      <!-- Contenido 3 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Input 6 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Número de identificación</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="numeroIdentificacion" (blur)="validateField('numeroIdentificacion')"
+            [ngClass]="{'input-error': !numeroIdentificacion && touchedFields['numeroIdentificacion']}">
+          <p *ngIf="!numeroIdentificacion && touchedFields['numeroIdentificacion']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Caja seleccionable 2 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Seleccione un medio para la respuesta</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="medioRespuesta" (blur)="validateField('medioRespuesta')"
+            [ngClass]="{'input-error': !medioRespuesta && touchedFields['medioRespuesta']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el medio de respuesta</option>
+            <option *ngFor="let medio of medioRespuestaDatos" [value]="medio.id">{{ medio.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!medioRespuesta && touchedFields['medioRespuesta']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
+      <!-- Contenido 4 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Input 7 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*E-mail</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="email" (blur)="validateField('email')"
+            [ngClass]="{'input-error': !email && touchedFields['email']}">
+          <p *ngIf="!email && touchedFields['email']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Input 8 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Confirma el e-mail</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="emailConfirma" (blur)="validateField('emailConfirma')"
+            [ngClass]="{'input-error': !emailConfirma && touchedFields['emailConfirma']}">
+          <p *ngIf="!emailConfirma && touchedFields['emailConfirma']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Input 9 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">E-mail alternativo</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="emailAlternativo">
+        </div>
+
+      </div>
+
+      <!-- Contenido 5 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Input 10 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">Dirección</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="direccion">
+        </div>
+
+        <!-- Input 11 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Telefono de contacto</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="telefono" (blur)="validateField('telefono')"
+            [ngClass]="{'input-error': !telefono && touchedFields['telefono']}">
+          <p *ngIf="!telefono && touchedFields['telefono']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
+      <!-- Contenido 6 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Caja seleccionable 3 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Pais</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="paises" (blur)="validateField('paises')"
+            [ngClass]="{'input-error': !paises && touchedFields['paises']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el pais</option>
+            <option *ngFor="let pais of paisesDatos" [value]="pais.id">{{ pais.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!paises && touchedFields['paises']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Caja seleccionable 4 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Departamento</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="departamentos" (blur)="validateField('departamentos')"
+            [ngClass]="{'input-error': !departamentos && touchedFields['departamentos']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el departamento</option>
+            <option *ngFor="let departamento of departamentosDatos"
+                    [value]="departamento.id">{{ departamento.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!departamentos && touchedFields['departamentos']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Caja seleccionable 5 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Municipio</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="municipios" (blur)="validateField('municipios')"
+            [ngClass]="{'input-error': !municipios && touchedFields['municipios']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el municipio</option>
+            <option *ngFor="let municipio of municipiosDatos" [value]="municipio.id">{{ municipio.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!municipios && touchedFields['municipios']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
     </div>
 
     <div class="section report-info">
       <h3>Información del requerimiento</h3>
 
+      <!-- Contenido 1 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-4">
+
+        <!-- Caja seleccionable 1 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Tipo de PQR</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="tipoPQR" (blur)="validateField('tipoPQR')"
+            [ngClass]="{'input-error': !tipoPQR && touchedFields['tipoPQR']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el tipo de PQR</option>
+            <option *ngFor="let tipo of tipoPQRDatos" [value]="tipo.id">{{ tipo.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!tipoPQR && touchedFields['tipoPQR']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+        <!-- Caja seleccionable 2 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Tipo de Solicitud</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="tipoSolicitud" (blur)="validateField('tipoSolicitud')"
+            [ngClass]="{'input-error': !tipoSolicitud && touchedFields['tipoSolicitud']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el tipo de solicitud</option>
+            <option *ngFor="let tipo of tipoSolicitudDatos" [value]="tipo.id">{{ tipo.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!tipoSolicitud && touchedFields['tipoSolicitud']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <div class="form-container">
+          <div class="form-group">
+            <label for="descripcionHechos">Descripción de los Hechos (opcional)</label>
+            <textarea id="descripcionHechos" class="form-control" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="peticion">Petición (opcional)</label>
+            <textarea id="peticion" class="form-control" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="itemsModificados">Especifique los ítems que presentan modificaciones (opcional)</label>
+            <textarea id="itemsModificados" class="form-control" rows="4"></textarea>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <div class="section indicators">
       <h3>Documentos anexos a la solicitud</h3>
+
+      <!-- Contenido 1 -->
+      <div class="md:flex justify-center gap-4 px-8 pb-8 mt-4">
+
+        <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+          <p class="text-primary3 font-semibold">
+            Certificación firmada por el Contador o revisor fiscal
+          </p>
+
+          <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                           [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+
+        </div>
+
+        <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+          <p class="text-primary3 font-semibold">
+            Documentos que soportan su solicitud
+          </p>
+
+          <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                           [error]="errorStates[2]" (uploadFile)="OnUploadButton($event)"/>
+
+        </div>
+
+      </div>
+
+      <!-- Contenido 2 -->
+      <div class="md:flex justify-center gap-4 px-8 pb-8 mt-4">
+
+        <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+          <p class="text-primary3 font-semibold">
+            Poder Especial
+          </p>
+
+          <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                           [error]="errorStates[3]" (uploadFile)="OnUploadButton($event)"/>
+
+        </div>
+
+        <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+          <p class="text-primary3 font-semibold">
+            Otros Anexos
+          </p>
+
+          <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                           [error]="errorStates[4]" (uploadFile)="OnUploadButton($event)"/>
+
+        </div>
+
+      </div>
 
     </div>
 

@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
   TableConsultarEntregasComponent
 } from "../../../componentes/table-consultar-entregas/table-consultar-entregas.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-consultar-entregas',
@@ -24,7 +25,9 @@ export class ConsultarEntregasComponent implements OnInit {
   filtroAnio: string = '';
   filtroGlobal: string = '';
 
-  constructor() {
+  constructor(
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
@@ -65,6 +68,12 @@ export class ConsultarEntregasComponent implements OnInit {
     this.filtroNumero = '';
     this.filtroAnio = '';
     this.filtroGlobal = '';
+
+  }
+
+  navigateTo(route: string): void {
+
+    this.router.navigate([route]);
 
   }
 

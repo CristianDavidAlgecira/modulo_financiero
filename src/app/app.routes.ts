@@ -25,6 +25,7 @@ import {
   FormularioRequerimientoAnulacionComponent
 } from "./vistas/spring-2/formulario-requerimiento-anulacion/formulario-requerimiento-anulacion.component";
 import {ModificarEntregaComponent} from "./vistas/spring-2/modificar-entrega/modificar-entrega.component";
+import {VigiladoComponent} from "./vistas/spring-2/vigilado/vigilado.component";
 
 export const routes: Routes = [
 
@@ -101,6 +102,11 @@ export const routes: Routes = [
       {
         path: 'modificar-entregas',
         loadComponent: () => ModificarEntregaComponent,
+
+      },
+      {
+        path: 'vigilado',
+        loadComponent: () => VigiladoComponent,
 
       },
       {

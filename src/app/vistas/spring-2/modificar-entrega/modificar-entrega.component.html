@@ -1,0 +1,44 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Modificar la entrega</h3>
+
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-4">
+
+        <div class="form-container">
+
+          <div class="form-group">
+            <label for="descripcionHechos">*Observación</label>
+            <textarea id="descripcionHechos" class="form-control" rows="4"></textarea>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-4">
+
+        <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+          <p class="text-primary3 font-semibold">
+            Anexo
+          </p>
+          <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                           [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+
+        </div>
+
+      </div>
+
+      <div class="text-center mt-6">
+        <p>Los campos marcados con * son obligatorios</p>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>

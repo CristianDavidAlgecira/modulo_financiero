@@ -1,0 +1,100 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Por favor seleccione los archivos a subir</h3>
+
+      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-6">
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*NIFF - OTROS</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="text" [(ngModel)]="niffOtros" (input)="actualizarInputs()" (blur)="validateForm('niffOtros')"
+            [ngClass]="{'input-error': niffOtros.trim().length === 0 && touchedFields['niffOtros']}" required/>
+          <p *ngIf="niffOtros.trim().length === 0 && touchedFields['niffOtros']" class="text-red-500 text-xs mt-1">
+            El niff no puede estar vacío
+          </p>
+        </div>
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*E-mail de respuesta</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="email" [(ngModel)]="emailRespuesta" (input)="actualizarInputs()"
+            (blur)="validateForm('emailRespuesta')"
+            [ngClass]="{'input-error': !isValidEmail(emailRespuesta) && touchedFields['emailRespuesta']}" required/>
+          <p *ngIf="!isValidEmail(emailRespuesta) && touchedFields['emailRespuesta']" class="text-red-500 text-xs mt-1">
+            El correo debe tener una estructura válida
+          </p>
+        </div>
+
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Confirmar e-mail de respuesta</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            type="email" [(ngModel)]="emailConfirmar" (input)="actualizarInputs()"
+            (blur)="validateForm('emailConfirmar')"
+            [ngClass]="{'input-error': !isValidEmail(emailConfirmar) && touchedFields['emailConfirmar']}" required/>
+          <p *ngIf="!isValidEmail(emailConfirmar) && touchedFields['emailConfirmar']" class="text-red-500 text-xs mt-1">
+            El correo debe tener una estructura válida
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="sm:flex justify-center p-4 space-x-4">
+
+      <div class="flex flex-col w-auto justify-center items-start pt-6l my-auto mb-2">
+
+        <p class="text-primary3 font-semibold">
+          Cargar archivo
+        </p>
+
+        <app-file-upload class="mt-2 h-full" [dataClass]="dataClass" [maxFiles]="1" mimes=".pdf"
+                         [error]="errorStates[1]" (uploadFile)="OnUploadButton($event)"/>
+
+      </div>
+
+      <app-primary-button class="h-full mt-9" type="button">Descargar formulario
+      </app-primary-button>
+
+    </div>
+
+    <div class="sm:flex justify-center p-4 space-x-4">
+
+      <app-primary-button class="h-full mt-9" type="button" (click)="btnGuardar()" [disabled]="isDisabled">
+        Guardar
+      </app-primary-button>
+
+      <button
+        class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1 h-full mt-9
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateTo('entregas-pendientes')"> Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Modal de loading -->
+<app-alert [showModal]="showLoadingModal" title="Verificando datos" subtitle="Un momento por favor."
+           message="Señor Vigilado, el archivo de carga de información será procesado,
+  posteriormente recibirá un correo electrónico con el resultado de las validaciones iniciales para continuar con la entrega.
+  En cualquier momento usted puede ingresar al sistema y validar el estado de la misma."
+           [showFirstButton]="false" [showCancelButton]="false" TypeAlert="loader">
+</app-alert>
+
+<!-- Modal final -->
+<app-alert [showModal]="showFinalModal" title="Solicitud guardada exitosamente" textColor="text-success"
+           [showSubtitle]="false" [message]="'Se ha enviado con éxito.'" buttonText="Continuar"
+           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
+           (close)="navigateTo('entregas-pendientes')" (closeByButton1)="navigateTo('entregas-pendientes')"
+           (closeByButton2)="navigateTo('entregas-pendientes')" (closeByBackdrop)="navigateTo('entregas-pendientes')">
+</app-alert>
+

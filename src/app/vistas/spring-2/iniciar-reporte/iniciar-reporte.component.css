@@ -1,0 +1,55 @@
+.report-container {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+h3 {
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.input-error {
+  border: 2px solid #f00;
+}
+
+select {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+/* Estilo para el scrollbar */
+::-webkit-scrollbar {
+  /* Ancho del scrollbar vertical */
+  width: 4px;
+  height: 4px;
+  /* Altura del scrollbar horizontal */
+}
+
+/* Estilo para el scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #004884;
+  /* Color del scrollbar thumb */
+  border-radius: 6px;
+  /* Radio de borde del scrollbar thumb */
+}
+
+/* Estilo para el scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #E6EFFD;
+  /* Color del scrollbar track */
+}

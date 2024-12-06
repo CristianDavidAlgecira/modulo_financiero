@@ -1,0 +1,92 @@
+<div class="w-full lg:pt-[70px] lg:px-[86px] px-[40px] lg:min-h-[60vh] min-h-[70vh]">
+  <div>
+    <h4 class="text-[#4B4B4B] font-bold">
+      Bienvenido
+    </h4>
+  </div>
+
+  <div class="lg:grid lg:grid-cols-4 gap-4 mt-5">
+
+    <div class="col-span-1 lg:mt-1 mt-10">
+
+      <div class="card">
+
+        <div class="flex gap-4">
+
+          <div class="flex items-center">
+            <p class="text-primary1 text-lg m-0">
+              <b>Consultar Entregas</b>
+            </p>
+          </div>
+
+          <div>
+            <div class="bg-primary1 rounded-full p-2 flex justify-center items-center">
+              <span class="govco-list-alt"></span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="my-5">
+
+          <p class="text-center">
+            <span class="govco-check"></span> Consultar Entregas
+          </p>
+
+        </div>
+
+        <div class="flex justify-center">
+
+          <app-primary-button class="h-full mt-9" type="button" (click)="navigateTo('consultar-entregas')">
+            Ingresar
+          </app-primary-button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-span-1 lg:mt-1 mt-10">
+
+      <div class="card">
+
+        <div class="flex gap-4">
+
+          <div class="flex items-center">
+            <p class="text-primary1 text-lg m-0">
+              <b>Entregas Pendientes</b>
+            </p>
+          </div>
+
+          <div>
+            <div class="bg-primary1 rounded-full p-2 flex justify-center items-center">
+              <span class="govco-list-alt"></span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="my-5">
+
+          <p class="text-center">
+            <span class="govco-check"></span> Entregas Pendientes
+          </p>
+
+        </div>
+
+        <div class="flex justify-center">
+
+          <app-primary-button class="h-full mt-9" type="button" (click)="navigateTo('entregas-pendientes')">
+            Ingresar
+          </app-primary-button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

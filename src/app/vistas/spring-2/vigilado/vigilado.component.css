@@ -1,0 +1,127 @@
+.fondo {
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+}
+
+.fondo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.tarjeta {
+  height: fit-content;
+  margin-top: 80px;
+}
+
+.suspensivos {
+  font-size: 6rem;
+  line-height: 0px;
+}
+
+.padding-title {
+  padding: 10px 50% 10px 90px;
+}
+
+.title {
+  display: block;
+}
+
+.padding-content {
+  padding: 0px 50% 0px 90px;
+}
+
+@media screen and (max-width: 767px) {
+  .padding-title {
+    padding: 10px 20px;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .tarjeta {
+    margin-top: 0px;
+  }
+
+  .height-reponsive {
+    min-height: 79.7vh;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1014px) {
+  .height-reponsive {
+    min-height: 86.9vh;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .tarjeta {
+    margin-top: 0px;
+  }
+
+}
+
+
+.spinner-indicador-de-carga-govco {
+  display: inline-block;
+  vertical-align: -0.125em;
+  border-radius: 50%;
+  animation: spinner-border .75s linear infinite;
+  /* Aplicar la animación */
+  border: 8px solid white;
+  /* Define el borde */
+  border-right-color: transparent;
+  /* Hace transparente el borde derecho para crear el efecto */
+  position: relative;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+
+  /* Define la animación */
+}
+
+
+.govco-list-alt {
+  background-image: url(/assets/gobierno/assets/icons/list-alt.svg);
+  min-width: 2rem;
+  min-height: 2rem;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 2rem 2rem;
+}
+
+.card {
+  padding: 20px 17px;
+  border: solid #3366cc;
+  border-radius: 20px;
+}
+
+.govco-check {
+  background-image: url(/assets/gobierno/assets/icons/check-circle.svg);
+  min-width: 1rem;
+  min-height: 1rem;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 1rem 1rem;
+}
+
+.govco-info {
+  background-image: url(/assets/gobierno/assets/icons/info.svg);
+  min-width: 2rem;
+  min-height: 2rem;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 2rem 2rem;
+}

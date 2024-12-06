@@ -26,6 +26,8 @@ export default class MenuNavegacionComponent implements AfterViewInit {
   userInfo: any;
   hasSolicitudes: boolean = false;
   hasIndicadores: boolean = false;
+  user: any;
+  hasPermission: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -33,7 +35,11 @@ export default class MenuNavegacionComponent implements AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private eRef: ElementRef,
     private router: Router,
+
   ) {
+    this.hasPermission = this.authService.hasPermission(
+      'MF_LISTAR_REQUERIMIENTOS'
+    );
 
   }
 

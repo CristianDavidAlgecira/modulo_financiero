@@ -1,0 +1,89 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <h2 class="text-center">FORMULARIO DE REQUERIMIENTO DE ANULACIÓN</h2>
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <p>Los campos marcados con * son obligatorios</p>
+
+    </div>
+
+    <div class="section general-info mt-8">
+      <h3>Datos personales</h3>
+
+      <!-- Contenido 1 -->
+      <div class="md:flex justify-center gap-4 px-4 pb-8">
+
+        <!-- Input 1 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">Nombre</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="nombreVigilado" disabled>
+        </div>
+
+        <!-- Input 2 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">Tipo de identificación</label>
+          <input
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 border-secondary1 focus:outline-none focus:border-primary1 bg-transparent"
+            type="text" [(ngModel)]="tipoIdentifiacionVigilado" disabled>
+        </div>
+
+        <!-- Caja seleccionable 1 -->
+        <div class="w-full">
+          <label class="text-primary3 font-semibold h-full text-xs">*Titular del trámite</label>
+          <select
+            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
+            [(ngModel)]="titularTramite" (blur)="validateField('titularTramite')"
+            [ngClass]="{'input-error': !titularTramite && touchedFields['titularTramite']}"
+            required>
+            <option value="" disabled selected hidden>Seleccione el tramite</option>
+            <option *ngFor="let titular of titularTramiteDatos" [value]="titular.id">{{ titular.descripcion }}
+            </option>
+          </select>
+          <p *ngIf="!titularTramite && touchedFields['titularTramite']"
+             class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="section report-info">
+      <h3>Información del requerimiento</h3>
+
+    </div>
+
+    <div class="section indicators">
+      <h3>Documentos anexos a la solicitud</h3>
+
+    </div>
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <p>Puede verificar y/o modificar los datos registrados, cuando este seguro presione "Enviar Solicitud."</p>
+
+    </div>
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <app-primary-button type="button">Guardar
+      </app-primary-button>
+
+      <app-primary-button type="button">Enviar Solicitud
+      </app-primary-button>
+
+      <button
+        class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center">
+        Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

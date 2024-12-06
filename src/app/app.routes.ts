@@ -21,6 +21,9 @@ import {IniciarReporteComponent} from "./vistas/spring-2/iniciar-reporte/iniciar
 import {
   AnexoEntregasPendientesComponent
 } from "./vistas/spring-2/anexo-entregas-pendientes/anexo-entregas-pendientes.component";
+import {
+  FormularioRequerimientoAnulacionComponent
+} from "./vistas/spring-2/formulario-requerimiento-anulacion/formulario-requerimiento-anulacion.component";
 
 export const routes: Routes = [
 
@@ -87,6 +90,11 @@ export const routes: Routes = [
       {
         path: 'anexo-entregas-pendientes',
         loadComponent: () => AnexoEntregasPendientesComponent,
+
+      },
+      {
+        path: 'formulario-requerimiento-anulacion',
+        loadComponent: () => FormularioRequerimientoAnulacionComponent,
 
       },
       {

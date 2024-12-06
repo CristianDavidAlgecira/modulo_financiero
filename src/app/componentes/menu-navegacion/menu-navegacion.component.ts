@@ -28,6 +28,7 @@ export default class MenuNavegacionComponent implements AfterViewInit {
   hasIndicadores: boolean = false;
   user: any;
   hasPermission: boolean = false;
+  hasPermission1: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -39,6 +40,9 @@ export default class MenuNavegacionComponent implements AfterViewInit {
   ) {
     this.hasPermission = this.authService.hasPermission(
       'MF_LISTAR_REQUERIMIENTOS'
+    );
+    this.hasPermission1 = this.authService.hasPermission(
+      'MF_ENTREGAS_PENDIENTES'
     );
 
   }

@@ -56,61 +56,85 @@ export const routes: Routes = [
       {
         path: 'visualizar-archivo',
         loadComponent: () => VisualizarArchivoComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'consultar-entregas',
         loadComponent: () => ConsultarEntregasComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'entregas-pendientes',
         loadComponent: () => EntregasPendientesComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'ver-detalle-consultar-entregas',
         loadComponent: () => VerDetalleConsultarEntregasComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'ver-detalle-entregas-pendientes',
         loadComponent: () => VerDetalleEntregasPendientesComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'otros-anexos',
         loadComponent: () => OtrosAnexosComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'otros-aspectos',
         loadComponent: () => OtrosAspectosComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'iniciar-reporte',
         loadComponent: () => IniciarReporteComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'anexo-entregas-pendientes',
         loadComponent: () => AnexoEntregasPendientesComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'formulario-requerimiento-anulacion',
         loadComponent: () => FormularioRequerimientoAnulacionComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'modificar-entregas',
         loadComponent: () => ModificarEntregaComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {
         path: 'vigilado',
         loadComponent: () => VigiladoComponent,
+        canActivate: [AuthGuard],
+        data: {permission: ['MF_ENTREGAS_PENDIENTES', 'MF_CONSULTAR_ENTREGAS', 'MF_ACCESO_TOTAL\\']}
 
       },
       {

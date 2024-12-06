@@ -24,7 +24,8 @@ export class VisualizarArchivoComponent implements OnInit {
   };
 
   // Propiedad de guardar temporalmente el archivo seleccionado
-  selectedFile: File | null = null;
+  // @ts-ignore
+  selectedFile: File = [];
 
   //modales
   showErrorModal: boolean = false;
@@ -128,6 +129,7 @@ export class VisualizarArchivoComponent implements OnInit {
 
   OnUploadButton(file: File[]) {
     if (file[0]) {
+
       this.showLoadingModal = true;
       this.ApiMFService.uploadFileAPI(file[0], this.validationRanges).subscribe({
         next: (response) => {
@@ -160,7 +162,26 @@ export class VisualizarArchivoComponent implements OnInit {
   }
 
   ValidSaveExcel() {
+    this.showLoadingModal = true;
     console.log("entrooooooo")
+    this.ApiMFService.saveExcel(this.selectedFile).subscribe({
+      next: (response) => {
+        this.showLoadingModal = false;
+        if(response.message == 'Archivo guardado en BD'){
+          this.showValidado = true;
+        } else {
+          this.messageNoValidado = response.message;
+          this.showError = true;
+        }
+
+        console.log('Archivo subido con éxito:', response);
+      },
+      error: (err) => {
+        this.showLoadingModal = false;
+        this.showErrorModal = true;
+        console.error('Error al subir el archivo:', err);
+      }
+    });
   }
 
   navigateToAdministracion() {

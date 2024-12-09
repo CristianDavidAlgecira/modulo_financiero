@@ -60,10 +60,14 @@
                   <p>{{ item.estadoRequerimientoDescripcion }}</p>
                 </td>
 
-                <td class="px-5 py-5">
+                <td class="px-2 py-2 flex flex-wrap gap-2">
                   <p class="whitespace-no-wrap text-center">
                     <span (click)="onButtonClick(item.idRequerimiento)"
                           class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
+                  </p>
+                  <p class="whitespace-no-wrap text-center">
+                    <span (click)="onButtonClick1(item.idRequerimiento)"
+                          class="pi pi-trash w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
                 </td>
 

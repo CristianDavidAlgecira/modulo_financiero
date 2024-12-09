@@ -191,4 +191,14 @@ export class TableEntregasPendientesComponent {
 
   }
 
+  onButtonClick1(id: number) {
+
+    this.router.navigate(['/formulario-requerimiento-anulacion'], {
+      state: {
+        id: id,
+      },
+    });
+
+  }
+
 }

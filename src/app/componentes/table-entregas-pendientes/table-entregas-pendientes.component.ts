@@ -201,4 +201,14 @@ export class TableEntregasPendientesComponent {
 
   }
 
+  onButtonClick2(id: number) {
+
+    this.router.navigate(['/modificar-entregas'], {
+      state: {
+        id: id,
+      },
+    });
+
+  }
+
 }

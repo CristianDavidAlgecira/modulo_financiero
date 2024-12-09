@@ -1,12 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
+import {PrimaryButtonComponent} from "../../../componentes/primary-button/primary-button.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-modificar-entrega',
   standalone: true,
-  imports: [
-    FileUploadComponent
-  ],
+    imports: [
+        FileUploadComponent,
+        PrimaryButtonComponent
+    ],
   templateUrl: './modificar-entrega.component.html',
   styleUrl: './modificar-entrega.component.css'
 })
@@ -20,7 +23,9 @@ export class ModificarEntregaComponent implements OnInit {
   // Propiedad de objeto para manejar errores
   errorStates: { [key: number]: boolean } = {};
 
-  constructor() {
+  constructor(
+    private router: Router
+  ) {
   }
 
   ngOnInit() {
@@ -38,6 +43,10 @@ export class ModificarEntregaComponent implements OnInit {
 
     }
 
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
 }

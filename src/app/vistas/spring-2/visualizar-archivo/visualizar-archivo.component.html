@@ -45,13 +45,19 @@
 
 <!-- Modal enviar y validar -->
 <app-alert [showModal]="showValidado" title="validación exitosamente" textColor="text-success"
-           [showSubtitle]="false" [message]="'archivo excel validado, clic en en enviar y validar para continuar con el cargue de información'" buttonText="Enviar y validar"
+           [showSubtitle]="false" [message]="'estructura de archivo excel validado, clic en en enviar para continuar con el cargue de información'" buttonText="Enviar y validar"
            [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
            (closeByButton1)="ValidSaveExcel()" (closeByButton2)="onCloseModal()"
            (closeByBackdrop)="onCloseModal()"></app-alert>
 
 <app-alert [showModal]="showError" title="documento invalido" textColor="text-error"
            [showSubtitle]="false" [message]="messageNoValidado" buttonText="Continuar"
-           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
+           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="error"
            (closeByButton1)="onCloseModal()" (closeByButton2)="onCloseModal()"
            (closeByBackdrop)="onCloseModal()" (close)="onCloseModal()"></app-alert>
+
+<app-alert [showModal]="showFinalModal" title="Documento validado y guardado" textColor="text-success"
+           [showSubtitle]="false" [message]="messageNoValidado" buttonText="Continuar"
+           [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
+           (closeByButton1)="navigateToAdministracion()" (closeByButton2)="navigateToAdministracion()"
+           (closeByBackdrop)="navigateToAdministracion()" (close)="navigateToAdministracion()"></app-alert>

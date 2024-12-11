@@ -55,11 +55,15 @@ export class ApiMFService {
   }
 
   // Enviar excel a BD
-  saveExcel(file: File): Observable<any> {
+  saveExcel(file: File, nit: string, fieldMapping: object): Observable<any> {
     const formData = new FormData();
 
     // Agregar archivo al FormData
     formData.append('file', file);
+    //agrega nit
+    formData.append('nit', nit);
+    // Convertir fieldMapping a JSON y agregar al FormData
+    formData.append('fieldMapping', JSON.stringify(fieldMapping));
 
 
     return this.http.post(`${this.baseUrl}/api/files/saveExcel`, formData);

@@ -185,7 +185,8 @@ export class VisualizarArchivoComponent implements OnInit {
       "validacionGananciaPerdidaNeta": "H95",
       "totalPasivoPatrimonio": "H97",
       "validacionEcuacionPatrimonial": "H99",
-      "nit": "NitValue"
+      "nit": "NitValue",
+      "annio": "H10",
     }, "ORI": {
       "gananciaPerdidaNeta": "J10",
       "otroResultadoIntegralDiferenciasCambioConversion": "J13",
@@ -200,7 +201,8 @@ export class VisualizarArchivoComponent implements OnInit {
       "resultadoIntegralPropietariosControladora": "J24",
       "resultadoIntegralParticipacionesNoControladoras": "J25",
       "validacionEstadoResultados": "J27",
-      "nit": "NitValue"
+      "nit": "NitValue",
+      "annio": "J9"
     }, "EFE-indirecto": {
       "gananciaPerdida": "J10",
       "ajustesGastosImpuestosGanancias": "J12",
@@ -255,7 +257,8 @@ export class VisualizarArchivoComponent implements OnInit {
       "efectosTasaCambioEfectivoEquivalentes": "J69",
       "efectivoEquivalentesPrincipioPeriodo": "J71",
       "efectivoEquivalentesFinalPeriodo": "J72",
-      "nit": 'nit'
+      "nit": 'nit',
+      "annio": "J8"
 
     }, "EFE-directo": {
       "flujosEfectivoProcedentesUtilizadosActividadesOperacion": "j9",
@@ -295,7 +298,8 @@ export class VisualizarArchivoComponent implements OnInit {
       "efectosVariacionTasaCambioEfectivo": "J76",
       "efectivoEquivalentesPrincipioPeriodo": "J78",
       "efectivoEquivalentesFinalPeriodo": "J79",
-      "nit": "nit"
+      "nit": "nit",
+      "annio": "J8"
 
     }, "Dictamen": {
       "dictamen": "F11",

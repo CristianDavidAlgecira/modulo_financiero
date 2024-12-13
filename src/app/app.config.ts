@@ -4,12 +4,13 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi} from "@angular/common/http";
 import {JWT_OPTIONS, JwtHelperService} from "@auth0/angular-jwt";
+import {authInterceptor} from "./interceptors/interceptors/auth.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withFetch(), withInterceptors([authInterceptor])),
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideClientHydration(),

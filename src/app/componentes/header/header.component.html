@@ -1,39 +1,27 @@
 <div class="header-bar h-[48px] px-[18px] sm:px-[48px] bg-primary1">
-  <div class="flex w-full items-center gap-6">
+  <div class="flex w-full items-center gap-6 pt-1">
     <div class="w-1/2 flex pt-1 justify-start">
-      <!-- logo .gov -->
       <a href="https://www.gov.co/" target="_blank" title="Ir a la GOV.CO">
-        <img src="assets/logo.svg" alt="Logo de GOV.CO" class="sm:h-[38px] h-[44px] w-auto" />
+        <img src="assets/logo.svg" alt="Logo de GOV.CO" class="sm:h-[30px] h-[30px] w-auto">
       </a>
-      <!-- botones manejo roles -->
-      <!-- SuperUsuario -->
-      <button class="bg-green-800 mx-1 text-sm text-white rounded"
-              (click)="changeUser('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJFTVBSRVNBIE1BRVNUUkUiLCJhdXRob3JpdGllcyI6Ilt7XCJpZFwiOjI1LFwibm9tYnJlXCI6XCJzdXBlclVzdWFyaW9cIixcInNpc3RlbWFcIjpcIk1GX1NVUEVSVVNVQVJJT1wiLFwicGVybWlzb3NcIjpbe1wiaWRcIjo0NSxcIm5vbWJyZVwiOlwiTElTVEFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9MSVNUQVJfUkVRVUVSSU1JRU5UT1NcIixcImlkX3JlbGFjaW9uXCI6Njl9LHtcImlkXCI6NDYsXCJub21icmVcIjpcIkNSRUFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9DUkVBUl9SRVFVRVJJTUlFTlRPU1wiLFwiaWRfcmVsYWNpb25cIjo3MH0se1wiaWRcIjo0NyxcIm5vbWJyZVwiOlwiQU5VTEFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9BTlVMQVJfUkVRVUVSSU1JRU5UT1NcIixcImlkX3JlbGFjaW9uXCI6NzF9XX1dIiwiaWQiOjY3LCJ1c2VyIjoie1wiaWRcIjo2NyxcIm5vbWJyZXNcIjpcIkVNUFJFU0EgTUFFU1RSRVwiLFwiYXBlbGxpZG9zXCI6bnVsbCxcImNvcnJlb1wiOlwicHJ1ZWJhc3N1cGVycEBnbWFpbC5jb21cIixcImRlbGVnYXR1cmFJZFwiOm51bGwsXCJyYXpvblNvY2lhbFwiOlwiRU1QUkVTQSBNQUVTVFJFXCIsXCJkb2N1bWVudG9cIjpcIjgwNjY2NjY2XCIsXCJ0aXBvVXN1YXJpb0lkXCI6NX0iLCJzeXN0ZW0iOiJNRiIsImV4cCI6MTczMzUyNDM3NiwiaWF0IjoxNzMzNTIwNzc2fQ.4HuekHcf4WKuF7b2yfXmnLh70HP9d7_zMpc36Ua4a-8', '/dashboard')">
-        SuperUsuario</button>
-      <!-- Vigilado -->
-      <button class="bg-green-800 mx-1 text-sm text-white rounded"
-              (click)="changeUser('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJFTVBSRVNBIE5JTkZBIiwiYXV0aG9yaXRpZXMiOiJbe1wiaWRcIjoyOCxcIm5vbWJyZVwiOlwidmlnaWxhZG9cIixcInNpc3RlbWFcIjpcIk1GX1ZJR0lMQURPXCIsXCJwZXJtaXNvc1wiOlt7XCJpZFwiOjQ5LFwibm9tYnJlXCI6XCJFTlRSRUdBU19QRU5ESUVOVEVTXCIsXCJzaXN0ZW1hXCI6XCJNRl9FTlRSRUdBU19QRU5ESUVOVEVTXCIsXCJpZF9yZWxhY2lvblwiOjczfSx7XCJpZFwiOjUwLFwibm9tYnJlXCI6XCJDT05TVUxUQVJfRU5UUkVHQVNcIixcInNpc3RlbWFcIjpcIk1GX0NPTlNVTFRBUl9FTlRSRUdBU1wiLFwiaWRfcmVsYWNpb25cIjo3NH1dfV0iLCJpZCI6NjgsInVzZXIiOiJ7XCJpZFwiOjY4LFwibm9tYnJlc1wiOlwiRU1QUkVTQSBOSU5GQVwiLFwiYXBlbGxpZG9zXCI6bnVsbCxcImNvcnJlb1wiOlwicHJ1ZWJhc3N1cGVycEBnbWFpbC5jb21cIixcImRlbGVnYXR1cmFJZFwiOm51bGwsXCJyYXpvblNvY2lhbFwiOlwiRU1QUkVTQSBOSU5GQVwiLFwiZG9jdW1lbnRvXCI6XCI4MDE1MjUyNTJcIixcInRpcG9Vc3VhcmlvSWRcIjo1fSIsInN5c3RlbSI6Ik1GIiwiZXhwIjoxNzMzNTI3OTIzLCJpYXQiOjE3MzM1MjQzMjN9.HplM35gkx5jcWBOg4JE7yXQuq61aCZsRsw99Iz0Igoc', '/vigilado')">
-        Vigilado</button>
-
     </div>
 
-    <div class="w-1/2 flex justify-end">
-      <div class="flex items-center gap-4" (focusin)="onFocus()" (focusout)="onFocusOut()">
-        <p class="text-white text-[7px] sm:text-[14px]">{{ user.fullName }}</p>
-        <div class="flex items-center justify-center user cursor-pointer" tabindex="0">
+    <div class="w-1/2 flex justify-end items-center gap-4">
+      <div class="flex items-center gap-4">
+        <p class="text-white text-[14px] maximo-texto">{{userInfo ? userInfo.razonSocial : ''}}</p>
+        <div class="flex items-center justify-center user" tabindex="0">
           <span class="pi pi-user text-white"></span>
         </div>
       </div>
 
-      <div *ngIf="menuVisible"
-           class="absolute right-0 z-10 mt-10 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-           role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-        <a href="#" class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="user-menu-item-0">Perfil</a>
-        <a><button (click)="logout()" class="block px-4 py-2 text-sm w-full text-left" role="menuitem" tabindex="-1"
-                   id="user-menu-item-2">
-          Cerrar Sesion
-        </button></a>
+      <div>
+        <img src="/assets/home.svg" pTooltip="Volver a SINST" tooltipPosition="bottom" width="25px" alt="" class="cursor-pointer" (click)="volverInicio($event)">
       </div>
+      <div>
+        <img src="/assets/sign-out-alt.svg" pTooltip="Cerrar sesión" tooltipPosition="bottom" width="25px" alt="" class="cursor-pointer" (click)="cerrarsesion($event)">
+      </div>
+
     </div>
+
   </div>
 </div>

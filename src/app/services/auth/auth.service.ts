@@ -2,66 +2,117 @@
 import { Injectable, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Authority, Permiso } from '../../models/auth.types';
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnInit, OnChanges {
+export class AuthService {
 
+  private readonly TOKEN_KEY = 'authToken'; // Clave para guardar el token en sessionStorage
   private token: string | null = null;
   private decodedToken: { user?: string; authorities?: string } | null = null;
-  private readonly defaultToken: string =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJFTVBSRVNBIE1BRVNUUkUiLCJhdXRob3JpdGllcyI6Ilt7XCJpZFwiOjI1LFwibm9tYnJlXCI6XCJzdXBlclVzdWFyaW9cIixcInNpc3RlbWFcIjpcIk1GX1NVUEVSVVNVQVJJT1wiLFwicGVybWlzb3NcIjpbe1wiaWRcIjo0NSxcIm5vbWJyZVwiOlwiTElTVEFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9MSVNUQVJfUkVRVUVSSU1JRU5UT1NcIixcImlkX3JlbGFjaW9uXCI6Njl9LHtcImlkXCI6NDYsXCJub21icmVcIjpcIkNSRUFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9DUkVBUl9SRVFVRVJJTUlFTlRPU1wiLFwiaWRfcmVsYWNpb25cIjo3MH0se1wiaWRcIjo0NyxcIm5vbWJyZVwiOlwiQU5VTEFSX1JFUVVFUklNSUVOVE9TXCIsXCJzaXN0ZW1hXCI6XCJNRl9BTlVMQVJfUkVRVUVSSU1JRU5UT1NcIixcImlkX3JlbGFjaW9uXCI6NzF9XX1dIiwiaWQiOjY3LCJ1c2VyIjoie1wiaWRcIjo2NyxcIm5vbWJyZXNcIjpcIkVNUFJFU0EgTUFFU1RSRVwiLFwiYXBlbGxpZG9zXCI6bnVsbCxcImNvcnJlb1wiOlwicHJ1ZWJhc3N1cGVycEBnbWFpbC5jb21cIixcImRlbGVnYXR1cmFJZFwiOm51bGwsXCJyYXpvblNvY2lhbFwiOlwiRU1QUkVTQSBNQUVTVFJFXCIsXCJkb2N1bWVudG9cIjpcIjgwNjY2NjY2XCIsXCJ0aXBvVXN1YXJpb0lkXCI6NX0iLCJzeXN0ZW0iOiJNRiIsImV4cCI6MTczMzUyNDM3NiwiaWF0IjoxNzMzNTIwNzc2fQ.4HuekHcf4WKuF7b2yfXmnLh70HP9d7_zMpc36Ua4a-8'; // Define your default token here
+  private apiUrl = environment.LOGOUT;
 
   constructor(private jwtHelper: JwtHelperService) {
     this.initializeToken();
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    this.initializeToken();
-  }
 
-  ngOnInit() {
-    this.initializeToken();
-  }
-
+  /**
+   * Inicializa el token desde la URL o desde sessionStorage.
+   */
   private initializeToken(): void {
-    console.log('🚀 INITIALICE TOKEN ...:');
-    const storedToken = localStorage.getItem('authToken');
-    const authToken = storedToken ? storedToken : this.defaultToken;
-    this.setToken(authToken);
-    if (storedToken !== authToken) localStorage.setItem('authToken', authToken);
+    const urlToken = this.getTokenFromUrl();
+    const storedToken = this.getStoredToken();
+
+    if (urlToken) {
+      this.token = urlToken;
+      this.setToken(this.token);
+      this.storeToken(this.token); // Almacena el token en sessionStorage
+    } else if (storedToken) {
+      this.token = storedToken;
+      this.setToken(this.token);
+    }
+  }
+
+  /**
+   * Extrae el token desde la URL.
+   */
+  private getTokenFromUrl(): string | null {
+    const url = window.location.href;
+    const urlParams = new URLSearchParams(new URL(url).search);
+    return urlParams.get('token');
+  }
+
+
+  /**
+   * Decodifica y configura el token.
+   */
+  setToken(token: string | null): void {
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+      this.token = token;
+      this.decodedToken = this.jwtHelper.decodeToken(token);
+    } else {
+      this.token = null;
+      this.decodedToken = null;
+    }
   }
 
   changeToken(newToken: string): Promise<void> {
     return new Promise((resolve) => {
       this.setToken(newToken);
-      localStorage.setItem('authToken', newToken); // Almacenar el nuevo token en localStorage
+      this.storeToken(newToken); // Almacena el token en sessionStorage // Almacenar el nuevo token en localStorage
       resolve();
     });
   }
 
-  setToken(token: string = this.defaultToken): void {
-    //&& !this.jwtHelper.isTokenExpired(token)
-    if (token) {
-      this.decodedToken = this.jwtHelper.decodeToken(token);
-      this.token = token;
-    } else {
-      this.decodedToken = null;
-      this.token = null;
+  /**
+   * Obtiene el token almacenado en sessionStorage.
+   */
+  private getStoredToken(): string | null {
+    return sessionStorage.getItem(this.TOKEN_KEY);
+  }
+
+  /**
+   * Almacena el token en sessionStorage.
+   */
+  private storeToken(token: string): void {
+    sessionStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    if (this.token && this.jwtHelper.isTokenExpired(this.token)) {
+      this.clearToken();
+      return null;
     }
+    return this.token;
   }
 
-  getCurrentToken(): string | null {
-    return this.token || this.defaultToken;
+  /**
+   * Limpia el token almacenado.
+   */
+  clearToken(): void {
+    sessionStorage.removeItem(this.TOKEN_KEY);
+    this.token = null;
+    this.decodedToken = null;
+    window.location.href = this.apiUrl + '/transversales/usuarios/login';
   }
 
+  /**
+   * Retorna el token actual.
+   */
+  getTestToken(): string | null {
+    return this.getToken();
+  }
+
+  // Métodos existentes para obtener información de usuario y permisos:
   getUserInfo(): any {
     return this.decodedToken?.user ? JSON.parse(this.decodedToken.user) : null;
   }
 
   getUserRoles(): Authority[] {
     return this.decodedToken?.authorities
-      ? (JSON.parse(this.decodedToken.authorities) as Authority[])
+      ? JSON.parse(this.decodedToken.authorities) as Authority[]
       : [];
   }
 
@@ -69,35 +120,9 @@ export class AuthService implements OnInit, OnChanges {
     return this.getUserRoles().some((auth: Authority) => auth.sistema === role);
   }
 
-  hasPermission(permission: string | string[]): boolean {
-    const roles = this.getUserRoles();
-
-    // Verifica si el parámetro es un arreglo
-    if (Array.isArray(permission)) {
-      // Retorna true si el usuario tiene al menos uno de los permisos
-      const hasAnyPermission = roles.some((auth: Authority) =>
-        auth.permisos.some((permiso: Permiso) =>
-          permission.includes(permiso.sistema)
-        )
-      );
-
-
-      return hasAnyPermission;
-    } else {
-      // Retorna true si el usuario tiene el permiso individual
-      const hasPermission = roles.some((auth: Authority) =>
-        auth.permisos.some((permiso: Permiso) => permiso.sistema === permission)
-      );
-
-      return hasPermission;
-    }
-  }
-
-  isAuthenticated(): boolean {
-    const currentToken = this.token || this.defaultToken;
-    // !this.jwtHelper.isTokenExpired(currentToken)
-    return (
-      currentToken !== null
+  hasPermission(permission: string): boolean {
+    return this.getUserRoles().some((auth: Authority) =>
+      auth.permisos.some((permiso: Permiso) => permiso.sistema === permission)
     );
   }
 }

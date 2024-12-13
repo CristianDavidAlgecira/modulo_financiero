@@ -43,7 +43,7 @@ export const routes: Routes = [
         path: 'nuevo-requerimiento',
         loadComponent: () => NuevoRequerimientoComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CREAR_REQUERIMIENTOS'}
+        data: {permission: 'MF_CREAR_REQUERIMIENTOS' }
 
       },
       {
@@ -99,42 +99,42 @@ export const routes: Routes = [
         path: 'otros-aspectos',
         loadComponent: () => OtrosAspectosComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_ENTREGAS_PENDIENTES' }
 
       },
       {
         path: 'iniciar-reporte',
         loadComponent: () => IniciarReporteComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
 
       },
       {
         path: 'anexo-entregas-pendientes',
         loadComponent: () => AnexoEntregasPendientesComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
 
       },
       {
         path: 'formulario-requerimiento-anulacion',
         loadComponent: () => FormularioRequerimientoAnulacionComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {
         path: 'modificar-entregas',
         loadComponent: () => ModificarEntregaComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
 
       },
       {
         path: 'vigilado',
         loadComponent: () => VigiladoComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
 
       },
       {
@@ -160,8 +160,12 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'dashboard',
+    loadComponent: () => import('./vistas/dashboard/dashboard.component'),
+  },
+  {
     path: '**',
-    redirectTo: 'administracion'
+    redirectTo: 'dashboard'
 
   }
 

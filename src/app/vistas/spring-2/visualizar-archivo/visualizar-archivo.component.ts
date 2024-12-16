@@ -11,7 +11,7 @@ import {ApiMuvService} from "../../../services/api/api-muv.service";
 @Component({
   selector: 'app-visualizar-archivo',
   standalone: true,
-  imports: [FileUploadComponent, PrimaryButtonComponent, AlertComponent],
+  imports: [FileUploadComponent, AlertComponent],
   templateUrl: './visualizar-archivo.component.html',
   styleUrl: './visualizar-archivo.component.css'
 })

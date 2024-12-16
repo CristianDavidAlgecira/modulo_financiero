@@ -164,7 +164,7 @@ export class TableAnexoEntregasPendientesComponent implements OnInit, OnChanges 
 
   onButtonClick(id: number) {
 
-    this.router.navigate(['/ver-detalle-consultar-entregas'], {
+    this.router.navigate([''], {
       state: {
         id: id,
       },

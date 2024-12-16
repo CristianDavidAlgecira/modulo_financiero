@@ -10,6 +10,7 @@ import {HttpClient} from "@angular/common/http";
 export class ApiMuvService {
 
   private baseUrl = environment.API_URL;
+  private baseUrl1 = environment.API_MUV_URL;
 
   constructor(private http: HttpClient) {
   }
@@ -22,6 +23,11 @@ export class ApiMuvService {
   // Obtener EMPRESAS BY NIT
   getEmpresasByNIT(nit?:any): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/muv/empresasByNit/?nit=${nit}`);
+  }
+
+  // Obtener EMPRESAS BY NIT
+  getDetallesByNIT(nit?:any): Observable<any> {
+    return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/empresas/detalles?nit=${nit}`);
   }
 
 }

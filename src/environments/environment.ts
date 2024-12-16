@@ -1,5 +1,6 @@
 export const environment = {
   API_URL: 'http://localhost:9090',
+  API_MUV_URL: 'http://48.216.166.9',
   MAESTROS: 'http://48.216.166.9/transversales/datos-maestros',
   LOGOUT: 'http://sinstdev.supertransporte.gov.co'
 };

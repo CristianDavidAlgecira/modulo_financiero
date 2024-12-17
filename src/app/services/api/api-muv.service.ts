@@ -30,4 +30,26 @@ export class ApiMuvService {
     return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/empresas/detalles?nit=${nit}`);
   }
 
+  //POR DIGITO NIT
+  // Obtener digito unico
+  getVigiladoByUltimoDigito(digito?:any): Observable<any> {
+    return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/financiero/empresas-by-nit/ultimo-digito?ultimoDigito=${digito}`);
+  }
+
+  // Obtener dos ultimos digito
+  getVigiladoByUltimos2Digitos(digitoInit?:any , digitoFin?:any): Observable<any> {
+    return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/financiero/empresas-by-nit/ultimos-dos-digitos?digitoInicio=${digitoInit}&digitoFin=${digitoFin}`);
+  }
+
+  // Obtener dos ultimos digito
+  getVigiladoByUltimos3Digitos(digitoInit?:any , digitoFin?:any): Observable<any> {
+    return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/financiero/empresas-by-nit/ultimos-tres-digitos?digitoInicio=${digitoInit}&digitoFin=${digitoFin}`);
+  }
+
+  //POR DELEGATURA
+  // Obtener por delegatura
+  getVigiladoByDelegatura(delegatura:any = '', vigilado:any = '', page:number = 1 ): Observable<any> {
+    return this.http.get(`${this.baseUrl1}/universo-vigilados/master-back/financiero/empresas-by-delegatura/${delegatura}?idTipoVigilado=${vigilado}&page=${page}&size=50`);
+  }
+
 }

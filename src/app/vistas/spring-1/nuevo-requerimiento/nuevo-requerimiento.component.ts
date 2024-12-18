@@ -13,6 +13,7 @@ import {catchError, of, timeout} from "rxjs";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
 import {AlertComponent} from "../../../componentes/alert/alert.component";
 
+
 @Component({
   selector: 'app-nuevo-requerimiento',
   standalone: true,
@@ -81,7 +82,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   };
 
   // Propiedad de objeto para manejar errores
-  errorStates: { [key: number]: boolean } = {};
+  errorStates: {[key: number]: boolean} = {};
 
   // Estado para mostrar tabla
   isAdicionar: boolean = false;
@@ -97,7 +98,6 @@ export class NuevoRequerimientoComponent implements OnInit {
   showLoadingModal: boolean = false;
   showFinalModal: boolean = false;
   showErrorModal: boolean = false;
-
 
   // Variables para ver si selecciono las casillas
   touchedFields = {
@@ -133,6 +133,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   programacionDigitosDatos: any;
 
   // Constructor
+  private vigiladoInfo: any;
   constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef, private apiMFService: ApiMFService, private apiService: ApiService, private apiMUVService: ApiMuvService,) {
   }
 
@@ -157,19 +158,9 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     // Respuesta nombre requerimiento
     this.apiService.getTipoRequerimiento().subscribe((response1: any) => {
-      const opcionesPermitidas = [
-        "Administrativa",
-        "Financiero",
-        "General Anualizada (administrativa,societaria y financiera)",
-        "Modelo Negocios Especiales",
-        "Reporte intermedio de información y medición de indicadores",
-        "Societario"
-      ];
-      this.nombreRequerimientoDatos = response1 ? response1.detalle.filter((registro: any) =>
-        opcionesPermitidas.includes(registro.descripcion)
-      ) : [];
+      const opcionesPermitidas = ["Administrativa", "Financiero", "General Anualizada (administrativa,societaria y financiera)", "Modelo Negocios Especiales", "Reporte intermedio de información y medición de indicadores", "Societario"];
+      this.nombreRequerimientoDatos = response1 ? response1.detalle.filter((registro: any) => opcionesPermitidas.includes(registro.descripcion)) : [];
     });
-
 
     // Respuesta periodo entrega
     this.apiService.getPeriodoEntrega().subscribe((response1: any) => {
@@ -201,13 +192,11 @@ export class NuevoRequerimientoComponent implements OnInit {
       this.tipoVigiladosDatos = response1 ? response1 : [];
     });
 
-
   }
-
 
   OnUploadButton(file: File[]) {
 
-    if (file[0]) {
+    if(file[0]) {
 
       this.convertFilesToBase64(file).then((base64Array) => {
 
@@ -238,7 +227,7 @@ export class NuevoRequerimientoComponent implements OnInit {
           const base64String = event.target.result.split(',')[1];
           base64Array.push(base64String);
 
-          if (base64Array.length === files.length) {
+          if(base64Array.length === files.length) {
             resolve(base64Array);
           }
 
@@ -256,32 +245,25 @@ export class NuevoRequerimientoComponent implements OnInit {
     let num = 0;
     this.vigilados = [];
 
-
     this.vigilados.push({
       id: 49, value: 'Todos'
     });
 
-    if (this.filtroDelegaturas && this.filtroDelegaturas !== 'Todos') {
+    if(this.filtroDelegaturas && this.filtroDelegaturas !== 'Todos') {
 
       num = this.delegaturasDatos.find((item: any) => item.descripcion == this.filtroDelegaturas).detalle
 
-
       // Agregar los datos obtenidos al array de vigilados
-      this.vigilados.push(...this.tipoVigiladosDatos
-        .filter((data: any) => data.idDelegatura == num)
-        .map((data: any) => ({
-          id: data.id, value: data.descripcion
-        }))
-      );
+      this.vigilados.push(...this.tipoVigiladosDatos.filter((data: any) => data.idDelegatura == num).map((data: any) => ({
+        id: data.id, value: data.descripcion
+      })));
 
     }
 
     // Resetear el filtro de vigilados
     this.filtroVigilados = '';
 
-
   }
-
 
   onProgramacionChange(): void {
 
@@ -320,7 +302,7 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.digitoInicial = '';
     this.digitoFinal = '';
 
-    if (!isEdit) {
+    if(!isEdit) {
       this.filtroDelegaturas = '';
       this.filtroDigitos = '';
     }
@@ -341,7 +323,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     const input = event.target as HTMLInputElement;
 
-    if (this.digitoUnico) {
+    if(this.digitoUnico) {
 
       input.value = input.value.replace(/[^0-9]/g, '').slice(0, 1);
 
@@ -351,18 +333,20 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.programacionNIT = input.value;
 
-    } else if (this.programacionNIT) {
+    } else if(this.programacionNIT) {
 
       this.razonSocial = '';
       console.log(this.programacionNIT.length >= 8)
-      if (this.programacionNIT && this.programacionNIT.length >= 8) {
-        this.apiMUVService.getEmpresasByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
+      if(this.programacionNIT && this.programacionNIT.length >= 8) {
+        this.apiMUVService.getDetallesByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
           console.error('Error al enviar los datos:', error);
           return of(null);
         })).subscribe((response: any) => {
-          if (response && response.length > 0) {
-            console.log(response)
-            this.razonSocial = response[0].razonSocial;
+
+          if(response) {
+            console.log(response);
+            this.vigiladoInfo = response;
+            this.razonSocial = response.razonSocial;
             this.habilitarGuardar = this.razonSocial.trim().length > 0;
           } else {
             this.razonSocial = '';
@@ -372,7 +356,6 @@ export class NuevoRequerimientoComponent implements OnInit {
       } else {
         this.razonSocial = ''; // Reinicia razonSocial si el valor es inválido
       }
-
 
     }
 
@@ -386,9 +369,9 @@ export class NuevoRequerimientoComponent implements OnInit {
     const cleanValue = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
 
     // Actualiza el valor correspondiente según el tipo de input
-    if (type === 'inicial') {
+    if(type === 'inicial') {
       this.digitoInicial = cleanValue;
-    } else if (type === 'final') {
+    } else if(type === 'final') {
       this.digitoFinal = cleanValue;
     }
 
@@ -398,7 +381,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   calcularDias(): void {
 
-    if (this.fechaInicio && this.fechaFin) {
+    if(this.fechaInicio && this.fechaFin) {
 
       const fechaInicioDate = new Date(this.fechaInicio);
       const fechaFinDate = new Date(this.fechaFin);
@@ -407,7 +390,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
       this.diasRequerimiento = diasCalculados > 0 ? diasCalculados : 0;
 
-      if (new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
+      if(new Date(this.fechaFin) <= new Date(this.fechaInicio)) {
 
         this.fechaFinInvalida = true;
         this.fechaFin = '';
@@ -424,7 +407,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   onFechaInicioChange(): void {
 
-    if (this.fechaInicio) {
+    if(this.fechaInicio) {
 
       const fechaInicioObj = new Date(this.fechaInicio);
       fechaInicioObj.setDate(fechaInicioObj.getDate() + 1);
@@ -463,13 +446,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if (this.filtroProgramaciones === "232") {
+    if(this.filtroProgramaciones === "232") {
 
       return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDelegaturas && !!this.filtroVigilados);
 
-    } else if (this.filtroProgramaciones === "234") {
+    } else if(this.filtroProgramaciones === "234") {
 
-      if (this.filtroDigitos === "Último dígito") {
+      if(this.filtroDigitos === "Último dígito") {
 
         return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDigitos && !!this.digitoUnico);
 
@@ -493,11 +476,11 @@ export class NuevoRequerimientoComponent implements OnInit {
     this.habilitarGuardar = true;
     this.contadorIDTable += 1;
 
-    if (this.filtroVigilados === "Todos") {
+    if(this.filtroVigilados === "Todos") {
       this.isDisabledTodos = true;
     }
 
-    switch (num) {
+    switch(num) {
       case 1:
 
         this.headers = [{
@@ -572,21 +555,39 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  obtenerIdNombreDelegatura(nombreReq: any): any {
+  obtenerIdNombreDelegatura(nombreReq: any, isMUV: boolean = false): any {
     let num = 0;
-    if (nombreReq === 'Todos') {
+    if(nombreReq === 'Todos') {
 
       return 49;
     } else {
-      if (this.delegaturasDatos) {
+      if(this.delegaturasDatos && !isMUV) {
 
         const idReq = this.delegaturasDatos.find((element: any) => {
           return element.descripcion === nombreReq;
         });
 
-        if (idReq) {
+        if(idReq) {
 
           return idReq.id;
+
+        } else {
+
+          console.log('No se encontró el id:', nombreReq);
+          return;
+
+        }
+
+      }
+      else if(this.delegaturasDatos && isMUV){
+
+        const idReq = this.delegaturasDatos.find((element: any) => {
+          return element.descripcion === nombreReq;
+        });
+
+        if(idReq) {
+
+          return idReq.detalle;
 
         } else {
 
@@ -606,13 +607,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   obtenerIdNombreDigitoNit(nombreReq: any): any {
 
-    if (this.programacionDigitosDatos) {
+    if(this.programacionDigitosDatos) {
 
       const idReq = this.programacionDigitosDatos.find((element: any) => {
         return element.descripcion === nombreReq;
       });
 
-      if (idReq) {
+      if(idReq) {
 
         return idReq.id;
 
@@ -633,17 +634,17 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   obtenerTipoVigilado(nombreReq: any): any {
 
-    if (nombreReq === 'Todos') {
+    if(nombreReq === 'Todos') {
 
       return 49;
     } else {
-      if (this.tipoVigiladosDatos) {
+      if(this.tipoVigiladosDatos) {
 
         const idReq = this.tipoVigiladosDatos.find((element: any) => {
           return element.descripcion === nombreReq;
         });
 
-        if (idReq) {
+        if(idReq) {
 
           return idReq.id;
 
@@ -668,17 +669,14 @@ export class NuevoRequerimientoComponent implements OnInit {
     let num = 0;
     this.vigilados = [];
 
-    if (data.Delegatura) {
+    if(data.Delegatura) {
 
       num = this.delegaturasDatos.find((item: any) => item.descripcion == data.Delegatura).detalle
 
       // Agregar los datos obtenidos al array de vigilados
-      this.vigilados.push(...this.tipoVigiladosDatos
-        .filter((data: any) => data.idDelegatura == num)
-        .map((data: any) => ({
-          id: data.id, value: data.descripcion
-        }))
-      );
+      this.vigilados.push(...this.tipoVigiladosDatos.filter((data: any) => data.idDelegatura == num).map((data: any) => ({
+        id: data.id, value: data.descripcion
+      })));
 
     }
 
@@ -735,7 +733,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     };
 
-    if (index !== -1) {
+    if(index !== - 1) {
 
       const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
@@ -750,7 +748,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   deleteItem(item: any) {
 
     this.datosTable = this.datosTable.filter((dato: any) => dato.id !== item.id);
-    if (this.datosTable.length == 0) {
+    if(this.datosTable.length == 0) {
       this.isAdicionar = false;
       this.setearDatosProgramacion();
       this.contadorIDTable = 0;
@@ -770,14 +768,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
-  onGuardar() {
-
+  async onGuardar() {
     this.showLoadingModal = true;
 
     let fechaFinal = new Date();
 
     let delegatura: Array<{
-      idDelegatura: number, idTipoVigilado: number, fechaFin: any, estado: boolean, estadoRequerimiento: number
+      idDelegatura: number, idTipoVigilado: number, fechaFin: any, estado: boolean, estadoRequerimiento: number, vigilados:any
     }> = [];
 
     let digitosNit: Array<{
@@ -788,34 +785,46 @@ export class NuevoRequerimientoComponent implements OnInit {
       estado: boolean,
       estadoRequerimiento: number,
       digitoUnico: string,
+      vigilados: any,
     }> = [];
 
     if (this.filtroProgramaciones === '232') {
 
-      this.datosTable.forEach((dato: any) => {
-        delegatura.push({
+      let vigilados = [];
+      for (const dato of this.datosTable) {
+        vigilados = await this.delegaturaVigilado(
+          this.obtenerIdNombreDelegatura(dato.Delegatura, true),
+          this.obtenerTipoVigilado(dato.vigilado)
+        );
+        console.log(vigilados);
 
+        delegatura.push({
           idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
           idTipoVigilado: this.obtenerTipoVigilado(dato.vigilado),
           fechaFin: dato.fechaFin,
           estado: true,
-          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289
-
+          estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289,
+          vigilados: vigilados,
         });
+        console.log(delegatura);
 
         const fechaActual = new Date(dato.fechaFin);
         fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
-
-      });
-
+      }
     } else if (this.filtroProgramaciones === '234') {
-
-      this.datosTable.forEach((dato: any) => {
-
+      for (const dato of this.datosTable) {
         const rango = dato.rango.split('-');
 
-        digitosNit.push({
+        let vigilados = [];
+        if (this.obtenerIdNombreDigitoNit(dato.programacionNIT) === 255) {
+          vigilados = await this.digitoNitApi(1, rango[0]);
+        } else if (this.obtenerIdNombreDigitoNit(dato.programacionNIT) === 256) {
+          vigilados = await this.digitoNitApi(2, rango[0], rango[1]);
+        } else {
+          vigilados = await this.digitoNitApi(3, rango[0], rango[1]);
+        }
 
+        digitosNit.push({
           idNumeroDigitos: this.obtenerIdNombreDigitoNit(dato.programacionNIT),
           inicioRango: rango[0],
           finRango: rango[1],
@@ -823,48 +832,51 @@ export class NuevoRequerimientoComponent implements OnInit {
           estado: true,
           estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289,
           digitoUnico: rango[0],
-
+          vigilados: vigilados
         });
 
         const fechaActual = new Date(dato.fechaFin);
         fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
-
-      });
-
+      }
     }
 
+    console.log(this.vigiladoInfo);
+
     let data = {
-      "nombreRequerimiento": parseInt(this.filtroNombreRequerimiento),
-      "fechaInicio": this.fechaInicio,
-      "fechaFin": fechaFinal,
-      "fechaCreacion": new Date(),
-      "periodoEntrega": parseInt(this.filtroPeriodo),
-      "tipoProgramacion": parseInt(this.filtroProgramaciones),
-      "actoAdministrativo": this.numeroActoAdministrativo || '',
-      "fechaPublicacion": this.fechaPublicacion || '',
-      "annioVigencia": this.annioVigencia || '',
-      "documentoActo": this.cargarActoAdmin || '',
-      "estadoVigilado": parseInt(this.filtroEstados) || '',
-      "estadoRequerimiento": new Date() >= new Date(fechaFinal) ? 290 : 289,
-      "estado": true,
-      "delegaturas": delegatura,
-      "digitoNIT": digitosNit
+      nombreRequerimiento: parseInt(this.filtroNombreRequerimiento),
+      fechaInicio: this.fechaInicio,
+      fechaFin: fechaFinal,
+      fechaCreacion: new Date(),
+      periodoEntrega: parseInt(this.filtroPeriodo),
+      tipoProgramacion: parseInt(this.filtroProgramaciones),
+      actoAdministrativo: this.numeroActoAdministrativo || '',
+      fechaPublicacion: this.fechaPublicacion || '',
+      annioVigencia: this.annioVigencia || '',
+      documentoActo: this.cargarActoAdmin || '',
+      estadoVigilado: parseInt(this.filtroEstados) || '',
+      estadoRequerimiento: new Date() >= new Date(fechaFinal) ? 290 : 289,
+      estado: true,
+      delegaturas: delegatura,
+      digitoNIT: digitosNit,
+      vigiladoNIT: [{
+        idVigilado: this.vigiladoInfo ? this.vigiladoInfo.id : '',
+        nit: this.vigiladoInfo ? this.vigiladoInfo.nit : '',
+      }],
     };
 
-
-    this.apiMFService.createRequerimientoAPI(data).subscribe((response) => {
-      // Aquí puedes manejar la respuesta, por ejemplo:
-      this.showLoadingModal = false;
-      this.showFinalModal = true;
-
-    }, (error) => {
-      this.showLoadingModal = false;
-      this.showErrorModal = true;
-      // Manejo del error
-      console.error('Error al enviar los datos:', error);
-    });
-
+    this.apiMFService.createRequerimientoAPI(data).subscribe(
+      (response) => {
+        this.showLoadingModal = false;
+        this.showFinalModal = true;
+      },
+      (error) => {
+        this.showLoadingModal = false;
+        this.showErrorModal = true;
+        console.error('Error al enviar los datos:', error);
+      }
+    );
   }
+
 
   navigateToAdministracion() {
     this.showFinalModal = false;
@@ -872,4 +884,110 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   }
 
+  //LLAMADO API PARA HEREDADOS MUV
+  async digitoNitApi(num: number, digitoInit: any, digitoFin?: any): Promise<Array<{ idVigilado: number, nit: number }>> {
+    //Lista vigilados
+    let arrayList: Array<{ idVigilado: number, nit: number }> = [];
+
+    switch (num) {
+      //DIGITO UNICO
+      case 1:
+        try {
+          const response = await this.apiMUVService.getVigiladoByUltimoDigito(digitoInit).toPromise();
+          arrayList = response.map((item: any) => ({
+            idVigilado: item.id,
+            nit: item.nit,
+          }));
+        } catch (error) {
+          console.error('Error en digitoNitApi:', error);
+        }
+        break;
+
+        //2 ULTIMOS DIGITOS
+      case 2:
+        try {
+          if (digitoFin && parseInt(digitoFin) < parseInt(digitoInit)) {
+            console.warn(`El valor digitoFin (${digitoFin}) es menor que digitoInit (${digitoInit}). Intercambiando valores.`);
+            const temp = digitoInit;
+            digitoInit = digitoFin;
+            digitoFin = temp;
+          }
+          const response = await this.apiMUVService.getVigiladoByUltimos2Digitos(digitoInit, digitoFin).toPromise();
+          arrayList = response.map((item: any) => ({
+            idVigilado: item.id,
+            nit: item.nit,
+          }));
+        } catch (error) {
+          console.error('Error en digitoNitApi:', error);
+        }
+        break;
+
+      //3 ULTIMOS DIGITOS
+      case 3:
+        try {
+          if (digitoFin && parseInt(digitoFin) < parseInt(digitoInit)) {
+            console.warn(`El valor digitoFin (${digitoFin}) es menor que digitoInit (${digitoInit}). Intercambiando valores.`);
+            const temp = digitoInit;
+            digitoInit = digitoFin;
+            digitoFin = temp;
+          }
+          const response = await this.apiMUVService.getVigiladoByUltimos3Digitos(digitoInit, digitoFin).toPromise();
+          arrayList = response.map((item: any) => ({
+            idVigilado: item.id,
+            nit: item.nit,
+          }));
+        } catch (error) {
+          console.error('Error en digitoNitApi:', error);
+        }
+        break;
+    }
+
+    return arrayList;
+  }
+
+  async delegaturaVigilado(
+    delegatura?: number,
+    vigilado?: number
+  ): Promise<Array<{ idVigilado: number; nit: number }>> {
+
+    let arrayList: Array<{ idVigilado: number; nit: number }> = [];
+    let currentPage = 1;
+    let totalPages = 2;
+
+    try {
+      do {
+        let response: any;
+
+        // Determinar la consulta específica a realizar
+        if (delegatura === 49) {
+          response = await this.apiMUVService.getVigiladoByDelegatura().toPromise();
+        } else if (vigilado === 49) {
+          response = await this.apiMUVService.getVigiladoByDelegatura(delegatura).toPromise();
+        } else {
+          response = await this.apiMUVService.getVigiladoByDelegatura(delegatura, vigilado, currentPage).toPromise();
+        }
+
+        // Extraer y mapear los datos de la página actual
+        const content = response.content || [];
+        const page = response.page;
+
+        content.forEach((item: any) => {
+          arrayList.push({
+            idVigilado: item.id,
+            nit: item.nit,
+          });
+        });
+
+        // Actualizar el total de páginas y avanzar a la siguiente página
+        totalPages = page.totalPages;
+        currentPage++;
+
+      } while (currentPage < totalPages); // Iterar hasta que se recorran todas las páginas
+
+    } catch (error) {
+      console.error('Error en delegaturaVigilado:', error);
+    }
+
+    return arrayList;
+  }
 }

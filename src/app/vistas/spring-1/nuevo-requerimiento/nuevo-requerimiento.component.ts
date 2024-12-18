@@ -133,6 +133,7 @@ export class NuevoRequerimientoComponent implements OnInit {
   programacionDigitosDatos: any;
 
   // Constructor
+  private vigiladoInfo: any;
   constructor(private errorService: ErrorService, private router: Router, private cdr: ChangeDetectorRef, private apiMFService: ApiMFService, private apiService: ApiService, private apiMUVService: ApiMuvService,) {
   }
 
@@ -337,13 +338,15 @@ export class NuevoRequerimientoComponent implements OnInit {
       this.razonSocial = '';
       console.log(this.programacionNIT.length >= 8)
       if(this.programacionNIT && this.programacionNIT.length >= 8) {
-        this.apiMUVService.getEmpresasByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
+        this.apiMUVService.getDetallesByNIT(this.programacionNIT).pipe(timeout(5000), catchError((error) => {
           console.error('Error al enviar los datos:', error);
           return of(null);
         })).subscribe((response: any) => {
-          if(response && response.length > 0) {
-            console.log(response)
-            this.razonSocial = response[0].razonSocial;
+
+          if(response) {
+            console.log(response);
+            this.vigiladoInfo = response;
+            this.razonSocial = response.razonSocial;
             this.habilitarGuardar = this.razonSocial.trim().length > 0;
           } else {
             this.razonSocial = '';
@@ -787,11 +790,13 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     if (this.filtroProgramaciones === '232') {
 
+      let vigilados = [];
       for (const dato of this.datosTable) {
-        const vigilados = await this.delegaturaVigilado(
+        vigilados = await this.delegaturaVigilado(
           this.obtenerIdNombreDelegatura(dato.Delegatura, true),
           this.obtenerTipoVigilado(dato.vigilado)
         );
+        console.log(vigilados);
 
         delegatura.push({
           idDelegatura: this.obtenerIdNombreDelegatura(dato.Delegatura),
@@ -801,6 +806,7 @@ export class NuevoRequerimientoComponent implements OnInit {
           estadoRequerimiento: new Date() >= new Date(dato.fechaFin) ? 290 : 289,
           vigilados: vigilados,
         });
+        console.log(delegatura);
 
         const fechaActual = new Date(dato.fechaFin);
         fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
@@ -834,6 +840,8 @@ export class NuevoRequerimientoComponent implements OnInit {
       }
     }
 
+    console.log(this.vigiladoInfo);
+
     let data = {
       nombreRequerimiento: parseInt(this.filtroNombreRequerimiento),
       fechaInicio: this.fechaInicio,
@@ -849,7 +857,11 @@ export class NuevoRequerimientoComponent implements OnInit {
       estadoRequerimiento: new Date() >= new Date(fechaFinal) ? 290 : 289,
       estado: true,
       delegaturas: delegatura,
-      digitoNIT: digitosNit
+      digitoNIT: digitosNit,
+      vigiladoNIT: [{
+        idVigilado: this.vigiladoInfo ? this.vigiladoInfo.id : '',
+        nit: this.vigiladoInfo ? this.vigiladoInfo.nit : '',
+      }],
     };
 
     this.apiMFService.createRequerimientoAPI(data).subscribe(

@@ -26,6 +26,9 @@ import {
 } from "./vistas/spring-2/formulario-requerimiento-anulacion/formulario-requerimiento-anulacion.component";
 import {ModificarEntregaComponent} from "./vistas/spring-2/modificar-entrega/modificar-entrega.component";
 import {VigiladoComponent} from "./vistas/spring-2/vigilado/vigilado.component";
+import {
+  DetallesReportesComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportes/detalles-reportes.component";
 
 export const routes: Routes = [
 
@@ -43,7 +46,7 @@ export const routes: Routes = [
         path: 'nuevo-requerimiento',
         loadComponent: () => NuevoRequerimientoComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CREAR_REQUERIMIENTOS' }
+        data: {permission: 'MF_CREAR_REQUERIMIENTOS'}
 
       },
       {
@@ -89,6 +92,13 @@ export const routes: Routes = [
 
       },
       {
+        path: 'detalles-reportes',
+        loadComponent: () => DetallesReportesComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
         path: 'otros-anexos',
         loadComponent: () => OtrosAnexosComponent,
         canActivate: [AuthGuard],
@@ -99,21 +109,21 @@ export const routes: Routes = [
         path: 'otros-aspectos',
         loadComponent: () => OtrosAspectosComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES' }
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
 
       },
       {
         path: 'iniciar-reporte',
         loadComponent: () => IniciarReporteComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {
         path: 'anexo-entregas-pendientes',
         loadComponent: () => AnexoEntregasPendientesComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {
@@ -127,14 +137,14 @@ export const routes: Routes = [
         path: 'modificar-entregas',
         loadComponent: () => ModificarEntregaComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {
         path: 'vigilado',
         loadComponent: () => VigiladoComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_CONSULTAR_ENTREGAS' }
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {

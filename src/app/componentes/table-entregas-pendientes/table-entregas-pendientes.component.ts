@@ -4,6 +4,7 @@ import {PaginatorComponent} from "../paginator/paginator.component";
 import {Router} from "@angular/router";
 import {ApiMFService} from "../../services/api/api-mf.service";
 import {PageEvent} from "@angular/material/paginator";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-table-entregas-pendientes',
@@ -30,6 +31,7 @@ export class TableEntregasPendientesComponent {
     private router: Router,
     private apiMFService: ApiMFService,
     private cdRef: ChangeDetectorRef,
+    private authService: AuthService,
   ) {
   }
 
@@ -92,19 +94,11 @@ export class TableEntregasPendientesComponent {
 
   getRequerimientos(): void {
 
-    this.data = [
-      {
-        tipoRequerimientoDescripcion: "General Anualizada",
-        annio: 2023,
-        fechaInicio: "2024-11-08",
-        fechaFin: "2024-11-22",
-        fechaLimite: "2024-11-22",
-        actoAdministrativo: 434,
-        fechaEntrega: "2024-11-22",
-        estadoRequerimientoDescripcion: "En proceso",
-        idRequerimiento: 1,
-      },
-    ]
+    this.apiMFService.getEntregaPendiente(this.authService.getUserInfo().documento).subscribe(
+      response => {
+        this.data = response;
+      }
+    )
 
     this.applyFilter()
     this.cdRef.detectChanges();

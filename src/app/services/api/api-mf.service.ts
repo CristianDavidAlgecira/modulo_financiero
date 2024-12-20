@@ -70,5 +70,10 @@ export class ApiMFService {
 
   }
 
+  //Tabla principal entregas pendientes
+  getEntregaPendiente(nit: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/requerimiento/entregas-pendientes?${nit}`);
+  }
+
 }
 

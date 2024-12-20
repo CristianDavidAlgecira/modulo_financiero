@@ -96,7 +96,9 @@ export class TableEntregasPendientesComponent {
 
     this.apiMFService.getEntregaPendiente(this.authService.getUserInfo().documento).subscribe(
       response => {
+        console.log(response)
         this.data = response;
+        this.paginatorFilter(0, 5, response);
       }
     )
 

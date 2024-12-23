@@ -55,13 +55,14 @@ export class ApiMFService {
   }
 
   // Enviar excel a BD
-  saveExcel(file: File, nit: string, fieldMapping: object): Observable<any> {
+  saveExcel(file: File, nit: string, idHeredado: string, fieldMapping: object): Observable<any> {
     const formData = new FormData();
-
     // Agregar archivo al FormData
     formData.append('file', file);
     //agrega nit
     formData.append('nit', nit);
+    //agrega nit
+    formData.append('idHeredado', idHeredado);
     // Convertir fieldMapping a JSON y agregar al FormData
     formData.append('fieldMapping', JSON.stringify(fieldMapping));
 
@@ -73,6 +74,16 @@ export class ApiMFService {
   //Tabla principal entregas pendientes
   getEntregaPendiente(nit: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/requerimiento/entregas-pendientes?nit=${nit}`);
+  }
+
+  //Tabla principal entregas finalizadas
+  getEntregaFinalizada(nit: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/requerimiento/entregas-finalizadas?nit=${nit}`);
+  }
+
+  //Info Excel Identificación del vigilado
+  getIdentificacionVigilado(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/indentificacion-vigilado?nit=${nit}&idHeredado=${idHeredado}`);
   }
 
 }

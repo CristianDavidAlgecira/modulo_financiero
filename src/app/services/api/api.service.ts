@@ -55,4 +55,9 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/catalogos/MFEstadoRequerimiento`);
   }
 
+  //Estado entrega
+  getEstadoEntrega(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/catalogos/MF%20Estado%20Entrega`);
+  }
+
 }

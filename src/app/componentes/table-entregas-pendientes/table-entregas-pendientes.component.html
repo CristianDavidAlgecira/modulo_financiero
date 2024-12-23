@@ -33,7 +33,7 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.annioVigencia }}</p>
+                  <p>{{ item.annioVigencia || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
@@ -45,19 +45,19 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ formatField(item.fechaFin) }}</p>
+                  <p>{{ item.individual ? formatField(item.fechaFin) : formatField(item.fechaEntrega) }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.actoAdministrativo }}</p>
+                  <p>{{ item.actoAdministrativo || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ formatField(item.fechaEntrega) }}</p>
+                  <p>{{ formatField(item.fechaPublicacion) || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.estadoRequerimientoDescripcion }}</p>
+                  <p>{{ item.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' : obtenerEstadoEntregaDescripcion(item.estadoEntrega) }}</p>
                 </td>
 
                 <td class="px-2 py-2 flex flex-wrap gap-2">
@@ -70,8 +70,8 @@
                           class="pi pi-trash w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
                   <p class="whitespace-no-wrap text-center">
-                    <span (click)="onButtonClick2(item.idRequerimiento)"
-                          class="pi pi-pencil w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
+                    <span (click)="onButtonClick2(item.idHeredado)" pTooltip="Iniciar Reporte" tooltipPosition="bottom"
+                          class="pi pi-file-arrow-up w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
                 </td>
 

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {FileUploadComponent} from "../../../componentes/file-upload/file-upload.component";
 import {ErrorService} from "../../../componentes/servicios/error/error.component";
 import {ApiMFService} from "../../../services/api/api-mf.service";
@@ -45,6 +45,9 @@ export class VisualizarArchivoComponent implements OnInit {
 
   // Propiedad de fieldgrupo1
   fieldgrupo1: any;
+  //grupo NIF
+  @Input() grupoNif:number = 0;
+  @Input() idHeredado:string = '0';
 
   // Constructor
   constructor(
@@ -63,27 +66,16 @@ export class VisualizarArchivoComponent implements OnInit {
       this.errorStates = errorStates;
     });
 
-    this.ApiMuvService.getDetallesByNIT(this.authService.getUserInfo().documento)
-      .subscribe((response: any) => {
-        if (response.idClasificacionGrupoNiif === 136) {
-          this.onCeldasExcel(1)
-        } else if (response.idClasificacionGrupoNiif === 137) {
-          this.onCeldasExcel(2)
-        } else if (response.idClasificacionGrupoNiif === 138) {
-          this.onCeldasExcel(3)
-        } else if (response.idClasificacionGrupoNiif === 139) {
-          this.onCeldasExcel(4)
-        } else if (response.idClasificacionGrupoNiif === 140) {
-          this.onCeldasExcel(5)
-        } else if (response.idClasificacionGrupoNiif === 141) {
-          this.onCeldasExcel(6)
-        }
-      })
+    console.log(this.grupoNif)
+    this.onCeldasExcel(this.grupoNif);
+    // this.onCeldasExcel(1);
 
   }
 
   // Metodo para definir las celdas del excel segun los grupos
   onCeldasExcel(numero: number) {
+
+    this.grupoNif = numero;
 
     this.validationRanges = {
       "validationRanges": [{
@@ -935,7 +927,7 @@ export class VisualizarArchivoComponent implements OnInit {
   ValidSaveExcel() {
     this.showLoadingModal = true;
     console.log("entrooooooo")
-    this.ApiMFService.saveExcel(this.selectedFile, '1004734004', this.fieldgrupo1).subscribe({
+    this.ApiMFService.saveExcel(this.selectedFile, this.authService.getUserInfo().documento, this.idHeredado, this.fieldgrupo1).subscribe({
       next: (response) => {
         this.messageNoValidado = response.message;
         this.showLoadingModal = false;
@@ -956,7 +948,7 @@ export class VisualizarArchivoComponent implements OnInit {
 
   navigateToAdministracion() {
 
-    this.router.navigate(['/administracion']);
+    this.router.navigate(['/vigilado']);
 
   }
 

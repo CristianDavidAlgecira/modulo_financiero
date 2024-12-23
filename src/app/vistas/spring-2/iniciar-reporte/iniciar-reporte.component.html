@@ -5,24 +5,13 @@
     <div class="section general-info">
       <h3>Por favor seleccione los archivos a subir</h3>
 
-      <div class="md:flex justify-center gap-4 px-4 pb-8 mt-6">
-
-        <div class="w-full">
-          <label class="text-primary3 font-semibold h-full text-xs">*NIFF - OTROS</label>
-          <input
-            class="mt-1 shadow-sm rounded-md w-full p-2 border-2 focus:outline-none bg-transparent"
-            type="text" [(ngModel)]="niffOtros" disabled />
-        </div>
-
-      </div>
-
     </div>
 
     <div class="sm:flex justify-center p-4 space-x-4">
 
-      <app-visualizar-archivo></app-visualizar-archivo>
+      <app-visualizar-archivo [grupoNif]="grupoNif" [idHeredado]="idHeredado"></app-visualizar-archivo>
 
-      <app-primary-button class="h-full mt-20" type="button">Descargar formulario
+      <app-primary-button class="h-full mt-20" type="button" (click)="downoloadForm()">Descargar formulario
       </app-primary-button>
 
     </div>

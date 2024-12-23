@@ -4,32 +4,31 @@
 
     <div class="section general-info">
       <h3>Datos Generales</h3>
-      <div class="info-grid">
-        <div><strong>Nombre del Requerimiento:</strong> General Analizada</div>
-        <div><strong>Periodo de entrega:</strong> Anual</div>
-        <div><strong>Año:</strong> 2023</div>
-        <div><strong>Fecha Inicio:</strong> 10/01/2023</div>
-        <div><strong>Fecha Fin:</strong> 31/12/2023</div>
-        <div><strong>Fecha Entrega:</strong> 15/05/2024</div>
-        <div><strong>Fecha Límite Entrega:</strong> 20/05/2024</div>
-        <div><strong>Número de Acto Administrativo:</strong> 413 de 2024</div>
-        <div><strong>Estado:</strong> Entregado</div>
+      <div class="info-grid py-6 pl-2">
+        <div><strong>Nombre del Requerimiento:</strong> {{ datosState.tipoRequerimientoDescripcion }}</div>
+        <div><strong>Periodo de entrega:</strong> {{ datosState.periodoEntrega || 'No contiene' }} </div>
+        <div><strong>Año:</strong> {{ datosState.annioVigencia || 'No contiene' }} </div>
+        <div><strong>Fecha Inicio:</strong> {{ datosState.fechaInicio}} </div>
+        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega}}</div>
+        <div><strong>Fecha Publicación:</strong> {{ datosState.fechaPublicacion || 'No contiene' }}</div>
+        <div><strong>Número de Acto Administrativo:</strong> {{ datosState.actoAdministrativo }}</div>
+        <div><strong>Estado:</strong> {{datosState.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' : obtenerEstadoEntregaDescripcion(datosState.estadoEntrega)}}</div>
       </div>
     </div>
 
     <div class="section report-info">
       <h3>Información del Reporte</h3>
-      <div class="info-grid">
+      <div class="info-grid py-4 pl-2">
         <div>
           <h4 class="mb-6"><strong>Detalle del Reporte</strong></h4>
           <ul>
             <li>Carátula</li>
             <li>Estado de Situación Financiera</li>
             <li>Estado de Resultados</li>
-            <li>Estado de Resultados Integral</li>
-            <li>Flujo de Efectivo Indirecto</li>
-            <li>Flujo de Efectivo Directo</li>
-            <li>Estado de Cambios en el Patrimonio</li>
+            <li *ngIf="GrupoNif != 3">Estado de Resultados Integral</li>
+            <li *ngIf="GrupoNif != 3">Flujo de Efectivo Indirecto</li>
+            <li *ngIf="GrupoNif != 3">Flujo de Efectivo Directo</li>
+            <li *ngIf="GrupoNif != 3">Estado de Cambios en el Patrimonio</li>
             <li>Dictamen del Revisor Fiscal</li>
           </ul>
         </div>

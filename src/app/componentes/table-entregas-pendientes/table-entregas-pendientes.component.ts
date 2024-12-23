@@ -7,6 +7,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {AuthService} from "../../services/auth/auth.service";
 import {ApiService} from "../../services/api/api.service";
 import {TooltipModule} from "primeng/tooltip";
+import {catchError, combineLatest, map, mergeMap, of, tap} from "rxjs";
 
 @Component({
   selector: 'app-table-entregas-pendientes',
@@ -64,14 +65,42 @@ export class TableEntregasPendientesComponent {
 
   loadInitialData(): void {
 
-    this.apiService.getEstadoEntrega().subscribe(response => {
-      console.log(response);
-      this.estadoEntrega = response.detalle;
-
+    combineLatest({
+      estados: this.apiService.getEstadoEntrega().pipe(catchError(() => of({ detalle: [] }))),
+      entregas: this.apiMFService
+      .getEntregaPendiente(this.authService.getUserInfo().documento)
+      .pipe(catchError(() => of([]))),
     })
+    .pipe(
+      tap(({ estados, entregas }) => {
+        this.estadoEntrega = estados.detalle || [];
+        this.data = entregas || [];
+      }),
+      mergeMap(() => this.updateDataWithExcelInfo()) // Flujo reactivo para actualización
+    )
+    .subscribe({
+      next: () => {
+        this.applyFilter();
+        this.cdRef.markForCheck();
+      },
+      error: (err) => console.error('Error al cargar datos:', err),
+    });
+  }
 
-    this.getRequerimientos();
-
+  private updateDataWithExcelInfo() {
+    return combineLatest(
+      this.data.map((item:any) =>
+        this.apiMFService
+        .getIdentificacionVigilado(item.nit, item.idHeredado)
+        .pipe(
+          map((response) => (item.hasExcel = response && response.length > 0)),
+          catchError(() => {
+            item.hasExcel = false;
+            return of(null);
+          })
+        )
+      )
+    );
   }
 
   getRequerimientos(): void {
@@ -79,7 +108,25 @@ export class TableEntregasPendientesComponent {
     this.apiMFService.getEntregaPendiente(this.authService.getUserInfo().documento).subscribe(response => {
       console.log(response)
       this.data = response;
-      this.paginatorFilter(0, 5, response);
+
+      // Iterar sobre cada elemento en this.data
+      const promises = this.data.map((item: any) => {
+        return this.apiMFService.getIdentificacionVigilado(item.nit, item.idHeredado).toPromise().then(response1 => {
+          // Verifica si la respuesta tiene datos válidos
+          item.hasExcel = response1 && response1.length > 0; // true si tiene datos, false si no
+        }).catch(() => {
+          // En caso de error, marcamos el campo como false
+          item.hasExcel = false;
+        });
+      });
+
+      // Esperar a que todas las promesas terminen
+      Promise.all(promises).then(() => {
+        console.log('Datos actualizados:', this.data);
+        this.applyFilter();
+        this.cdRef.detectChanges();
+      });
+
     })
 
     this.applyFilter()
@@ -157,13 +204,12 @@ export class TableEntregasPendientesComponent {
 
   obtenerEstadoEntregaDescripcion(idEstado: number) {
 
-    return this.estadoEntrega.find((estado:any) => estado.id === idEstado).descripcion;
+    return this.estadoEntrega.find((estado: any) => estado.id === idEstado).descripcion;
   }
-
 
   onButtonClick(id: number) {
 
-    const data = this.paginatedData.find((estado:any) => estado.idRequerimiento === id);
+    const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
     console.log(data);
     this.router.navigate(['/ver-detalle-entregas-pendientes'], {
       state: {
@@ -174,8 +220,6 @@ export class TableEntregasPendientesComponent {
   }
 
   onButtonClick1(id: number) {
-
-
 
     this.router.navigate(['/formulario-requerimiento-anulacion'], {
       state: {

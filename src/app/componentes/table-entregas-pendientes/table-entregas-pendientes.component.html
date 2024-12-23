@@ -57,19 +57,19 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' : obtenerEstadoEntregaDescripcion(item.estadoEntrega) }}</p>
+                  <p>{{ item.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' : item.hasExcel ? 'Pendiente por aprobación' :obtenerEstadoEntregaDescripcion(item.estadoEntrega) }}</p>
                 </td>
 
                 <td class="px-2 py-2 flex flex-wrap gap-2">
-                  <p class="whitespace-no-wrap text-center">
+                  <p class="whitespace-no-wrap text-center" *ngIf="item.hasExcel">
                     <span (click)="onButtonClick(item.idRequerimiento)"
                           class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
-                  <p class="whitespace-no-wrap text-center">
+                  <p class="whitespace-no-wrap text-center" *ngIf="item.hasExcel">
                     <span (click)="onButtonClick1(item.idRequerimiento)"
                           class="pi pi-trash w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
-                  <p class="whitespace-no-wrap text-center">
+                  <p class="whitespace-no-wrap text-center" *ngIf="!item.hasExcel">
                     <span (click)="onButtonClick2(item.idHeredado)" pTooltip="Iniciar Reporte" tooltipPosition="bottom"
                           class="pi pi-file-arrow-up w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>

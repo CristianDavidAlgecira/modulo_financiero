@@ -29,6 +29,15 @@ import {VigiladoComponent} from "./vistas/spring-2/vigilado/vigilado.component";
 import {
   DetallesReportesComponent
 } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportes/detalles-reportes.component";
+import {
+  DetallesReportesESFComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesESF/detalles-reportesESF.component";
+import {
+  DetallesReportesERComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesER/detalles-reportesER.component";
+// import {
+//   DetallesReportesORIComponent
+// } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportes/detalles-reportes.component";
 
 export const routes: Routes = [
 
@@ -94,6 +103,20 @@ export const routes: Routes = [
       {
         path: 'detalles-reportes',
         loadComponent: () => DetallesReportesComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-esf',
+        loadComponent: () => DetallesReportesESFComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-er',
+        loadComponent: () => DetallesReportesERComponent,
         canActivate: [AuthGuard],
         data: {permission: 'MF_ENTREGAS_PENDIENTES'}
 

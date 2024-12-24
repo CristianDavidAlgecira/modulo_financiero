@@ -1,0 +1,245 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Datos Generales</h3>
+      <div class="info-grid py-6 pl-2">
+        <div><strong>Nombre del Requerimiento:</strong> {{ datosState.tipoRequerimientoDescripcion }}</div>
+        <div><strong>Periodo de entrega:</strong> {{ datosState.periodoEntrega || 'No contiene' }}</div>
+        <div><strong>Año:</strong> {{ datosState.annioVigencia || 'No contiene' }}</div>
+        <div><strong>Fecha Inicio:</strong> {{ datosState.fechaInicio }}</div>
+        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega }}
+        </div>
+        <div><strong>Fecha Publicación:</strong> {{ datosState.fechaPublicacion || 'No contiene' }}</div>
+        <div><strong>Número de Acto Administrativo:</strong> {{ datosState.actoAdministrativo }}</div>
+        <div>
+          <strong>Estado:</strong> {{ datosState.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' :
+          obtenerEstadoEntregaDescripcion(datosState.estadoEntrega) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="section report-info">
+      <h3>Información de Estado de Resultados</h3>
+      <div class="info-grid2 mt-4">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>PERÍODO a REPORTAR</th>
+                <th class="mb-6 justify-center"><strong>{{ infoExcelActual.annio }}</strong></th>
+                <th class="mb-6 justify-center"><strong>{{ infoExcelComparativo.annio }}</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-bold">INGRESOS DE ACTIVIDADES ORDINARIAS</td>
+                <td>{{ formatMoney(infoExcelActual.ingresosActividadesOrdinarias) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresosActividadesOrdinarias) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Ingresos derivados de actividades de transporte, conexas y complementarias</td>
+                <td>{{ formatMoney(infoExcelActual.ingresosActividadesTransporte) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresosActividadesTransporte) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Ingresos derivados por otras actividades no asociadas al transporte</td>
+                <td>{{ formatMoney(infoExcelActual.ingresosOtrasActividades) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresosOtrasActividades) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Costo de ventas</td>
+                <td>{{ formatMoney(infoExcelActual.costoVentas) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.costoVentas) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Amortización</td>
+                <td>{{ formatMoney(infoExcelActual.amortizacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.amortizacion) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Depreciación</td>
+                <td>{{ formatMoney(infoExcelActual.depreciacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.depreciacion) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA BRUTA</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaBruta) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaBruta) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Gastos de ventas</td>
+                <td>{{ formatMoney(infoExcelActual.gastosVentas) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gastosVentas) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Gastos de Administración</td>
+                <td>{{ formatMoney(infoExcelActual.gastosAdministracion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gastosAdministracion) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Amortización</td>
+                <td>{{ formatMoney(infoExcelActual.amortizacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.amortizacion) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Depreciación</td>
+                <td>{{ formatMoney(infoExcelActual.depreciacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.depreciacion) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Otros ingresos operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.otrosIngresosOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrosIngresosOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Otros gastos operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.otrosGastosOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrosGastosOperacionales) }}</td>
+              </tr>
+              
+              <tr>
+                <td class="text-error font-semibold">(±) Otras ganancias (pérdidas) operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.otrasGananciasPerdidasOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrasGananciasPerdidasOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) POR ACTIVIDADES DE LA OPERACIÓN</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaOperacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaOperacion) }}</td>
+              </tr>
+              <tr>
+                <td class="text-error font-semibold">(±) Diferencia entre el importe en libros de dividendos pagaderos e importe en libros de activos distribuidos distintos al efectivo</td>
+                <td>{{ formatMoney(infoExcelActual.diferenciaDividendosActivos) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.diferenciaDividendosActivos) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) DERIVADAS DE LA POSICIÓN MONETARIA NETA</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaPosicionMonetariaNeta) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaPosicionMonetariaNeta) }}</td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-error">(±) Ganancias (pérdidas) que surgen de la baja de cuentas de activos financieros medidos al costo amortizado</td>
+                <td>{{ formatMoney(infoExcelActual.gananciasBajaActivosFinancieros) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciasBajaActivosFinancieros) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Ingresos No Operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.ingresosNoOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresosNoOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Ingresos Financieros</td>
+                <td>{{ formatMoney(infoExcelActual.ingresosFinancieros) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresosFinancieros) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Otros Ingresos no operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.otrosIngresosNoOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrosIngresosNoOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Gastos No Operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.gastosNoOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gastosNoOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Costos Financieros</td>
+                <td>{{ formatMoney(infoExcelActual.costosFinancieros) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.costosFinancieros) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Otros gastos financieros</td>
+                <td>{{ formatMoney(infoExcelActual.otrosGastosFinancieros) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrosGastosFinancieros) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Intereses de la Deuda</td>
+                <td>{{ formatMoney(infoExcelActual.interesesDeuda) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.interesesDeuda) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Otros Gastos no operacionales</td>
+                <td>{{ formatMoney(infoExcelActual.otrosGastosNoOperacionales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otrosGastosNoOperacionales) }}</td>
+              </tr>
+              <tr>
+                <td class="text-error font-semibold">(±) Participación en las ganancias (pérdidas) de asociadas y negocios conjuntos que se contabilicen utilizando el método de participación</td>
+                <td>{{ formatMoney(infoExcelActual.participacionGananciasAsociadas) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.participacionGananciasAsociadas) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) ANTES DE IMPUESTOS</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaAntesImpuestos) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaAntesImpuestos) }}</td>
+              </tr>
+              <tr>
+                <td>(+) Ingreso por impuestos</td>
+                <td>{{ formatMoney(infoExcelActual.ingresoImpuestos) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.ingresoImpuestos) }}</td>
+              </tr>
+              <tr>
+                <td>(-) Gasto por impuesto a las ganancias</td>
+                <td>{{ formatMoney(infoExcelActual.gastoImpuestoGanancias) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gastoImpuestoGanancias) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) PROCEDENTE DE OPERACIONES CONTINUADAS</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaOperacionesContinuadas) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaOperacionesContinuadas) }}</td>
+              </tr>
+              <tr>
+                <td class="text-error font-semibold">(±) Ganancias (pérdidas) procedente de operaciones discontinuadas libros anteriores y el valor razonable de activos financieros reclasificados como medidos al valor razonable</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaOperacionesDiscontinuadas) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaOperacionesDiscontinuadas) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) NETA</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaNeta) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaNeta) }}</td>
+              </tr>
+              <tr>
+                <td>Resultado integral atribuible a los propietarios de la controladora</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralPropietarios) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralPropietarios) }}</td>
+              </tr>
+              <tr>
+                <td>Resultado integral atribuible a participaciones no controladoras</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralNoControladoras) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralNoControladoras) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">Resultado integral total</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralTotal) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralTotal) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) NETA</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaNeta) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaNeta) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold">VALIDACIÓN ESTADO DE RESULTADOS</td>
+                <td><strong class="inline-flex bg-success/80 text-white px-2">{{ infoExcelActual.validacionEstadoResultados }}</strong></td>
+                <td><strong class="inline-flex bg-success/80 text-white px-2">{{ infoExcelComparativo.validacionEstadoResultados }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <button class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateTo('ver-detalle-entregas-pendientes')"> Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

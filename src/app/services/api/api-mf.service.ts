@@ -86,5 +86,15 @@ export class ApiMFService {
     return this.http.get(`${this.baseUrl}/api/muv/indentificacion-vigilado?nit=${nit}&idHeredado=${idHeredado}`);
   }
 
+  //Info Excel ESF
+  getESF(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/ESF?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
+  //Info Excel ER
+  getER(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/ER?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
 }
 

@@ -1,0 +1,352 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Datos Generales</h3>
+      <div class="info-grid py-6 pl-2">
+        <div><strong>Nombre del Requerimiento:</strong> {{ datosState.tipoRequerimientoDescripcion }}</div>
+        <div><strong>Periodo de entrega:</strong> {{ datosState.periodoEntrega || 'No contiene' }}</div>
+        <div><strong>Año:</strong> {{ datosState.annioVigencia || 'No contiene' }}</div>
+        <div><strong>Fecha Inicio:</strong> {{ datosState.fechaInicio }}</div>
+        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega }}
+        </div>
+        <div><strong>Fecha Publicación:</strong> {{ datosState.fechaPublicacion || 'No contiene' }}</div>
+        <div><strong>Número de Acto Administrativo:</strong> {{ datosState.actoAdministrativo }}</div>
+        <div>
+          <strong>Estado:</strong> {{ datosState.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' : obtenerEstadoEntregaDescripcion(datosState.estadoEntrega) }}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="section report-info">
+      <h3>Información de Estado de Situación Financiera</h3>
+      <div class="info-grid2 mt-4">
+        <div>
+          <h4 class="mb-6 justify-center"><strong>PERÍODO a REPORTAR</strong></h4>
+          <ul>
+            <li><strong>ACTIVOS</strong></li>
+
+            <li><strong>TOTAL ACTIVOS CORRIENTES</strong></li>
+
+            <li>Efectivo Y Equivalentes Al Efectivo</li>
+            <li>Efectivo Restringido</li>
+            <li>Inversiones Corto Plazo</li>
+            <li>Cuentas Comerciales por Cobrar Operacionales – Clientes</li>
+            <li>Cuentas Por Cobrar Con Partes Relacionadas</li>
+            <li>Activos Biológicos</li>
+            <li>Otras Cuentas Por Cobrar</li>
+            <li>Pagos Anticipados</li>
+            <li>Inventarios Corrientes</li>
+            <li>Activos Por Impuestos</li>
+            <li>Activos Distintos Al Efectivo Pignorados Como Garantía</li>
+            <li>Otros Activos Financieros</li>
+            <li>Otros Activos No Financieros</li>
+            <li><strong>VALIDACIÓN ACTIVOS CORRIENTES</strong></li>
+
+            <li><strong>TOTAL ACTIVOS NO CORRIENTES</strong></li>
+
+            <li>Depósitos Y Otros Activos</li>
+            <li>Inversiones Largo Plazo</li>
+            <li>Cuentas Comerciales Por Cobrar</li>
+            <li>Cuentas Por Cobrar Con Partes Relacionadas</li>
+            <li>Otras Cuentas Por Cobrar</li>
+            <li>Propiedad De Inversión</li>
+            <li>Activos Intangibles Y Crédito Mercantil</li>
+            <li>Propiedades, Planta Y Equipo</li>
+            <li>Activos Biológicos No Corrientes</li>
+            <li>Inversiones Contabilizadas Método De Participación</li>
+            <li>Inversiones En Subsidiarias, Negocios Conjuntos Y Asociadas</li>
+            <li>Plusvalía</li>
+            <li>Inventarios No Corrientes</li>
+            <li>Activos Por Impuestos Diferidos</li>
+            <li>Activos Por Impuestos Corrientes, No Corrientes</li>
+            <li>Otros Activos Financieros</li>
+            <li>Otros Activos No Financieros</li>
+            <li>Activos Distintos Al Efectivo Pignorados Como Garantía</li>
+            <li><strong>VALIDACIÓN ACTIVOS NO CORRIENTES</strong></li>
+            <li><strong>VALIDACIÓN ACTIVOS</strong></li>
+
+            <li><strong>PASIVOS</strong></li>
+            <li><strong>PASIVOS CORRIENTES</strong></li>
+
+            <li>Cuentas por Pagar Comerciales - Proveedores</li>
+            <li>Otras Cuentas Por Pagar</li>
+            <li>Pasivos Por Impuestos</li>
+            <li>Deuda Financiera</li>
+            <li>Otros Pasivos No Financieros</li>
+            <li>Depósitos Y Otros Activos</li>
+            <li>Porción Corriente Deuda</li>
+            <li>Cuentas Por Pagar Con Partes Relacionadas</li>
+            <li>Otras Provisiones</li>
+            <li>Provisiones Por Beneficios A Empleados</li>
+            <li>Ingresos Recibidos Por Cuenta De Terceros</li>
+            <li><strong>VALIDACIÓN PASIVOS CORRIENTES</strong></li>
+
+            <li><strong>PASIVOS NO CORRIENTES</strong></li>
+
+            <li>Deuda A Largo Plazo</li>
+            <li>Cuentas Por Pagar</li>
+            <li>Provisiones Por Beneficios A Empleados</li>
+            <li>Pasivos Por Impuestos Diferidos</li>
+            <li>Ingresos Recibidos Por Anticipado</li>
+            <li>Otros Pasivos No Financieros</li>
+            <li>Otros Pasivos Financieros</li>
+            <li>Pasivos Por Impuestos</li>
+            <li><strong>VALIDACIÓN PASIVOS NO CORRIENTES</strong></li>
+
+            <li><strong>VALIDACIÓN PASIVOS</strong></li>
+
+            <li><strong>PATRIMONIO</strong></li>
+
+            <li>Capital Pagado</li>
+            <li>Prima De Emisión</li>
+            <li>Readquisición de instrumentos de patrimonio propio</li>
+            <li>Inversión Suplementaria Al Capital Asignado</li>
+            <li>Otras Participaciones En El Patrimonio</li>
+            <li>Superávit Por Revaluación</li>
+            <li>Reserva Legal</li>
+            <li>Otras Reservas</li>
+            <li>Utilidad y/o Pérdida del Ejercicio</li>
+            <li>Utilidad y/o Pérdida Acumulada</li>
+            <li>Ganancias acumuladas por efecto de la convergencia</li>
+            <li class="h-full">Ganancias acumuladas diferentes a las generadas por efecto de la convergencia</li>
+            <li><strong>VALIDACIÓN PATRIMONIO</strong></li>
+
+            <li><strong>VALIDACIÓN GANANCIA (PÉRDIDA) NETA</strong></li>
+            <li><strong>TOTAL PASIVO + PATRIMONIO</strong></li>
+
+            <li><strong>VALIDACIÓN ECUACIÓN PATRIMONIAL</strong></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mb-6 justify-center"><strong>{{ infoExcelActual.annio }}</strong></h4>
+          <ul>
+            <li>
+              <strong>{{ formatMoney(infoExcelActual.totalActivosCorrientes + infoExcelActual.totalActivosNoCorrientes) }}</strong>
+            </li>
+            <li><strong>{{ formatMoney(infoExcelActual.totalActivosCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.efectivoYEquivalentesAlEfectivo) }}</li>
+            <li>{{ formatMoney(infoExcelActual.efectivoRestringido) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inversionesCortoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasComercialesCobrarOperacionalesClientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasPorCobrarConPartesRelacionadas1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosBiologicos) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasCuentasPorCobrar1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.pagosAnticipados) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inventariosCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosPorImpuestos) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosDistintosAlEfectivoPignoradosComoGarantia) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosActivosFinancieros1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosActivosNoFinancieros1) }}</li>
+            <li class="bg-success/80 inline-flex px-2"><strong
+              class="text-white">{{ infoExcelActual.validacionActivosCorrientes }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.totalActivosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.depositosYOtrosActivos1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inversionesLargoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasComercialesPorCobrar) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasPorCobrarConPartesRelacionadas2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasCuentasPorCobrar2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.propiedadDeInversion) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosIntangiblesYCreditoMercantil) }}</li>
+            <li>{{ formatMoney(infoExcelActual.propiedadesPlantaYEquipo) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosBiologicosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inversionesContabilizadasParticipacion) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inversionesSubsidiarNegocios) }}</li>
+            <li>{{ formatMoney(infoExcelActual.plusvalia) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inventariosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosPorImpuestosDiferidos) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosPorImpuestosCorrientesNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosActivosFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosActivosNoFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.activosDistintosAlEfectivo) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionActivosNoCorrientes }}</strong>
+            </li>
+            <li class="bg-success/80 inline-flex px-2"><strong
+              class="text-white">{{ infoExcelActual.validacionActivos }}</strong></li>
+            <li><strong>{{ formatMoney(infoExcelActual.pasivos) }}</strong></li>
+            <li><strong>{{ formatMoney(infoExcelActual.pasivosCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.cuentasPorPagarComercialesProveedores) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasCuentasPorPagar) }}</li>
+            <li>{{ formatMoney(infoExcelActual.pasivosPorImpuestos1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.deudaFinanciera) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosPasivosNoFinancieros1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.depositosYOtrosActivos2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.porcionCorrienteDeuda) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasPorPagarConPartesRelacionadas3) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasProvisiones) }}</li>
+            <li>{{ formatMoney(infoExcelActual.provisionesPorBeneficiosAEmpleados1) }}</li>
+            <li>{{ formatMoney(infoExcelActual.ingresosRecibidosPorCuentaDeTerceros) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionPasivosCorrientes }}</strong>
+            </li>
+
+            <li><strong>{{ formatMoney(infoExcelActual.pasivosNoCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.deudaALargoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelActual.cuentasPorPagar) }}</li>
+            <li>{{ formatMoney(infoExcelActual.provisionesPorBeneficiosAEmpleados2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.pasivosPorImpuestosDiferidos) }}</li>
+            <li>{{ formatMoney(infoExcelActual.ingresosRecibidosPorAnticipado) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosPasivosNoFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrosPasivosFinancieros) }}</li>
+            <li>{{ formatMoney(infoExcelActual.pasivosPorImpuestos2) }}</li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionPasivosNoCorrientes }}</strong>
+            </li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionPasivos }}</strong></li>
+
+            <li><strong>{{ formatMoney(infoExcelActual.patrimonio) }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.capitalPagado) }}</li>
+            <li>{{ formatMoney(infoExcelActual.primaDeEmision) }}</li>
+            <li>{{ formatMoney(infoExcelActual.readquisicionDeInstrumentosDePatrimonioPropio) }}</li>
+            <li>{{ formatMoney(infoExcelActual.inversionSumplementariaAlCapitalAsignado) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasParticipacionesEnElPatrimonio) }}</li>
+            <li>{{ formatMoney(infoExcelActual.superavitPorRevaluacion) }}</li>
+            <li>{{ formatMoney(infoExcelActual.reservaLegal) }}</li>
+            <li>{{ formatMoney(infoExcelActual.otrasReservas) }}</li>
+            <li><strong>{{ formatMoney(infoExcelActual.utilidadYorPerdidaDelEjercicio) }}</strong></li>
+            <li>{{ formatMoney(infoExcelActual.utilidadYorPerdidaAcumulada) }}</li>
+            <li>{{ formatMoney(infoExcelActual.gananciasAcumuladasPorEfectoDeLaConvergencia) }}</li>
+            <li class="flex py-2">{{ formatMoney(infoExcelActual.gananciasAcumuladasDiferentesALasGeneradasPorEfectoDeLaConvergencia) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionPatrimonio }}</strong></li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionGananciaPerdidaNeta }}</strong>
+            </li>
+            <li><strong>{{ formatMoney(infoExcelActual.totalPasivoPatrimonio) }}</strong></li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelActual.validacionEcuacionPatrimonial }}</strong>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="mb-6 justify-center"><strong>{{ infoExcelComparativo.annio }}</strong></h4>
+          <ul>
+            <li>
+              <strong>{{ formatMoney(infoExcelComparativo.totalActivosCorrientes + infoExcelComparativo.totalActivosNoCorrientes) }}</strong>
+            </li>
+            <li><strong>{{ formatMoney(infoExcelComparativo.totalActivosCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.efectivoYEquivalentesAlEfectivo) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.efectivoRestringido) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inversionesCortoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasComercialesCobrarOperacionalesClientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasPorCobrarConPartesRelacionadas1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosBiologicos) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasCuentasPorCobrar1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.pagosAnticipados) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inventariosCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosPorImpuestos) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosDistintosAlEfectivoPignoradosComoGarantia) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosActivosFinancieros1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosActivosNoFinancieros1) }}</li>
+            <li class="bg-success/80 inline-flex px-2"><strong
+              class="text-white">{{ infoExcelComparativo.validacionActivosCorrientes }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.totalActivosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.depositosYOtrosActivos1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inversionesLargoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasComercialesPorCobrar) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasPorCobrarConPartesRelacionadas2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasCuentasPorCobrar2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.propiedadDeInversion) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosIntangiblesYCreditoMercantil) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.propiedadesPlantaYEquipo) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosBiologicosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inversionesContabilizadasParticipacion) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inversionesSubsidiarNegocios) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.plusvalia) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inventariosNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosPorImpuestosDiferidos) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosPorImpuestosCorrientesNoCorrientes) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosActivosFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosActivosNoFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.activosDistintosAlEfectivo) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionActivosNoCorrientes }}</strong>
+            </li>
+            <li class="bg-success/80 inline-flex px-2"><strong
+              class="text-white">{{ infoExcelComparativo.validacionActivos }}</strong></li>
+            <li><strong>{{ formatMoney(infoExcelComparativo.pasivos) }}</strong></li>
+            <li><strong>{{ formatMoney(infoExcelComparativo.pasivosCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasPorPagarComercialesProveedores) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasCuentasPorPagar) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.pasivosPorImpuestos1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.deudaFinanciera) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosPasivosNoFinancieros1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.depositosYOtrosActivos2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.porcionCorrienteDeuda) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasPorPagarConPartesRelacionadas3) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasProvisiones) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.provisionesPorBeneficiosAEmpleados1) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.ingresosRecibidosPorCuentaDeTerceros) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionPasivosCorrientes }}</strong>
+            </li>
+
+            <li><strong>{{ formatMoney(infoExcelComparativo.pasivosNoCorrientes) }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.deudaALargoPlazo) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.cuentasPorPagar) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.provisionesPorBeneficiosAEmpleados2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.pasivosPorImpuestosDiferidos) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.ingresosRecibidosPorAnticipado) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosPasivosNoFinancieros2) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrosPasivosFinancieros) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.pasivosPorImpuestos2) }}</li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionPasivosNoCorrientes }}</strong>
+            </li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionPasivos }}</strong></li>
+
+            <li><strong>{{ formatMoney(infoExcelComparativo.patrimonio) }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.capitalPagado) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.primaDeEmision) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.readquisicionDeInstrumentosDePatrimonioPropio) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.inversionSumplementariaAlCapitalAsignado) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasParticipacionesEnElPatrimonio) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.superavitPorRevaluacion) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.reservaLegal) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.otrasReservas) }}</li>
+            <li><strong>{{ formatMoney(infoExcelComparativo.utilidadYorPerdidaDelEjercicio) }}</strong></li>
+            <li>{{ formatMoney(infoExcelComparativo.utilidadYorPerdidaAcumulada) }}</li>
+            <li>{{ formatMoney(infoExcelComparativo.gananciasAcumuladasPorEfectoDeLaConvergencia) }}</li>
+            <li class="flex py-2">{{ formatMoney(infoExcelComparativo.gananciasAcumuladasDiferentesALasGeneradasPorEfectoDeLaConvergencia) }}</li>
+
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionPatrimonio }}</strong></li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionGananciaPerdidaNeta }}</strong>
+            </li>
+            <li><strong>{{ formatMoney(infoExcelComparativo.totalPasivoPatrimonio) }}</strong></li>
+            <li class=""><strong
+              class="bg-success/80 inline-flex px-2 text-white">{{ infoExcelComparativo.validacionEcuacionPatrimonial }}</strong>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <button
+        class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateTo('ver-detalle-entregas-pendientes')"> Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

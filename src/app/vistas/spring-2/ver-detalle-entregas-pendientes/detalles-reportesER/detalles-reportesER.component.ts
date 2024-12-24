@@ -3,15 +3,16 @@ import {Router} from "@angular/router";
 import {ApiService} from "../../../../services/api/api.service";
 import {BehaviorSubject} from "rxjs";
 import {ApiMFService} from "../../../../services/api/api-mf.service";
+import {formatCurrency} from "@angular/common";
 
 @Component({
-  selector: 'app-detalles-reportes',
+  selector: 'app-detalles-reportes-esf',
   standalone: true,
   imports: [],
-  templateUrl: './detalles-reportes.component.html',
-  styleUrl: './detalles-reportes.component.css'
+  templateUrl: './detalles-reportesER.component.html',
+  styleUrl: './detalles-reportesER.component.css'
 })
-export class DetallesReportesComponent implements OnInit {
+export class DetallesReportesERComponent implements OnInit {
 
   constructor(private router: Router, private apiService: ApiService, private apiMFService: ApiMFService) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
@@ -38,8 +39,9 @@ export class DetallesReportesComponent implements OnInit {
   datosState: any;
   //datos maestros estado entrega
   estadoEntrega: any;
-  //grupo NIF
-  infoExcel: any;
+  //datos api
+  infoExcelActual: any;
+  infoExcelComparativo: any;
 
   // Método para actualizar el id y el BehaviorSubject
   setId(newId: any): void {
@@ -71,9 +73,10 @@ export class DetallesReportesComponent implements OnInit {
     });
 
     //LLAMAR INFO EXCEL API
-    this.apiMFService.getIdentificacionVigilado(this.datosState.nit, this.datosState.idHeredado).subscribe(
+    this.apiMFService.getER(this.datosState.nit, this.datosState.idHeredado).subscribe(
       response => {
-        this.infoExcel = response[0];
+        this.infoExcelActual = response[0].actual ? response[0] : response[1];
+        this.infoExcelComparativo = response[0].actual ? response[1] : response[0];
         console.log(response);
     })
 
@@ -90,9 +93,15 @@ export class DetallesReportesComponent implements OnInit {
     return 'No contiene'
   }
 
+  formatMoney(number:number) {
+    return formatCurrency(number, 'es-CO', '$', 'COP', '1.0-0');
+  }
+
   navigateTo(route: string): void {
 
     this.router.navigate([route]);
 
   }
+
+  protected readonly formatCurrency = formatCurrency;
 }

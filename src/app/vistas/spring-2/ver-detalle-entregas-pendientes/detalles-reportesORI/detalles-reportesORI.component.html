@@ -1,0 +1,147 @@
+<div class="sm:w-full mb-12 pb-8">
+
+  <div class="report-container">
+
+    <div class="section general-info">
+      <h3>Datos Generales</h3>
+      <div class="info-grid py-6 pl-2">
+        <div><strong>Nombre del Requerimiento:</strong> {{ datosState.tipoRequerimientoDescripcion }}</div>
+        <div><strong>Periodo de entrega:</strong> {{ datosState.periodoEntrega || 'No contiene' }}</div>
+        <div><strong>Año:</strong> {{ datosState.annioVigencia || 'No contiene' }}</div>
+        <div><strong>Fecha Inicio:</strong> {{ datosState.fechaInicio }}</div>
+        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega }}
+        </div>
+        <div><strong>Fecha Publicación:</strong> {{ datosState.fechaPublicacion || 'No contiene' }}</div>
+        <div><strong>Número de Acto Administrativo:</strong> {{ datosState.actoAdministrativo }}</div>
+        <div>
+          <strong>Estado:</strong> {{ datosState.estadoRequerimientoDescripcion == 'Anulado' ? 'Anulado' :
+          obtenerEstadoEntregaDescripcion(datosState.estadoEntrega) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="section report-info">
+      <h3>Información de Estado de Resultados integral ORI</h3>
+      <div class="info-grid2 mt-4">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>PERÍODO a REPORTAR</th>
+                <th class="mb-6 justify-center"><strong>{{ infoExcelActual.annio }}</strong></th>
+                <th class="mb-6 justify-center"><strong>{{ infoExcelComparativo.annio }}</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-bold">GANANCIA (PÉRDIDA) NETA</td>
+                <td>{{ formatMoney(infoExcelActual.gananciaPerdidaNeta) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciaPerdidaNeta) }}</td>
+              </tr>
+              <tr class="!bg-green-200">
+                <td><b>Otro Resultado Integral</b></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="!bg-white">
+                <td>Componentes de otro resultado integral que no se reclasificarán al resultado del periodo, neto de impuestos</td>
+                <td class="!bg-amber-200"></td>
+                <td class="!bg-amber-200"></td>
+              </tr>
+              <tr class="!bg-white !border-t-blue-400 !border-l-blue-400 !border-r-blue-400 !border-2">
+                <td>Otro resultado integral, neto de impuestos, diferencias de cambio por conversión</td>
+                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralDiferenciasCambioConversion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralDiferenciasCambioConversion) }}</td>
+              </tr>
+              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
+                <td>Otro resultado integral, neto de impuestos, ganancias (pérdidas) actuariales por planes de beneficios definidos</td>
+                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralGananciasActuariales) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralGananciasActuariales) }}</td>
+              </tr>
+              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
+                <td>Otro resultado integral, neto de impuestos, ganancias (pérdidas) por revaluación</td>
+                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralGananciasRevaluacion) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralGananciasRevaluacion) }}</td>
+              </tr>
+              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
+                <td class="font-bold !bg-green-200">Total otro resultado integral que no se reclasificará al resultado del periodo, neto de impuestos</td>
+                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegralNoReclasificable) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegralNoReclasificable) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td>Componentes de otro resultado integral que se reclasificarán al resultado del periodo, neto de impuestos</td>
+                <td class="!bg-amber-200"></td>
+                <td class="!bg-amber-200"></td>
+              </tr>
+              <tr class="!bg-white !border-t-blue-400 !border-l-blue-400 !border-r-blue-400 !border-2">
+                <td>Ganancias (pérdidas) por coberturas de flujos de efectivo, neto de impuestos	Ganancias (pérdidas) por diferencias de cambio de conversión, netas de impuestos</td>
+                <td>{{ formatMoney(infoExcelActual.gananciasCoberturasFlujosEfectivo) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.gananciasCoberturasFlujosEfectivo) }}</td>
+              </tr>
+              <tr class="!border-l-blue-400 !border-r-blue-400 !border-2">
+                <td class="font-bold !bg-green-200">Total otro resultado integral que se reclasificará al resultado del periodo, neto de impuestos</td>
+                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegralReclasificable) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegralReclasificable) }}</td>
+              </tr>
+              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
+                <td>Participación de otro resultado integral de subsidiarias, asociadas y negocios conjuntos contabilizados utilizando el método de la participación que se reclasificará al resultado del periodo, neto de impuestos</td>
+                <td>{{ formatMoney(infoExcelActual.participacionOtroResultadoIntegralSubsidiarias) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.participacionOtroResultadoIntegralSubsidiarias) }}</td>
+              </tr>
+              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
+                <td class="font-bold !bg-green-200">Total otro resultado integral</td>
+                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegral) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegral) }}</td>
+              </tr>
+              <tr>
+                <td class="font-bold !bg-green-200">Resultado integral total</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralTotal) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralTotal) }}</td>
+              </tr>
+
+              <tr class="!border-blue-400 !border-2">
+                <td class="!bg-gray-200 font-bold">Resultado integral atribuible a:</td>
+                <td class="!bg-amber-200"></td>
+                <td class="!bg-amber-200"></td>
+              </tr>
+              <tr class="!border-l-blue-400 !border-r-blue-400 !border-t-blue-400 !border-2">
+                <td class="!bg-white">Resultado integral atribuible a los propietarios de la controladora</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralPropietariosControladora) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralPropietariosControladora) }}</td>
+              </tr>
+              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
+                <td>Resultado integral atribuible a participaciones no controladoras</td>
+                <td>{{ formatMoney(infoExcelActual.resultadoIntegralParticipacionesNoControladoras) }}</td>
+                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralParticipacionesNoControladoras) }}</td>
+              </tr>
+              <tr>
+                <td></td>
+              </tr>
+              <tr class="!border-blue-400 !border-2">
+                <td class="font-bold !bg-green-200">VALIDACIÓN ESTADO DE RESULTADOS</td>
+                <td class="bg-success/70 text-white font-bold">{{ infoExcelActual.validacionEstadoResultados }}</td>
+                <td class="bg-success/70 text-white font-bold">{{ infoExcelComparativo.validacionEstadoResultados }}</td>
+              </tr>
+
+
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="flex justify-center p-4 space-x-4">
+
+      <button class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
+          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+        (click)="navigateTo('ver-detalle-entregas-pendientes')"> Regresar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

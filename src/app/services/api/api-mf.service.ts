@@ -96,5 +96,10 @@ export class ApiMFService {
     return this.http.get(`${this.baseUrl}/api/muv/ER?nit=${nit}&idHeredado=${idHeredado}`);
   }
 
+  //Info Excel ORI
+  getORI(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/ORI?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
 }
 

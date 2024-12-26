@@ -9,10 +9,10 @@ import {formatCurrency} from "@angular/common";
   selector: 'app-detalles-reportes-esf',
   standalone: true,
   imports: [],
-  templateUrl: './detalles-reportesESF.component.html',
-  styleUrl: './detalles-reportesESF.component.css'
+  templateUrl: './detalles-reportesEFEIndirecto.component.html',
+  styleUrl: './detalles-reportesEFEIndirecto.component.css'
 })
-export class DetallesReportesESFComponent implements OnInit {
+export class DetallesReportesEFEIndirectoComponent implements OnInit {
 
   constructor(private router: Router, private apiService: ApiService, private apiMFService: ApiMFService) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
@@ -73,7 +73,7 @@ export class DetallesReportesESFComponent implements OnInit {
     });
 
     //LLAMAR INFO EXCEL API
-    this.apiMFService.getESF(this.datosState.nit, this.datosState.idHeredado).subscribe(
+    this.apiMFService.getORI(this.datosState.nit, this.datosState.idHeredado).subscribe(
       response => {
         this.infoExcelActual = response[0].actual ? response[0] : response[1];
         this.infoExcelComparativo = response[0].actual ? response[1] : response[0];

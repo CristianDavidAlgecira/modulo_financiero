@@ -35,8 +35,14 @@ import {
 import {
   DetallesReportesERComponent
 } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesER/detalles-reportesER.component";
+import {
+  DetallesReportesORIComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesORI/detalles-reportesORI.component";
+import {
+  DetallesReportesEFEIndirectoComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesEFEIndirecto/detalles-reportesEFEIndirecto.component";
 // import {
-//   DetallesReportesORIComponent
+//   DetallesReportesEFEIndirectoComponent
 // } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportes/detalles-reportes.component";
 
 export const routes: Routes = [
@@ -117,6 +123,20 @@ export const routes: Routes = [
       {
         path: 'detalles-reportes-er',
         loadComponent: () => DetallesReportesERComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-ori',
+        loadComponent: () => DetallesReportesORIComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-efectivo-indirecto',
+        loadComponent: () => DetallesReportesEFEIndirectoComponent,
         canActivate: [AuthGuard],
         data: {permission: 'MF_ENTREGAS_PENDIENTES'}
 

@@ -27,102 +27,350 @@
           <table>
             <thead>
               <tr>
+                <th></th>
                 <th>PERÍODO a REPORTAR</th>
                 <th class="mb-6 justify-center"><strong>{{ infoExcelActual.annio }}</strong></th>
-                <th class="mb-6 justify-center"><strong>{{ infoExcelComparativo.annio }}</strong></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="font-bold">GANANCIA (PÉRDIDA) NETA</td>
-                <td>{{ formatMoney(infoExcelActual.gananciaPerdidaNeta) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.gananciaPerdidaNeta) }}</td>
-              </tr>
               <tr class="!bg-green-200">
-                <td><b>Otro Resultado Integral</b></td>
+                <td class="!bg-green-200"></td>
+                <td class="font-bold !bg-green-200">Actividades de operación</td>
                 <td></td>
-                <td></td>
+
               </tr>
               <tr class="!bg-white">
-                <td>Componentes de otro resultado integral que no se reclasificarán al resultado del periodo, neto de impuestos</td>
-                <td class="!bg-amber-200"></td>
-                <td class="!bg-amber-200"></td>
+                <td class="!bg-green-200"></td>
+                <td><b>(+/-) Ganancia (pérdida)</b></td>
+                <td>{{ formatMoney(infoExcelActual.gananciaPerdida) }}</td>
+
               </tr>
-              <tr class="!bg-white !border-t-blue-400 !border-l-blue-400 !border-r-blue-400 !border-2">
-                <td>Otro resultado integral, neto de impuestos, diferencias de cambio por conversión</td>
-                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralDiferenciasCambioConversion) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralDiferenciasCambioConversion) }}</td>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Ajustes para conciliar la ganancia(pérdida)</td>
+                <td class="!border-blue-400 !border-2 !bg-amber-200"></td>
               </tr>
-              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
-                <td>Otro resultado integral, neto de impuestos, ganancias (pérdidas) actuariales por planes de beneficios definidos</td>
-                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralGananciasActuariales) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralGananciasActuariales) }}</td>
-              </tr>
-              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
-                <td>Otro resultado integral, neto de impuestos, ganancias (pérdidas) por revaluación</td>
-                <td>{{ formatMoney(infoExcelActual.otroResultadoIntegralGananciasRevaluacion) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.otroResultadoIntegralGananciasRevaluacion) }}</td>
-              </tr>
-              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
-                <td class="font-bold !bg-green-200">Total otro resultado integral que no se reclasificará al resultado del periodo, neto de impuestos</td>
-                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegralNoReclasificable) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegralNoReclasificable) }}</td>
+
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes gastos por impuestos a las ganancias</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesGastosImpuestosGanancias) }}</td>
               </tr>
               <tr class="!bg-white">
-                <td>Componentes de otro resultado integral que se reclasificarán al resultado del periodo, neto de impuestos</td>
-                <td class="!bg-amber-200"></td>
-                <td class="!bg-amber-200"></td>
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">( + ) Ajustes por gastos de depreciación y amortización</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesGastosDepreciacionAmortizacion) }}</td>
               </tr>
-              <tr class="!bg-white !border-t-blue-400 !border-l-blue-400 !border-r-blue-400 !border-2">
-                <td>Ganancias (pérdidas) por coberturas de flujos de efectivo, neto de impuestos	Ganancias (pérdidas) por diferencias de cambio de conversión, netas de impuestos</td>
-                <td>{{ formatMoney(infoExcelActual.gananciasCoberturasFlujosEfectivo) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.gananciasCoberturasFlujosEfectivo) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por deterioro de valor (reversiones de pérdidas por deterioro de valor) reconocidas en el resultado del periodo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesDeterioroReversionPerdidas) }}</td>
               </tr>
-              <tr class="!border-l-blue-400 !border-r-blue-400 !border-2">
-                <td class="font-bold !bg-green-200">Total otro resultado integral que se reclasificará al resultado del periodo, neto de impuestos</td>
-                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegralReclasificable) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegralReclasificable) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Ajustes por provisiones</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesProvisiones) }}</td>
               </tr>
-              <tr class="!bg-white !border-l-blue-400 !border-r-blue-400 !border-2">
-                <td>Participación de otro resultado integral de subsidiarias, asociadas y negocios conjuntos contabilizados utilizando el método de la participación que se reclasificará al resultado del periodo, neto de impuestos</td>
-                <td>{{ formatMoney(infoExcelActual.participacionOtroResultadoIntegralSubsidiarias) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.participacionOtroResultadoIntegralSubsidiarias) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Ajustes por costos financieros</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesCostosFinancieros) }}</td>
               </tr>
-              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
-                <td class="font-bold !bg-green-200">Total otro resultado integral</td>
-                <td>{{ formatMoney(infoExcelActual.totalOtroResultadoIntegral) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.totalOtroResultadoIntegral) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por pérdidas (ganancias) de moneda extranjera no realizadas</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesPerdidasGananciasMonedaExtranjera) }}</td>
               </tr>
-              <tr>
-                <td class="font-bold !bg-green-200">Resultado integral total</td>
-                <td>{{ formatMoney(infoExcelActual.resultadoIntegralTotal) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralTotal) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Ajustes por pérdidas (ganancias) del valor razonable</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesPerdidasGananciasValorRazonable) }}</td>
               </tr>
-
-              <tr class="!border-blue-400 !border-2">
-                <td class="!bg-gray-200 font-bold">Resultado integral atribuible a:</td>
-                <td class="!bg-amber-200"></td>
-                <td class="!bg-amber-200"></td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Ajustes por ganancias no distribuidas de asociadas</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesGananciasNoDistribuidasAsociadas) }}</td>
               </tr>
-              <tr class="!border-l-blue-400 !border-r-blue-400 !border-t-blue-400 !border-2">
-                <td class="!bg-white">Resultado integral atribuible a los propietarios de la controladora</td>
-                <td>{{ formatMoney(infoExcelActual.resultadoIntegralPropietariosControladora) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralPropietariosControladora) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por pérdidas (ganancias) por la disposición de activos no corrientes</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesPerdidasGananciasDisposicionActivosNoCorrientes) }}</td>
               </tr>
-              <tr class="!border-l-blue-400 !border-r-blue-400 !border-b-blue-400 !border-2">
-                <td>Resultado integral atribuible a participaciones no controladoras</td>
-                <td>{{ formatMoney(infoExcelActual.resultadoIntegralParticipacionesNoControladoras) }}</td>
-                <td>{{ formatMoney(infoExcelComparativo.resultadoIntegralParticipacionesNoControladoras) }}</td>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otros ajustes para conciliar la ganancia (pérdida)</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrosAjustesConciliarGananciaPerdida) }}</td>
               </tr>
-              <tr>
-                <td></td>
-              </tr>
-              <tr class="!border-blue-400 !border-2">
-                <td class="font-bold !bg-green-200">VALIDACIÓN ESTADO DE RESULTADOS</td>
-                <td class="bg-success/70 text-white font-bold">{{ infoExcelActual.validacionEstadoResultados }}</td>
-                <td class="bg-success/70 text-white font-bold">{{ infoExcelComparativo.validacionEstadoResultados }}</td>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Total ajustes para conciliar la ganancia (pérdida)</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.totalAjustesConciliarGananciaPerdida) }}</td>
               </tr>
 
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Flujos de efectivo procedentes de actividades de operación</td>
+                <td class="!border-blue-400 !border-2 !bg-amber-200"></td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por disminuciones (incrementos) en los inventarios</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesDisminucionesIncrementosInventarios) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por la disminución (incremento) de cuentas por cobrar de origen comercial</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesDisminucionIncrementoCuentasPorCobrar) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por disminuciones (incrementos) en otras cuentas por cobrar derivadas de las actividades de operación</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesDisminucionesIncrementosOtrasCuentasCobrar) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por el incremento (disminución) de cuentas por pagar de origen comercial</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesIncrementoDisminucionCuentasPorPagar) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Ajustes por incrementos (disminuciones) en otras cuentas por pagar derivadas de las actividades de operación</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ajustesIncrementosDisminucionesOtrasCuentasPagar) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otras entradas (salidas) de efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrasEntradasSalidasEfectivo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Flujos de efectivo netos procedentes de actividades de operación</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.flujosEfectivoNetosActividadesOperacion) }}</td>
+              </tr>
+
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Flujos de efectivo procedentes de actividades de inversión</td>
+                <td class="!border-blue-400 !border-2 !bg-amber-200"></td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Flujos de efectivo procedentes de la pérdida de control de subsidiarias u otros negocios</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.flujosEfectivoPerdidaControlSubsidiarias) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Flujos de efectivo utilizados para obtener el control de subsidiarias u otros negocios</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.flujosEfectivoObtenerControlSubsidiarias) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Otros cobros por la venta de patrimonio o instrumentos de deuda de otras entidades</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.cobrosVentaPatrimonioInstrumentosDeuda) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Otros pagos para adquirir patrimonio o instrumentos de deuda de otras entidades</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.pagosAdquirirPatrimonioInstrumentosDeuda) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Otros cobros por la venta de participaciones en negocios conjuntos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.cobrosVentaParticipacionesNegociosConjuntos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Otros pagos para adquirir participaciones en negocios conjuntos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.pagosAdquirirParticipacionesNegociosConjuntos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Importes procedentes de la venta de propiedades, planta y equipo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ventaPropiedadesPlantaEquipo) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Compras de propiedades, planta y equipo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.comprasPropiedadesPlantaEquipo) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Importes procedentes de ventas de activos intangibles</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.ventaActivosIntangibles) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Compras de activos intangibles</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.comprasActivosIntangibles) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Recursos por ventas de otros activos a largo plazo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.recursosVentasOtrosActivosLargoPlazo) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Compras de otros activos a largo plazo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.comprasOtrosActivosLargoPlazo) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Anticipos de efectivo y préstamos concedidos a terceros</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.anticiposPrestamosConcedidosTerceros) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Cobros procedentes del reembolso de anticipos  y préstamos concedidos a terceros</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.cobrosReembolsoAnticiposPrestamos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Pagos derivados de contratos de futuro, a término, de opciones y de permuta financiera</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.pagosContratosDerivados) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Cobros procedentes de contratos de futuro, a término, de opciones y de permuta financiera</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.cobrosContratosDerivados) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Dividendos recibidos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.dividendosRecibidos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Intereses recibidos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.interesesRecibidos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otras entradas (salidas) de efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrasEntradasSalidasEfectivo) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Intereses pagados</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.interesesPagados) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otras entradas (salidas) de efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrasEntradasSalidasEfectivo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Flujos de efectivo netos procedentes de actividades de inversión</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.flujosEfectivoNetosActividadesInversion) }}</td>
+              </tr>
+
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Flujos de efectivo procedentes de actividades de financiación</td>
+                <td class="!border-blue-400 !border-2 !bg-amber-200"></td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Importes procedentes de aumento de capital y/o recolocación de acciones</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.disminucionCapitalReadquisicionAcciones) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Pagos por otras participaciones en el patrimonio</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.pagosOtrasParticipacionesPatrimonio) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Importe procedente del aumento prima por emisión</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.aumentoPrimaEmision) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Disminución de prima por emisión</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.disminucionPrimaEmision) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+) Importes procedentes de préstamos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.importesProcedentesPrestamos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Reembolsos de préstamos</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.reembolsosPrestamos) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Pagos de pasivos por arrendamientos financieros</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.pagosPasivosArrendamientosFinancieros) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Dividendos pagados</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.dividendosPagados) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(-) Intereses pagados</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.interesesPagados) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otros ajustes para conciliar la ganancia (pérdida)</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrosAjustesConciliarGananciaPerdida) }}</td>
+              </tr>
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">(+/-) Otras entradas (salidas) de efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.otrasEntradasSalidasEfectivo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Flujos de efectivo netos procedentes de actividades de financiación</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.flujosEfectivoNetosActividadesFinanciacion) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Incremento - disminución - neto de efectivo y equivalentes al efectivo, antes del efecto de los cambios en la tasa de cambio</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.incrementoDisminucionEfectivoEquivalentes) }}</td>
+              </tr>
+
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Efectos de la variacion en la tasa de cambio sobre el efectivo y equivalentes al efectivo</td>
+                <td class="!border-blue-400 !border-2 !bg-amber-200"></td>
+              </tr>
+
+              <tr class="!bg-white">
+                <td class="!bg-green-200"></td>
+                <td class="!border-blue-400 !border-2">Efectos de la variacion en la tasa de cambio sobre el efectivo y equivalentes al efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.efectosTasaCambioEfectivoEquivalentes) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Incremento (disminución) neto de efectivo y equivalentes al efectivo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.efectivoEquivalentesFinalPeriodo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Efectivo y equivalentes al efectivo al principio del periodo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.efectivoEquivalentesPrincipioPeriodo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Efectivo y equivalentes al efectivo al final del periodo</td>
+                <td class="!border-blue-400 !border-2">{{ formatMoney(infoExcelActual.efectivoEquivalentesFinalPeriodo) }}</td>
+              </tr>
+              <tr class="!bg-gray-200">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-white"></td>
+                <td class="!bg-white"></td>
+              </tr>
+              <tr class="!bg-success/80">
+                <td class="!bg-green-200"></td>
+                <td class="!bg-green-200 !border-blue-400 !border-2">Validación</td>
+                <td class="!border-blue-400 !border-2 text-white">CORRECTO</td>
+              </tr>
 
 
 

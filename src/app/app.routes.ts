@@ -41,8 +41,14 @@ import {
 import {
   DetallesReportesEFEIndirectoComponent
 } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesEFEIndirecto/detalles-reportesEFEIndirecto.component";
+import {
+  DetallesReportesEFEDirectoComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesEFEDirecto/detalles-reportesEFEDirecto.component";
+import {
+  DetallesReportesDictamenComponent
+} from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportesDictamen/detalles-reportesDictamen.component";
 // import {
-//   DetallesReportesEFEIndirectoComponent
+//   DetallesReportesEFEDirectoComponent
 // } from "./vistas/spring-2/ver-detalle-entregas-pendientes/detalles-reportes/detalles-reportes.component";
 
 export const routes: Routes = [
@@ -137,6 +143,20 @@ export const routes: Routes = [
       {
         path: 'detalles-reportes-efectivo-indirecto',
         loadComponent: () => DetallesReportesEFEIndirectoComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-efectivo-directo',
+        loadComponent: () => DetallesReportesEFEDirectoComponent,
+        canActivate: [AuthGuard],
+        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+
+      },
+      {
+        path: 'detalles-reportes-dictamen',
+        loadComponent: () => DetallesReportesDictamenComponent,
         canActivate: [AuthGuard],
         data: {permission: 'MF_ENTREGAS_PENDIENTES'}
 

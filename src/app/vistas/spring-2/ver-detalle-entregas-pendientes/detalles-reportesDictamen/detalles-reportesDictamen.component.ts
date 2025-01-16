@@ -3,16 +3,15 @@ import {Router} from "@angular/router";
 import {ApiService} from "../../../../services/api/api.service";
 import {BehaviorSubject} from "rxjs";
 import {ApiMFService} from "../../../../services/api/api-mf.service";
-import {formatCurrency} from "@angular/common";
 
 @Component({
-  selector: 'app-detalles-reportes-esf',
+  selector: 'app-detalles-reportes-dictamen',
   standalone: true,
   imports: [],
-  templateUrl: './detalles-reportesEFEIndirecto.component.html',
-  styleUrl: './detalles-reportesEFEIndirecto.component.css'
+  templateUrl: './detalles-reportesDictamen.component.html',
+  styleUrl: './detalles-reportesDictamen.component.css'
 })
-export class DetallesReportesEFEIndirectoComponent implements OnInit {
+export class DetallesReportesDictamenComponent implements OnInit {
 
   constructor(private router: Router, private apiService: ApiService, private apiMFService: ApiMFService) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
@@ -39,9 +38,8 @@ export class DetallesReportesEFEIndirectoComponent implements OnInit {
   datosState: any;
   //datos maestros estado entrega
   estadoEntrega: any;
-  //datos api
-  infoExcelActual: any;
-  infoExcelComparativo: any;
+  //grupo NIF
+  infoExcel: any;
 
   // Método para actualizar el id y el BehaviorSubject
   setId(newId: any): void {
@@ -73,10 +71,9 @@ export class DetallesReportesEFEIndirectoComponent implements OnInit {
     });
 
     //LLAMAR INFO EXCEL API
-    this.apiMFService.getEFEIndirecto(this.datosState.nit, this.datosState.idHeredado).subscribe(
+    this.apiMFService.getDictamen(this.datosState.nit, this.datosState.idHeredado).subscribe(
       response => {
-        this.infoExcelActual = response[0];
-
+        this.infoExcel = response[0];
         console.log(response);
     })
 
@@ -93,15 +90,9 @@ export class DetallesReportesEFEIndirectoComponent implements OnInit {
     return 'No contiene'
   }
 
-  formatMoney(number:number) {
-    return formatCurrency(number, 'es-CO', '$', 'COP', '1.0-0');
-  }
-
   navigateTo(route: string): void {
 
     this.router.navigate([route]);
 
   }
-
-  protected readonly formatCurrency = formatCurrency;
 }

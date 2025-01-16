@@ -1,4 +1,4 @@
-<div class="bg-gray-50/50 w-full h-full overflow-x-hidden">
+<div class="bg-gray-50/50 w-full h-full overflow-x-hidden overflow-y-auto">
   <app-header/>
   <!-- side bar azul -->
   <app-menu-navegacion></app-menu-navegacion>
@@ -12,7 +12,7 @@
   </div>
 
   <div class="z-4">
-    <div class="">
+    <div class="pb-6">
       <app-breadcrumb [breadcrumb]="breadcrumb"></app-breadcrumb>
       <router-outlet />
     </div>

@@ -101,5 +101,20 @@ export class ApiMFService {
     return this.http.get(`${this.baseUrl}/api/muv/ORI?nit=${nit}&idHeredado=${idHeredado}`);
   }
 
+  //Info Excel EFE Indirecto
+  getEFEIndirecto(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/EFEIndirecto?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
+  //Info Excel EFE Directo
+  getEFEDirecto(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/EFEDirecto?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
+  //Info Excel EFE Directo
+  getDictamen(nit: number, idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/muv/dictamen?nit=${nit}&idHeredado=${idHeredado}`);
+  }
+
 }
 

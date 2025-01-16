@@ -376,6 +376,7 @@ export class VisualizarArchivoComponent implements OnInit {
             "reembolsosPrestamos": "J64",
             "pagosPasivosArrendamientosFinancieros": "J65",
             "importesSubvencionesGobierno": "J66",
+            "flujosEfectivoProcedentesUtilizadosFinanciacion": "J73",
             "incrementoDisminucionNetoEfectivo": "J74",
             "efectosVariacionTasaCambioEfectivo": "J76",
             "efectivoEquivalentesPrincipioPeriodo": "J78",

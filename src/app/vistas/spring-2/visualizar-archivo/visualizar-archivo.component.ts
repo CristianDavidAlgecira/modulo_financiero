@@ -40,13 +40,14 @@ export class VisualizarArchivoComponent implements OnInit {
   //mensaje error
   messageNoValidado: string = '';
 
+
   // Propiedad de validationRanges
   validationRanges: any;
 
   // Propiedad de fieldgrupo1
   fieldgrupo1: any;
   //grupo NIF
-  @Input() grupoNif:number = 0;
+  grupoNif:number = 0;
   @Input() idHeredado:string = '0';
 
   // Constructor
@@ -66,8 +67,26 @@ export class VisualizarArchivoComponent implements OnInit {
       this.errorStates = errorStates;
     });
 
-    console.log(this.grupoNif)
-    this.onCeldasExcel(this.grupoNif);
+    this.ApiMuvService.getDetallesByNIT(this.authService.getUserInfo().documento).subscribe((response: any) => {
+      console.log(response.idClasificacionGrupoNiif);
+      if(response.idClasificacionGrupoNiif) {
+        this.grupoNif = 1;
+      } else if(response.idClasificacionGrupoNiif === 137) {
+        this.grupoNif = 2;
+      } else if(response.idClasificacionGrupoNiif === 138) {
+        this.grupoNif = 3;
+      } else if(response.idClasificacionGrupoNiif === 139) {
+        this.grupoNif = 4;
+      } else if(response.idClasificacionGrupoNiif === 140) {
+        this.grupoNif = 5;
+      } else if(response.idClasificacionGrupoNiif === 141) {
+        this.grupoNif = 6;
+      }
+
+      console.log(this.grupoNif);
+      this.onCeldasExcel(this.grupoNif);
+    });
+
     // this.onCeldasExcel(1);
 
   }
@@ -75,7 +94,6 @@ export class VisualizarArchivoComponent implements OnInit {
   // Metodo para definir las celdas del excel segun los grupos
   onCeldasExcel(numero: number) {
 
-    this.grupoNif = numero;
 
     this.validationRanges = {
       "validationRanges": [{

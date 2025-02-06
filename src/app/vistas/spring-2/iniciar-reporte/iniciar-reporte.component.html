@@ -9,7 +9,7 @@
 
     <div class="sm:flex justify-center p-4 space-x-4">
 
-      <app-visualizar-archivo [grupoNif]="grupoNif" [idHeredado]="idHeredado"></app-visualizar-archivo>
+      <app-visualizar-archivo [idHeredado]="idHeredado"></app-visualizar-archivo>
 
       <app-primary-button class="h-full mt-20" type="button" (click)="downoloadForm()">Descargar formulario
       </app-primary-button>
@@ -29,4 +29,13 @@
   </div>
 
 </div>
+
+
+<!-- modal error -->
+<app-alert [showModal]="showErrorModalDownload" title="Error en la descarga" textColor="text-error" [showSubtitle]="false"
+           [message]="'No tiene ningun grupo nif asignado, para descargar el excel'"
+           buttonText="Continuar" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="error"
+           (close)="showErrorModalDownload = false" (closeByButton1)="showErrorModalDownload = false"
+           (closeByIcon)="showErrorModalDownload = false"
+           (closeByBackdrop)="showErrorModalDownload = false" (close)="showErrorModalDownload = false"></app-alert>
 

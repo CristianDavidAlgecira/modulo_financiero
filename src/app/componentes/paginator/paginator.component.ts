@@ -6,6 +6,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {CustomPaginatorComponent} from '../servicios/custom-paginator/custom-paginator.component';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-paginator',
@@ -14,7 +15,8 @@ import {CustomPaginatorComponent} from '../servicios/custom-paginator/custom-pag
     FormsModule,
     MatFormFieldModule,
     MatPaginatorModule,
-    MatInputModule
+    MatInputModule,
+    NgIf
   ],
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.css'],

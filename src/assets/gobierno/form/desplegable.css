@@ -136,7 +136,7 @@ html {
     box-shadow: 0 0.25rem 0 #3366CC24;
 }
 
-.desplegable-govco .desplegable-items li, 
+.desplegable-govco .desplegable-items li,
 .desplegable-govco .desplegable-selected-option {
     font-family: WorkSans-Regular;
     font-size: 16px;
@@ -332,25 +332,25 @@ html {
 
 
 /* Casillas de verificación */
-/* opciones de seleccion */  
+/* opciones de seleccion */
 /* checkbox */
 .checkbox-seleccion-govco {
     display: block;
     cursor: pointer;
 }
-   
+
 .checkbox-seleccion-govco label {
    font-size: 16px;
    color: #4b4b4b;
    font-family: WorkSans-Regular;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"] + label {
     color: #4B4B4B;
     font-size: 16px;
     cursor: pointer;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"] {
     -webkit-appearance: none;
     appearance: none;
@@ -372,7 +372,7 @@ html {
     opacity: 1!important;
     cursor: pointer;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:checked::after {
     content: "";
     margin: 0;
@@ -388,33 +388,33 @@ html {
     transform: rotate(45deg);
     border-radius: 0.125rem;
 }
-  
-.checkbox-seleccion-govco input[type="checkbox"]:not(:checked), 
+
+.checkbox-seleccion-govco input[type="checkbox"]:not(:checked),
 .checkbox-seleccion-govco input[type="checkbox"]:checked {
     pointer-events: auto!important;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:checked {
     background-color: #3366CC;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:focus-visible {
     outline: max(0.125rem, 0.15em) solid #000000;
     outline-offset: max(0.125rem, 0.15em);
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:disabled {
     border: 0.188rem solid #737373;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:checked:disabled {
     background-color: #737373;
 }
-  
+
 .checkbox-seleccion-govco input[type="checkbox"]:disabled + label {
     color: #737373;
 }
-  
+
 /* switch */
 .switch-seleccion-govco {
    margin: 0;
@@ -425,13 +425,13 @@ html {
    align-items: center;
    display: block;
 }
-   
+
 .switch-seleccion-govco label {
    font-size: 16px;
    color: #4b4b4b;
    font-family: WorkSans-Regular;
 }
-  
+
 .switch-seleccion-govco input {
    margin-top: 0.563rem;
    padding: 0;
@@ -444,34 +444,34 @@ html {
    opacity: 1!important;
    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3.8' fill='rgba(51, 102, 204)'/></svg>") !important;
 }
-  
+
 .switch-seleccion-govco input:checked {
    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3.8' fill='%23fff'/></svg>") !important;
    background-color: #3366cc;
    border: 0.063rem solid #3366cc;
 }
-  
+
 .switch-seleccion-govco input:disabled {
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3.8' fill='%23737373'/></svg>") !important;
     background-color: #BABABA;
     border: 0.063rem solid #737373;
 }
-  
+
 .switch-seleccion-govco input:checked:disabled {
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3.8' fill='%23fff'/></svg>") !important;
     background-color: #737373;
 }
-  
+
 .switch-seleccion-govco input:disabled + label {
     color: #737373;
 }
-  
+
 .switch-seleccion-govco input:focus-visible {
     outline: 0.125rem solid black;
     outline-offset: 0.188rem;
     box-shadow: none !important;
 }
-  
+
 .switch-seleccion-govco label {
    margin: 0;
    padding: 0;
@@ -482,12 +482,12 @@ html {
    margin-left: 0.5rem;
    font-size: 16px;
 }
-  
+
 /* Radio button */
 .radio-seleccion-govco {
     margin-bottom: 0.125rem;
 }
-  
+
 .radio-seleccion-govco input[type="radio"] + label {
     color: #4B4B4B;
     font-size: 16px;
@@ -496,7 +496,7 @@ html {
     line-height: 1.375rem;
     cursor: pointer;
 }
-  
+
 .radio-seleccion-govco input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
@@ -517,19 +517,19 @@ html {
     position: relative!important;
     opacity: 1!important;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:hover {
     border: 0.15em solid #004884;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:disabled {
     border: 0.15em solid #737373;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:disabled + label {
     color: #737373;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]::before {
     content: "";
     width: 0.65em;
@@ -539,25 +539,25 @@ html {
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em #3366CC;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:hover::before {
     box-shadow: inset 1em 1em #004884;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:disabled::before {
     box-shadow: inset 1em 1em #737373;
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:checked::before {
     transform: scale(1);
 }
-  
+
 .radio-seleccion-govco input[type="radio"]:focus-visible {
     outline: max(0.125rem, 0.15em) solid #000000;
     outline-offset: max(0.125rem, 0.15em);
 }
-  
-.radio-seleccion-govco input[type="radio"]:not(:checked), 
+
+.radio-seleccion-govco input[type="radio"]:not(:checked),
 .radio-seleccion-govco input[type="radio"]:checked {
     pointer-events: all !important;
     cursor: pointer;
@@ -684,8 +684,8 @@ html {
     padding-top: 1em;
 }
 
-.desplegable-govco.desplegable-calendar-govco tbody, 
-.desplegable-govco.desplegable-calendar-govco thead, 
+.desplegable-govco.desplegable-calendar-govco tbody,
+.desplegable-govco.desplegable-calendar-govco thead,
 .desplegable-govco.desplegable-calendar-govco tr {
   border: 0;
 }
@@ -740,7 +740,7 @@ html {
     border: none;
     -webkit-appearance: none;
     display: inline-block;
-    border-radius: 0.25rem; 
+    border-radius: 0.25rem;
     color: #4B4B4B;
     font-family: WorkSans-Medium;
 }
@@ -766,7 +766,7 @@ html {
     border: none;
     -webkit-appearance: none;
     display: inline-block;
-    border-radius: 0.25rem; 
+    border-radius: 0.25rem;
     color: #4B4B4B;
     font-family: WorkSans-Medium;
 }
@@ -780,7 +780,7 @@ html {
     -webkit-appearance: none;
     display: inline-block;
     align-items: none;
-    border-radius: 0.25rem;    
+    border-radius: 0.25rem;
     color: #4B4B4B;
     font-family: WorkSans-Regular;
 }

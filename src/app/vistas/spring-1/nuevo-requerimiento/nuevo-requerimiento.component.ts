@@ -446,11 +446,11 @@ export class NuevoRequerimientoComponent implements OnInit {
 
   isFormValid(): boolean {
 
-    if(this.filtroProgramaciones === "232") {
+    if(this.filtroProgramaciones === "231") {
 
       return (!!this.filtroNombreRequerimiento && !!this.fechaInicio && !!this.filtroPeriodo && !!this.filtroProgramaciones && !!this.fechaFin && !!this.filtroDelegaturas && !!this.filtroVigilados);
 
-    } else if(this.filtroProgramaciones === "234") {
+    } else if(this.filtroProgramaciones === "233") {
 
       if(this.filtroDigitos === "Último dígito") {
 
@@ -735,7 +735,7 @@ export class NuevoRequerimientoComponent implements OnInit {
 
     if(index !== - 1) {
 
-      const updatedData = this.filtroProgramaciones === '232' ? datosDelegatura : datosDigitoNit;
+      const updatedData = this.filtroProgramaciones === '231' ? datosDelegatura : datosDigitoNit;
       Object.assign(this.datosTable[index], updatedData);
 
     }
@@ -788,7 +788,7 @@ export class NuevoRequerimientoComponent implements OnInit {
       vigilados: any,
     }> = [];
 
-    if (this.filtroProgramaciones === '232') {
+    if (this.filtroProgramaciones === '231') {
 
       let vigilados = [];
       for (const dato of this.datosTable) {
@@ -811,7 +811,7 @@ export class NuevoRequerimientoComponent implements OnInit {
         const fechaActual = new Date(dato.fechaFin);
         fechaFinal = fechaFinal >= fechaActual ? fechaFinal : fechaActual;
       }
-    } else if (this.filtroProgramaciones === '234') {
+    } else if (this.filtroProgramaciones === '233') {
       for (const dato of this.datosTable) {
         const rango = dato.rango.split('-');
 

@@ -21,7 +21,7 @@ export class TableAnexoEntregasPendientesComponent implements OnInit, OnChanges 
   @Input() filtro: string = '';
   @Output() requerimientoDetalle: EventEmitter<number> =
     new EventEmitter<number>();
-  data: any = [];
+  @Input() data: any = [];
   headers: any = [];
   paginatedData: any = [];
   pageLength: number = 0;
@@ -43,16 +43,8 @@ export class TableAnexoEntregasPendientesComponent implements OnInit, OnChanges 
         title: 'Archivo',
       },
       {
-        id: 2,
-        title: 'Fecha de carga',
-      },
-      {
-        id: 3,
-        title: 'Usuario',
-      },
-      {
         id: 4,
-        title: 'Descripcion',
+        title: 'requerimiento',
       },
       {
         id: 5,
@@ -76,16 +68,7 @@ export class TableAnexoEntregasPendientesComponent implements OnInit, OnChanges 
 
   getRequerimientos(): void {
 
-    this.data = [
-      {
-        archivo: "NIIF_G1",
-        fechaCargue: "30-05-2024",
-        usuario: "Cristian",
-        descripcion: "NIIF GENERICO",
-        idAnexoEntregasPendiente: 1,
-      },
-
-    ]
+    console.log(this.data)
 
     this.applyFilter()
     this.cdRef.detectChanges();

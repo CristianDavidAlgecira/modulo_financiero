@@ -81,6 +81,20 @@ export class ApiMFService {
     return this.http.get(`${this.baseUrl}/api/requerimiento/entregas-finalizadas?nit=${nit}`);
   }
 
+  //ENVIAR ANEXOS
+  guardarAnexo(data: any): Observable<any> {
+
+    return this.http.post(`${this.baseUrl}/api/anexos/guardar`, data, {
+      responseType: 'text',
+    });
+
+  }
+
+  //Obtener Anexos By idHeredado
+  getAnexosVigilado(idHeredado: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/anexos/byIDHeredado?idHeredado=${idHeredado}`);
+  }
+
   //Info Excel Identificación del vigilado
   getIdentificacionVigilado(nit: number, idHeredado: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/muv/indentificacion-vigilado?nit=${nit}&idHeredado=${idHeredado}`);

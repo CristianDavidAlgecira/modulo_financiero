@@ -69,7 +69,7 @@ export class VisualizarArchivoComponent implements OnInit {
 
     this.ApiMuvService.getDetallesByNIT(this.authService.getUserInfo().documento).subscribe((response: any) => {
       console.log(response.idClasificacionGrupoNiif);
-      if(response.idClasificacionGrupoNiif) {
+      if(response.idClasificacionGrupoNiif === 136) {
         this.grupoNif = 1;
       } else if(response.idClasificacionGrupoNiif === 137) {
         this.grupoNif = 2;
@@ -85,9 +85,13 @@ export class VisualizarArchivoComponent implements OnInit {
 
       console.log(this.grupoNif);
       this.onCeldasExcel(this.grupoNif);
+      console.log(this.validationRanges)
     });
 
-    // this.onCeldasExcel(1);
+    this.onCeldasExcel(1);
+    console.log(this.validationRanges)
+
+
 
   }
 

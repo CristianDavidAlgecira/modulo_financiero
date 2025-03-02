@@ -95,4 +95,9 @@ export class DetallesReportesComponent implements OnInit {
     this.router.navigate([route]);
 
   }
+
+  goBack() {
+    window.history.back();
+  }
+
 }

@@ -69,7 +69,7 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
     }).pipe(tap(({estados, entregas}) => {
         this.estadoEntrega = estados.detalle || [];
         this.data = entregas || [];
-      }), mergeMap(() => this.updateDataWithExcelInfo()) // Flujo reactivo para actualización
+      }) // Flujo reactivo para actualización
     ).subscribe({
       next: () => {
         this.applyFilter();
@@ -78,22 +78,7 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
     });
   };
 
-  private updateDataWithExcelInfo() {
-    return combineLatest(
-      this.data.map((item: any) =>
-        this.apiMFService
-        .getIdentificacionVigilado(item.nit, item.idHeredado)
-        .pipe(map((response) =>
-          (item.hasExcel = response && response.length > 0)),
-          catchError(() => {
-            item.hasExcel = false;
-            return of(null);
-          }
-          )
-        )
-      )
-    );
-  }
+
 
   getRequerimientos(): void {
 
@@ -221,11 +206,17 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
 
   }
 
-  onButtonClick(id: number) {
+  obtenerEstadoEntregaDescripcion(idEstado: number) {
 
+    return this.estadoEntrega.find((estado: any) => estado.id === idEstado).descripcion;
+  }
+
+  onButtonClick(id: number) {
+    const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
+    console.log(data);
     this.router.navigate(['/ver-detalle-consultar-entregas'], {
       state: {
-        id: id,
+        info: data,
       },
     });
 

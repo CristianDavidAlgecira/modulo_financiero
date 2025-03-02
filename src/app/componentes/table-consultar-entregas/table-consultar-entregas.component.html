@@ -33,7 +33,7 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.annio }}</p>
+                  <p>{{ item.annioVigencia || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
@@ -45,24 +45,23 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ formatField(item.fechaLimite) }}</p>
+                  <p>{{ item.individual ? formatField(item.fechaFin) : formatField(item.fechaEntrega) }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.actoAdministrativo }}</p>
+                  <p>{{ item.actoAdministrativo || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ formatField(item.fechaEntrega) }}</p>
+                  <p>{{ formatField(item.fechaPublicacion) || 'No contiene' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ item.estadoRequerimientoDescripcion }}</p>
+                  <p>{{ obtenerEstadoEntregaDescripcion(item.estadoEntrega) }}</p>
                 </td>
-
                 <td class="px-5 py-5">
                   <p class="whitespace-no-wrap text-center">
-                    <span (click)="onButtonClick(item.idRequerimiento)"
+                    <span *ngIf="item.estadoEntrega == 284" (click)="onButtonClick(item.idRequerimiento)"
                           class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
                   </p>
                 </td>

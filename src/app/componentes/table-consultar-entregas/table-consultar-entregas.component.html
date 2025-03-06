@@ -53,7 +53,7 @@
                 </td>
 
                 <td class="px-5 py-5">
-                  <p>{{ formatField(item.fechaPublicacion) || 'No contiene' }}</p>
+                  <p>{{ item.estadoEntrega == 284 || item.estadoEntrega == 460 ? formatField(item.fechaReporte) : 'No ha entregado' }}</p>
                 </td>
 
                 <td class="px-5 py-5">
@@ -61,9 +61,14 @@
                 </td>
                 <td class="px-5 py-5">
                   <p class="whitespace-no-wrap text-center">
-                    <span *ngIf="item.estadoEntrega == 284" (click)="onButtonClick(item.idRequerimiento)"
+                    <span *ngIf="item.estadoEntrega == 284 || item.estadoEntrega == 460" (click)="onButtonClick(item.idRequerimiento)"
                           class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>
+
                   </p>
+                  <!-- <p class="whitespace-no-wrap text-center" *ngIf="item.hasExcel">-->
+                  <!--                    <span (click)="onButtonClick1(item.idRequerimiento)"-->
+                  <!--                          class="pi pi-trash w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer"></span>-->
+                  <!--                  </p>-->
                 </td>
 
               </tr>

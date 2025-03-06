@@ -94,6 +94,8 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
       this.isloading = false;
       this.actuTable(response);
     } catch (error) {
+      this.isloading = false;
+      this.showErrorModal = true;
       this.cdr.detectChanges(); // Forzar la detección de cambios
       console.error('Error fetching user data', error);
     }
@@ -252,7 +254,8 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
   actuTable(data: any): void {
 
-    if (data.tipoProgramacion === 232) {
+    console.log(data.tipoProgramacion)
+    if (data.tipoProgramacion === 231) {
 
       this.headers = [{
         id: 0, title: 'ID'
@@ -277,7 +280,7 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
         estado: this.getnombreEstado(dato.estadoRequerimiento) || 'Sin dato',
       }));
 
-    } else if (data.tipoProgramacion === 234) {
+    } else if (data.tipoProgramacion === 233) {
 
       this.headers = [{
         id: 0, title: 'ID'
@@ -304,23 +307,39 @@ export class VerDetalleComponent implements OnInit, AfterViewInit {
 
     } else {
 
-      this.headers = [{
+      this.headers = [
+        {
         id: 0, title: 'Nombre del requerimiento'
-      }, {
+        },
+        {
         id: 1, title: 'Periodo de Entrega'
-      }, {
+        },
+        {
         id: 2, title: 'Fecha Inicio',
-      }, {
+        },
+        {
         id: 3, title: 'Fecha Fin',
-      }, {
-        id: 4, title: 'Estado',
-      },];
+        },
+        {
+          id: 4, title: 'Cantidad vigilados',
+        },
+        {
+          id: 5, title: 'Detalles',
+        },
+        {
+        id: 6, title: 'Estado',
+        },
+      ];
+
+      console.log(this.datosTable);
 
       this.datosTable = [{
         nombre: data.tipoRequerimientoDescripcion || 'Sin dato',
         periodo: data.periodoEntregaDescripcion || 'Sin dato',
         fechaInicio: data.fechaInicio || 'Sin dato',
         fechaFin: data.fechaFin || 'Sin dato',
+        cantidad: data.cantidad || 'Sin dato',
+        detalle: data.idHeredado || 'Sin dato',
         estado: data.estadoRequerimientoDescripcion || 'Sin dato',
       }];
 

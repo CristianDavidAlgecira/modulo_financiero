@@ -165,7 +165,7 @@ export const routes: Routes = [
         path: 'otros-anexos',
         loadComponent: () => OtrosAnexosComponent,
         canActivate: [AuthGuard],
-        data: {permission: 'MF_ENTREGAS_PENDIENTES'}
+        data: {permission: 'MF_CONSULTAR_ENTREGAS'}
 
       },
       {

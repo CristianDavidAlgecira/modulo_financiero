@@ -48,7 +48,7 @@ export class TableEntregasPendientesComponent {
     }, {
       id: 6, title: 'Número del acto administrativo',
     }, {
-      id: 7, title: 'Fecha de publicación',
+      id: 7, title: 'Fecha de entrega',
     }, {
       id: 8, title: 'Estado',
     }, {
@@ -93,7 +93,13 @@ export class TableEntregasPendientesComponent {
         this.apiMFService
         .getIdentificacionVigilado(item.nit, item.idHeredado)
         .pipe(
-          map((response) => (item.hasExcel = response && response.length > 0)),
+          map((response) => {
+            // Mantener todas las propiedades de item y actualizar solo las necesarias
+            console.log(response);
+            item.fechaReporte = response ? response[0].fechaReporte : null;
+            item.hasExcel = response && response.length > 0;
+            return item; // Devolver el objeto actualizado
+          }),
           catchError(() => {
             item.hasExcel = false;
             return of(null);
@@ -103,39 +109,8 @@ export class TableEntregasPendientesComponent {
     );
   }
 
-  getRequerimientos(): void {
-
-    this.apiMFService.getEntregaPendiente(this.authService.getUserInfo().documento).subscribe(response => {
-      console.log(response)
-      this.data = response;
-
-      // Iterar sobre cada elemento en this.data
-      const promises = this.data.map((item: any) => {
-        return this.apiMFService.getIdentificacionVigilado(item.nit, item.idHeredado).toPromise().then(response1 => {
-          // Verifica si la respuesta tiene datos válidos
-          item.hasExcel = response1 && response1.length > 0; // true si tiene datos, false si no
-        }).catch(() => {
-          // En caso de error, marcamos el campo como false
-          item.hasExcel = false;
-        });
-      });
-
-      // Esperar a que todas las promesas terminen
-      Promise.all(promises).then(() => {
-        console.log('Datos actualizados:', this.data);
-        this.applyFilter();
-        this.cdRef.detectChanges();
-      });
-
-    })
-
-    this.applyFilter()
-    this.cdRef.detectChanges();
-
-  }
 
   get info(): string[] {
-
     return this.data.length > 0 ? Object.keys(this.data[0]) : [];
 
   }
@@ -171,6 +146,7 @@ export class TableEntregasPendientesComponent {
 
     let datos = this.data;
 
+
     if(this.filtro) {
       const [nombre, numero, anio] = this.filtro.split('|');
 
@@ -196,6 +172,8 @@ export class TableEntregasPendientesComponent {
     if(!datos) {
       datos = this.data;
     }
+
+    console.log(datos)
     const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
     this.paginatedData = datos.slice(startIndex, endIndex);

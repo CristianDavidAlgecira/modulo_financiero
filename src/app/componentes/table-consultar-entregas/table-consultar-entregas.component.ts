@@ -64,79 +64,50 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
   loadInitialData(): void {
 
     combineLatest({
-      estados: this.apiService.getEstadoEntrega().pipe(catchError(() => of({detalle: []}))),
-      entregas: this.apiMFService.getEntregaFinalizada(this.authService.getUserInfo().documento).pipe(catchError(() => of([]))),
-    }).pipe(tap(({estados, entregas}) => {
+      estados: this.apiService.getEstadoEntrega().pipe(catchError(() => of({ detalle: [] }))),
+      entregas: this.apiMFService
+      .getEntregaFinalizada(this.authService.getUserInfo().documento)
+      .pipe(catchError(() => of([]))),
+    })
+    .pipe(
+      tap(({ estados, entregas }) => {
         this.estadoEntrega = estados.detalle || [];
         this.data = entregas || [];
-      }) // Flujo reactivo para actualización
-    ).subscribe({
+
+      }),
+      mergeMap(() => this.updateDataWithExcelInfo()) // Flujo reactivo para actualización
+    )
+    .subscribe({
       next: () => {
         this.applyFilter();
         this.cdRef.markForCheck();
-      }, error: (err) => console.error('Error al cargar datos:', err),
+      },
+      error: (err) => console.error('Error al cargar datos:', err),
     });
-  };
-
-
-
-  getRequerimientos(): void {
-
-    this.data = [{
-      tipoRequerimientoDescripcion: "Financiero",
-      annio: 2024,
-      fechaInicio: "2024-11-08",
-      fechaFin: "2024-11-22",
-      fechaLimite: "2024-11-22",
-      actoAdministrativo: 434,
-      fechaEntrega: "2024-11-22",
-      estadoRequerimientoDescripcion: "En proceso",
-      idRequerimiento: 1,
-    }, {
-      tipoRequerimientoDescripcion: "Financiero",
-      annio: 2024,
-      fechaInicio: "2024-11-08",
-      fechaFin: "2024-11-22",
-      fechaLimite: "2024-11-22",
-      actoAdministrativo: 434,
-      fechaEntrega: "2024-11-22",
-      estadoRequerimientoDescripcion: "En proceso",
-      idRequerimiento: 2,
-    }, {
-      tipoRequerimientoDescripcion: "Financiero",
-      annio: 2024,
-      fechaInicio: "2024-11-08",
-      fechaFin: "2024-11-22",
-      fechaLimite: "2024-11-22",
-      actoAdministrativo: 434,
-      fechaEntrega: "2024-11-22",
-      estadoRequerimientoDescripcion: "En proceso",
-      idRequerimiento: 3,
-    }, {
-      tipoRequerimientoDescripcion: "Financiero",
-      annio: 2024,
-      fechaInicio: "2024-11-08",
-      fechaFin: "2024-11-22",
-      fechaLimite: "2024-11-22",
-      actoAdministrativo: 434,
-      fechaEntrega: "2024-11-22",
-      estadoRequerimientoDescripcion: "En proceso",
-      idRequerimiento: 4,
-    }, {
-      tipoRequerimientoDescripcion: "Financiero",
-      annio: 2024,
-      fechaInicio: "2024-11-08",
-      fechaFin: "2024-11-22",
-      fechaLimite: "2024-11-22",
-      actoAdministrativo: 434,
-      fechaEntrega: "2024-11-22",
-      estadoRequerimientoDescripcion: "En proceso",
-      idRequerimiento: 5,
-    }]
-    this.applyFilter()
-    this.cdRef.detectChanges();
-
   }
+
+  private updateDataWithExcelInfo() {
+    return combineLatest(
+      this.data.map((item:any) =>
+        this.apiMFService
+        .getIdentificacionVigilado(item.nit, item.idHeredado)
+        .pipe(
+          map((response) => {
+            // Mantener todas las propiedades de item y actualizar solo las necesarias
+            console.log(response);
+            item.fechaReporte = response ? response[0].fechaReporte : null;
+            return item; // Devolver el objeto actualizado
+          }),
+          catchError(() => {
+            item.hasExcel = false;
+            return of(null);
+          })
+        )
+      )
+    );
+  }
+
+
 
   get info(): string[] {
 
@@ -200,6 +171,7 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
     if(!datos) {
       datos = this.data;
     }
+    console.log(datos);
     const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
     this.paginatedData = datos.slice(startIndex, endIndex);

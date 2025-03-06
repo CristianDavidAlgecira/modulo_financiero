@@ -1,0 +1,63 @@
+<div class="container-carga-de-archivo-govco">
+  <div class="loader-carga-de-archivo-govco">
+    <div class="all-input-carga-de-archivo-govco">
+      <input
+        #fileInput
+        type="file"
+        id="{{ idInput }}"
+        name="{{ name }}"
+        class="input-carga-de-archivo-govco active"
+        (change)="selectingFiles($event)"
+      />
+      <label *ngIf="Etiqueta != 'NA'" [for]="idInput" class="label-carga-de-archivo-govco">{{ Etiqueta }}</label>
+      <div class="sm:flex sm:flex-wrap sm:w-full gap-2">
+        <label [for]="idInput" class="container-input-carga-de-archivo-govco">
+          <span class="button-file-carga-de-archivo-govco">Seleccionar archivo</span>
+          <span #fileNameDisplay class="file-name-carga-de-archivo-govco">
+                    {{ selectedFiles[idInput].length ? selectedFiles[idInput][0].name : 'Sin archivo seleccionado' }}
+                </span>
+        </label>
+        <button #uploadButton class="button-loader-carga-de-archivo-govco"
+                [disabled]="!selectedFiles[idInput].length" (click)="uploadFiles()" type="button">
+          Cargar archivo
+        </button>
+      </div>
+
+      <span class="text-validation-carga-de-archivo-govco">
+                Solo archivos PDF. Peso máximo: 5 MB
+            </span>
+      <br *ngIf="errorMessage">
+      <span class="error-message" *ngIf="errorMessage" style="color: #a80521;">
+                {{ errorMessage }}
+            </span>
+
+    </div>
+    <div class="load-button-carga-de-archivo-govco">
+      <div class="load-carga-de-archivo-govco input-file-active-loader">
+        <div #uploadButton class="spinner-indicador-de-carga-govco"
+             [ngClass]="{'visually-hidden': !isUploading}" style="width: 32px; height: 32px; border-width: 6px;"
+             role="status">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container-detail-carga-de-archivo-govco">
+    <span class="alert-carga-de-archivo-govco visually-hidden"></span>
+    <div #attachedFilesContainer class="attached-files-carga-de-archivo-govco">
+      <div *ngFor="let file of attachmentList[idInput]" class="attached-file-carga-de-archivo-govco" tabindex="0">
+        <div class="icon-text-carga-de-archivo-govco">
+          <div class="file-alt-carga-de-archivo-govco"></div>
+          <div class="container-text-name-carga-de-archivo-govco">
+            <span class="text-name-carga-de-archivo-govco">{{ file.name }}</span>
+            <span>{{ (file.size / 1024) | number: '1.0-2' }} KB</span>
+          </div>
+        </div>
+        <button type="button" class="trash-alt-1-carga-de-archivo-govco" (click)="removeFile(idInput, file)">
+          <!-- Añade icono o texto si es necesario -->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

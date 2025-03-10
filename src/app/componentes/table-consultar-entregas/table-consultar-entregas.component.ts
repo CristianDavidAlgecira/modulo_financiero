@@ -7,11 +7,12 @@ import {PaginatorComponent} from "../paginator/paginator.component";
 import {catchError, combineLatest, map, mergeMap, of, tap} from "rxjs";
 import {ApiService} from "../../services/api/api.service";
 import {AuthService} from "../../services/auth/auth.service";
+import {TooltipModule} from "primeng/tooltip";
+import { ApiMuvService } from '../../services/api/api-muv.service';
 
 @Component({
   selector: 'app-table-consultar-entregas',
-  standalone: true,
-  imports: [NgForOf, NgIf, PaginatorComponent],
+  standalone: true, imports: [NgForOf, NgIf, PaginatorComponent, TooltipModule],
   templateUrl: './table-consultar-entregas.component.html',
   styleUrl: './table-consultar-entregas.component.css'
 })
@@ -26,7 +27,12 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
   //datos maestros estado entrega
   estadoEntrega: any;
 
-  constructor(private router: Router, private apiService: ApiService, private apiMFService: ApiMFService, private cdRef: ChangeDetectorRef, private authService: AuthService) {
+  //ruta segun niff y prog
+  rutaDetalles: string = '';
+  rutaReporte: string = '';
+  GrupoNif: number = 0;
+
+  constructor(private router: Router, private apiService: ApiService, private apiMFService: ApiMFService, private cdRef: ChangeDetectorRef, private authService: AuthService, private apiMuvService: ApiMuvService) {
   }
 
   ngOnInit() {
@@ -46,7 +52,7 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
     }, {
       id: 6, title: 'Número del acto administrativo',
     }, {
-      id: 7, title: 'Fecha de publicación',
+      id: 7, title: 'Fecha de entrega',
     }, {
       id: 8, title: 'Estado',
     }, {
@@ -84,6 +90,28 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
       },
       error: (err) => console.error('Error al cargar datos:', err),
     });
+
+    //detalles
+    this.apiMuvService.getDetallesByNIT(this.authService.getUserInfo().documento).subscribe((response: any) => {
+      if(response.idClasificacionGrupoNiif === 136) {
+        this.GrupoNif = 1;
+      } else if(response.idClasificacionGrupoNiif === 137) {
+        this.GrupoNif = 2;
+      } else if(response.idClasificacionGrupoNiif === 138) {
+        this.GrupoNif = 3;
+      } else if(response.idClasificacionGrupoNiif === 139) {
+        // GRUPO 414
+        this.GrupoNif = 4;
+      } else if(response.idClasificacionGrupoNiif === 140) {
+        //GRUPO 533
+        this.GrupoNif = 5;
+      } else if(response.idClasificacionGrupoNiif === 141) {
+        //GRUPO ENCHNM
+        this.GrupoNif = 6;
+
+      }
+    })
+
   }
 
   private updateDataWithExcelInfo() {
@@ -95,7 +123,7 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
           map((response) => {
             // Mantener todas las propiedades de item y actualizar solo las necesarias
             console.log(response);
-            item.fechaReporte = response ? response[0].fechaReporte : null;
+
             return item; // Devolver el objeto actualizado
           }),
           catchError(() => {
@@ -183,15 +211,78 @@ export class TableConsultarEntregasComponent implements OnInit, OnChanges {
     return this.estadoEntrega.find((estado: any) => estado.id === idEstado).descripcion;
   }
 
+  obtenerRuta(data: any, ruta: number): string {
+
+    //switch de requerimiento con link
+    switch(data.nombreRequerimiento) {
+      //societario
+      case 261:
+        return '';
+        break;
+      //financiero
+      case 262:
+        //cargue de archivo para 414 y 533
+        if(this.GrupoNif === 4 || this.GrupoNif === 5) {
+          return '';
+        } else {
+          if(ruta == 1) {
+            return '/ver-detalle-consultar-entregas';
+          } else if(ruta == 2) {
+            return '/formulario-requerimiento-anulacion';
+          }
+        }
+
+
+        break;
+      //Modelo neg especiales
+      case 263:
+        return '';
+        break;
+      //Reporte interm de info
+      case 264:
+        return '';
+        break;
+      //Administrativa
+      case 292:
+        return '';
+        break;
+    }
+
+    return '';
+
+  }
+
+  //ver detalles ruta 1
   onButtonClick(id: number) {
     const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
     console.log(data);
-    this.router.navigate(['/ver-detalle-consultar-entregas'], {
+
+    const rutaInfo = this.obtenerRuta(data, 1);
+
+    this.router.navigate([rutaInfo], {
       state: {
         info: data,
       },
     });
 
   }
+
+
+  //anulacion 2
+  onButtonClick1(id: number) {
+
+    const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
+    console.log(data);
+
+    const rutaInfo = this.obtenerRuta(data, 2);
+
+    this.router.navigate([rutaInfo], {
+      state: {
+        info: id,
+      },
+    });
+
+  }
+
 
 }

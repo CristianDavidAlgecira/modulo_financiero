@@ -139,7 +139,7 @@ export class FormularioRequerimientoAnulacionComponent implements OnInit {
 
   onDecline(): void {
     console.log('Modal rechazado');
-    this.showModalInicial = false;
+    window.history.back();
   }
 
   validateField(field: string): void {

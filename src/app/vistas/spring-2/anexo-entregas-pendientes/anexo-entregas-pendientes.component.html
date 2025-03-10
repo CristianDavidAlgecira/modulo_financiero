@@ -65,10 +65,10 @@
             *Cargar archivo
           </p>
           <app-upload-file class="h-full w-full"
-            [idInput]="'planilla'"
-            [acceptedExtensions]="['pdf']"
-            [name]="'archivo'"
-            (filesSelected)="handleFileSelected($event)"
+                           [idInput]="'planilla'"
+                           [acceptedExtensions]="['pdf']"
+                           [name]="'archivo'"
+                           (filesSelected)="handleFileSelected($event)"
           ></app-upload-file>
 
         </div>
@@ -89,6 +89,7 @@
           <tr>
             <th class="py-2 px-4 border-b">Nombre del Archivo</th>
             <th class="py-2 px-4 border-b">Estado</th>
+            <th class="py-2 px-4 border-b">detalle</th>
           </tr>
           </thead>
           <tbody>
@@ -96,6 +97,19 @@
             <td class="py-2 px-4 border-b">{{ getAnexoDescripcionByKey(key) }}</td>
             <td class="py-2 px-4 border-b"
                 [ngClass]="{ 'bg-success text-white': archivos[key] }">{{ archivos[key] ? 'Cargado' : 'No cargado' }}
+            </td>
+            <td class="py-2 px-4 border-b gap-6">
+              <span *ngIf="archivos[key]"
+                    (click)="onButtonClick(archivos[key])"
+                    class="pi pi-search text-primary2 text-medium hover:text-primary1 cursor-pointer">
+                </span>
+              <span *ngIf="archivos[key]"
+                    (click)="onDeleteClick(key)"
+                    class="pi pi-trash text-primary2 text-medium hover:text-primary1 cursor-pointer ms-4">
+                </span>
+              <span *ngIf="archivos[key] == null" class="text-gray-500">
+                  No hay archivo
+                </span>
             </td>
           </tr>
           </tbody>
@@ -141,5 +155,16 @@
            [showSubtitle]="false"
            [message]="'Los anexos han sido cargados y su solicitud ha sido recibida. '+responseFinal"
            [isIcon]="false" [showFirstButton]="true" [showCancelButton]="false" TypeAlert="success"
-           (closeByButton1)="goBack()" (closeByButton2)="goBack()" buttonText="Continuar"
-           (closeByBackdrop)="goBack()"></app-alert>
+           (closeByButton1)="navigateTo('vigilado')" (closeByButton2)="navigateTo('vigilado')" buttonText="Continuar"
+           (closeByBackdrop)="navigateTo('vigilado')"></app-alert>
+
+<!-- Modal con el iframe -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+  <div class="bg-white w-full max-w-4xl p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center border-b pb-2">
+      <h2 class="text-lg font-semibold">Vista Previa del Documento</h2>
+      <button (click)="onCloseModal()" class="text-red-500 text-xl">&times;</button>
+    </div>
+    <iframe [src]="safeUrl" class="w-full h-[500px] mt-4 rounded-md shadow"></iframe>
+  </div>
+</div>

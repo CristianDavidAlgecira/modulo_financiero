@@ -31,3 +31,17 @@ ul {
 ul li {
   margin-bottom: 5px;
 }
+
+/* Estilos para que el modal tenga una animación al abrir */
+.fixed {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

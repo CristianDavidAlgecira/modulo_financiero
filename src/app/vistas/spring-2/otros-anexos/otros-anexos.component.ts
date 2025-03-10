@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Sanitizer} from '@angular/core';
 import {TableOtrosAnexosComponent} from "../../../componentes/table-otros-anexos/table-otros-anexos.component";
 import {Router} from "@angular/router";
 import {ApiService} from "../../../services/api/api.service";
 import {ApiMFService} from "../../../services/api/api-mf.service";
 import {BehaviorSubject, interval, switchMap} from "rxjs";
-import {AlertComponent} from "../../../componentes/alert/alert.component";
-import {UploadFileComponent} from "../../../componentes/upload-file/upload-file.component";
-import {environment} from "../../../../environments/environment";
+
 import {AzureBlobService} from "../../../services/azure-blob/azure-blob.service";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
 import {AuthService} from "../../../services/auth/auth.service";
 import {NgForOf, NgIf} from "@angular/common";
+
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -21,7 +21,7 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class OtrosAnexosComponent implements OnInit {
 
-  constructor(private router: Router, private authService: AuthService, private apiService: ApiService, private ApiMuvService: ApiMuvService, private apiMFService: ApiMFService, private azureBlobService: AzureBlobService) {
+  constructor(private router: Router, private authService: AuthService, private apiService: ApiService, private ApiMuvService: ApiMuvService, private apiMFService: ApiMFService, private azureBlobService: AzureBlobService, private sanitizer: DomSanitizer) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {info: any};
@@ -37,6 +37,7 @@ export class OtrosAnexosComponent implements OnInit {
     }
   }
 
+  safeUrl: SafeResourceUrl | null = null;
   private sasToken: string | null = null;
   private tokenExpirationTime: number = 0; // Tiempo de expiración del token en timestamp
 
@@ -52,6 +53,9 @@ export class OtrosAnexosComponent implements OnInit {
   infoExcel: any;
   responseFinal: string = '';
   isDataAnexos: boolean = false;
+
+  //modal
+  isModalOpen: boolean = false;
 
   // Método para actualizar el id y el BehaviorSubject
   setId(newId: any): void {
@@ -207,7 +211,7 @@ export class OtrosAnexosComponent implements OnInit {
       });
     }
 
-    console.log(this.useToken(path))
+    this.useToken(path);
 
 
   }
@@ -226,10 +230,20 @@ export class OtrosAnexosComponent implements OnInit {
 
     useToken(path: any) {
     const [baseUrl, queryParams] = this.sasToken!.split('?'); // Divide en URL base y parámetros
-    let fullPath = `${baseUrl}?${path}${queryParams}`;
+    let fullPath = `${baseUrl}/${path}?${queryParams}`;
 
-    return fullPath;
+      this.openFile(fullPath);
     // Aquí puedes utilizar el fullPath según sea necesario
+  }
+
+  openFile(path: string) {
+
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(path);
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 
 

@@ -9,14 +9,16 @@ import {
 } from "../../../componentes/table-anexo-entregas-pendientes/table-anexo-entregas-pendientes.component";
 import {ApiService} from "../../../services/api/api.service";
 import {ApiMFService} from "../../../services/api/api-mf.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, interval, switchMap} from "rxjs";
 import {AlertComponent} from "../../../componentes/alert/alert.component";
 import {UploadFileComponent} from "../../../componentes/upload-file/upload-file.component";
 import {environment} from "../../../../environments/environment";
 import {AzureBlobService} from "../../../services/azure-blob/azure-blob.service";
 import {ApiMuvService} from "../../../services/api/api-muv.service";
 import {AuthService} from "../../../services/auth/auth.service";
-import { NgSelectModule } from '@ng-select/ng-select';
+
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -31,7 +33,7 @@ export class AnexoEntregasPendientesComponent implements OnInit {
   @ViewChild(UploadFileComponent) fileUploadComponent!: UploadFileComponent;
 
 
-  constructor(private router: Router, private authService: AuthService, private apiService: ApiService, private ApiMuvService: ApiMuvService, private apiMFService: ApiMFService, private azureBlobService: AzureBlobService) {
+  constructor(private router: Router, private authService: AuthService, private apiService: ApiService, private ApiMuvService: ApiMuvService, private apiMFService: ApiMFService, private azureBlobService: AzureBlobService, private sanitizer: DomSanitizer) {
     // TRAER ID DESDE NAVEGACIÓN O LOCALSTORAGE
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {info: any};
@@ -46,6 +48,14 @@ export class AnexoEntregasPendientesComponent implements OnInit {
       }
     }
   }
+
+  //MOSTRAR ARCHIVOS EN IFRAME
+  safeUrl: SafeResourceUrl | null = null;
+  //TOKEN PARA GETAPI ARCHIVOS PATH
+  private sasToken: string | null = null;
+  private tokenExpirationTime: number = 0; // Tiempo de expiración del token en timestamp
+
+
 
   //Capturar objetos del navigation
   private infoSubject = new BehaviorSubject<any>('0'); // Inicializa con '0'
@@ -82,6 +92,7 @@ export class AnexoEntregasPendientesComponent implements OnInit {
   showErrorModal: boolean = false;
   showLoadingModal: boolean = false;
   showSuccessModal: boolean = false;
+  isModalOpen: boolean = false;
 
   //para comprobar si ya se ha creado el registro y es para edit
   isDataAnexos: boolean = false;
@@ -150,6 +161,18 @@ export class AnexoEntregasPendientesComponent implements OnInit {
       sessionStorage.setItem('info', JSON.stringify(info));
       this.loadOptions();
     });
+
+    //API TOKEN REFRESH
+    this.refreshSasToken(); // Obtener el token al iniciar el componente
+
+    // Refrescar el token cada hora (3600000 ms)
+    interval(3600000)
+    .pipe(switchMap(() => this.azureBlobService.getSasToken()))
+    .subscribe(response => {
+      console.log('SAS Token actualizado automáticamente:', response);
+      this.sasToken = response.urlSasToken;
+      this.tokenExpirationTime = Date.now() + 3600000; // Actualiza el tiempo de expiración
+    });
   }
 
   loadOptions(): void {
@@ -186,7 +209,7 @@ export class AnexoEntregasPendientesComponent implements OnInit {
       console.log(this.grupoNif);
 
     });
-    this.grupoNif = 3;
+    this.grupoNif = 2;
 
 
     //LLAMAR INFO ANEXOS
@@ -363,7 +386,7 @@ export class AnexoEntregasPendientesComponent implements OnInit {
     this.showLoadingModal = true;
     this.touchedFields.anexo = true;
 
-    const path = `${environment.storage_folder}/anexos-vigilado/grupoNif${this.grupoNif}/${this.datosState.nit}-programacion${this.datosState.idHeredado}`;
+    let path = `${environment.storage_folder}/anexos-vigilado/grupoNif${this.grupoNif}/${this.datosState.nit}-programacion${this.datosState.idHeredado}`;
 
     this.azureBlobService.getSasToken().subscribe({
       next: (response) => {
@@ -380,16 +403,25 @@ export class AnexoEntregasPendientesComponent implements OnInit {
         const uploadPromises = archivosKeys.map(key => {
           const file = this.archivos[key];
 
+          let fullpath = `${path}-${key}`;
           if (file) {
-            return this.azureBlobService.uploadFile(file, path, sasToken)
-            .then(url => ({ key, path })) // Si se sube correctamente
-              .catch(error => {
-                console.error(`Error al subir ${key}:`, error);
-                throw new Error(`Error en el archivo: ${key}`); // Lanzar error para detener todo
-              });
+            return this.azureBlobService.uploadFile(file, fullpath, sasToken)
+            .then(url => {
+              const result = { key, path: fullpath }; // Guardamos el resultado antes de resetear
+              fullpath = ''; // Reseteamos fullpath
+              return result; // Retornamos el objeto con key y path
+            })
+            .catch(error => {
+              console.error(`Error al subir ${key}:`, error);
+              fullpath = ''; // También se resetea en caso de error
+              throw new Error(`Error en el archivo: ${key}`);
+            });
           } else {
             return Promise.resolve({ key, path: null });
           }
+
+
+
         });
 
         // Esperar a que todos los archivos se suban
@@ -416,7 +448,7 @@ export class AnexoEntregasPendientesComponent implements OnInit {
           // Enviar datos a la API
           this.apiMFService.guardarAnexo(data).subscribe({
             next: (response) => {
-              this.responseFinal = this.datosState.estadoEntrega == 285 ? 'Estado actualizado a En proceso. pasada la fecha limite su reporte se actualizará a Entregado' : 'Estado actualizado a extemporaneo, ya que entregue fuera del tiempo establecido'
+              this.responseFinal = this.datosState.estadoEntrega == 285 ? 'Estado actualizado a En proceso. pasada la fecha limite su reporte se actualizará a Entregado' : 'Estado actualizado a extemporaneo, ya que entregó fuera del tiempo establecido'
               this.showLoadingModal = false;
               this.showSuccessModal = true;
               console.log('Datos enviados con éxito:', response);
@@ -443,11 +475,65 @@ export class AnexoEntregasPendientesComponent implements OnInit {
     });
   }
 
+  //MOSTRAR ARCHIVOS DE AZURE
+  onButtonClick(path: any) {
+
+    console.log(path)
+
+    if (typeof path === 'string') {
+
+      if (!this.sasToken || Date.now() >= this.tokenExpirationTime) {
+        this.refreshSasToken(() => {
+          console.log("refreshSasToken");
+        });
+      }
+
+      this.useToken(path);
+
+    } else {
+      const pathFile = URL.createObjectURL(path);
+      this.openFile(pathFile);
+    }
+
+
+  }
+
+  onDeleteClick(key: string) {
+    this.archivos[key] = null;
+  }
+
+  private refreshSasToken(callback?: () => void) {
+    this.azureBlobService.getSasToken().subscribe({
+      next: (response) => {
+        console.log('SAS Token obtenido:', response);
+        this.sasToken = response.urlSasToken;
+        this.tokenExpirationTime = Date.now() + 3600000; // Expira en 1 hora
+        if (callback) callback();
+      },
+      error: (err) => console.error('Error al obtener SAS Token:', err)
+    });
+  }
+
+  useToken(path: any) {
+    const [baseUrl, queryParams] = this.sasToken!.split('?'); // Divide en URL base y parámetros
+    let fullPath = `${baseUrl}/${path}?${queryParams}`;
+
+    this.openFile(fullPath);
+    // Aquí puedes utilizar el fullPath según sea necesario
+  }
+
+  openFile(path: string) {
+
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(path);
+    this.isModalOpen = true;
+  }
+
 
   onCloseModal(): void {
     this.showSuccessModal = false;
     this.showLoadingModal = false;
     this.showErrorModal = false;
+    this.isModalOpen = false;
   }
 
   goBack() {

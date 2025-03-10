@@ -1,5 +1,4 @@
 <div class="w-full mb-12 pb-8">
-
   <div class="report-container">
 
     <div class="section general-info">
@@ -9,8 +8,7 @@
         <div><strong>Periodo de entrega:</strong> {{ datosState.periodoEntrega || 'No contiene' }}</div>
         <div><strong>Año:</strong> {{ datosState.annioVigencia || 'No contiene' }}</div>
         <div><strong>Fecha Inicio:</strong> {{ datosState.fechaInicio }}</div>
-        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega }}
-        </div>
+        <div><strong>Fecha Fin:</strong> {{ datosState.individual ? datosState.fechaFin : datosState.fechaEntrega }}</div>
         <div><strong>Fecha Publicación:</strong> {{ datosState.fechaPublicacion || 'No contiene' }}</div>
         <div><strong>Número de Acto Administrativo:</strong> {{ datosState.actoAdministrativo }}</div>
         <div>
@@ -21,40 +19,52 @@
 
     <div class="section report-info">
       <h3>Información de Anexos</h3>
-      <div class="mt-6 grid grid-cols-2 px-4">
-        <div>
-          <h4 class="mb-6"><strong>Detalle del Reporte</strong></h4>
-          <ul>
-            <li *ngFor="let nombre of nombreAnexoDatos">{{ nombre.descripcion }}</li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="mb-6 break-words"><strong>Detalles</strong></h4>
-          <ul>
-            <li *ngFor="let item of nombreAnexoDatos" class="whitespace-no-wrap text-center">
 
-    <span *ngIf="this.archivos[item.code] != null" (click)="onButtonClick(this.archivos[item.code])"
-          class="pi pi-search w-full h-full sm:text-xl text-base text-primary2 text-medium hover:text-primary1 cursor-pointer">
-    </span>
-              <span *ngIf="this.archivos[item.code] == null">
-                No hay archivo
-              </span>
-            </li>
-          </ul>
-        </div>
+      <!-- Tabla en lugar de listas -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300 mt-6">
+          <thead class="bg-gray-200">
+          <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left">Detalle del Reporte</th>
+            <th class="border border-gray-300 px-4 py-2 text-center">Detalles</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of nombreAnexoDatos">
+            <td class="border border-gray-300 px-4 py-2">{{ item.descripcion }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+                <span *ngIf="this.archivos[item.code] != null"
+                      (click)="onButtonClick(this.archivos[item.code])"
+                      class="pi pi-search text-primary2 text-medium hover:text-primary1 cursor-pointer">
+                </span>
+              <span *ngIf="this.archivos[item.code] == null" class="text-gray-500">
+                  No hay archivo
+                </span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div class="flex justify-center p-4 space-x-4">
-
       <button
         class="bg-secondary1 text-primary2 inline-flex items-center justify-center px-8 py-1
-          hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
+               hover:bg-primary2 hover:text-white font-medium rounded-full text-[16px] work-sans text-center"
         (click)="goBack()"> Regresar
       </button>
-
     </div>
 
   </div>
+</div>
 
+<!-- Modal con el iframe -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+  <div class="bg-white w-full max-w-4xl p-6 rounded-lg shadow-lg">
+    <div class="flex justify-between items-center border-b pb-2">
+      <h2 class="text-lg font-semibold">Vista Previa del Documento</h2>
+      <button (click)="closeModal()" class="text-red-500 text-xl">&times;</button>
+    </div>
+    <iframe [src]="safeUrl" class="w-full h-[500px] mt-4 rounded-md shadow"></iframe>
+  </div>
 </div>

@@ -8,6 +8,7 @@ import {AuthService} from "../../services/auth/auth.service";
 import {ApiService} from "../../services/api/api.service";
 import {TooltipModule} from "primeng/tooltip";
 import {catchError, combineLatest, map, mergeMap, of, tap} from "rxjs";
+import {ApiMuvService} from "../../services/api/api-muv.service";
 
 @Component({
   selector: 'app-table-entregas-pendientes',
@@ -28,7 +29,11 @@ export class TableEntregasPendientesComponent {
   //datos maestros estado entrega
   estadoEntrega: any;
 
-  constructor(private router: Router, private apiMFService: ApiMFService, private apiService: ApiService, private cdRef: ChangeDetectorRef, private authService: AuthService,) {
+
+  //grupo NIF
+  GrupoNif: any;
+
+  constructor(private router: Router, private apiMFService: ApiMFService, private apiService: ApiService, private cdRef: ChangeDetectorRef, private authService: AuthService, private apiMuvService: ApiMuvService) {
   }
 
   ngOnInit() {
@@ -85,6 +90,27 @@ export class TableEntregasPendientesComponent {
       },
       error: (err) => console.error('Error al cargar datos:', err),
     });
+
+    //detalles
+    this.apiMuvService.getDetallesByNIT(this.authService.getUserInfo().documento).subscribe((response: any) => {
+      if(response.idClasificacionGrupoNiif === 136) {
+        this.GrupoNif = 1;
+      } else if(response.idClasificacionGrupoNiif === 137) {
+        this.GrupoNif = 2;
+      } else if(response.idClasificacionGrupoNiif === 138) {
+        this.GrupoNif = 3;
+      } else if(response.idClasificacionGrupoNiif === 139) {
+        // GRUPO 414
+        this.GrupoNif = 4;
+      } else if(response.idClasificacionGrupoNiif === 140) {
+        //GRUPO 533
+        this.GrupoNif = 5;
+      } else if(response.idClasificacionGrupoNiif === 141) {
+        //GRUPO ENCHNM
+        this.GrupoNif = 6;
+
+      }
+    })
   }
 
   private updateDataWithExcelInfo() {
@@ -185,11 +211,58 @@ export class TableEntregasPendientesComponent {
     return this.estadoEntrega.find((estado: any) => estado.id === idEstado).descripcion;
   }
 
+  obtenerRuta(data: any, ruta: number): string {
+
+    //switch de requerimiento con link
+    switch(data.nombreRequerimiento) {
+      //societario
+      case 261:
+        return '';
+        break;
+      //financiero
+      case 262:
+        //cargue de archivo para 414 y 533
+        if(this.GrupoNif === 4 || this.GrupoNif === 5) {
+          return '';
+        } else {
+          if(ruta == 1) {
+            return '/ver-detalle-entregas-pendientes';
+          } else if(ruta == 2) {
+            return '/formulario-requerimiento-anulacion';
+          } else if(ruta == 3) {
+            return '/iniciar-reporte';
+          }
+        }
+
+
+        break;
+      //Modelo neg especiales
+      case 263:
+        return '';
+        break;
+      //Reporte interm de info
+      case 264:
+        return '';
+        break;
+      //Administrativa
+      case 292:
+        return '';
+        break;
+    }
+
+    return '';
+
+  }
+
+  //ver detalles 1
   onButtonClick(id: number) {
 
     const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
     console.log(data);
-    this.router.navigate(['/ver-detalle-entregas-pendientes'], {
+
+    const rutaInfo = this.obtenerRuta(data, 1);
+
+    this.router.navigate([rutaInfo], {
       state: {
         info: data,
       },
@@ -197,19 +270,16 @@ export class TableEntregasPendientesComponent {
 
   }
 
-  onButtonClick1(id: number) {
 
-    this.router.navigate(['/formulario-requerimiento-anulacion'], {
-      state: {
-        info: id,
-      },
-    });
-
-  }
-
+  //Inciar reporte 3
   onButtonClick2(id: number) {
 
-    this.router.navigate(['/iniciar-reporte'], {
+    const data = this.paginatedData.find((estado: any) => estado.idRequerimiento === id);
+    console.log(data);
+
+    const rutaInfo = this.obtenerRuta(data, 3);
+
+    this.router.navigate([rutaInfo], {
       state: {
         info: id,
       },

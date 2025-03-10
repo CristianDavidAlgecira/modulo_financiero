@@ -18,7 +18,7 @@ export class AzureBlobService {
 
   getSasToken(): Observable<AzureBlobResponse> {
     return of(({
-      urlSasToken: 'https://ssidatalakeprodg2.blob.core.windows.net/sistemanacionalsupervision?sv=2024-08-04&se=2025-03-06T02%3A20%3A13Z&sr=c&sp=rcwdl&sig=2jDglS6GNIZWL405H1HpI6KmUij6rALLTcg6W25FXhE%3D',
+      urlSasToken: 'https://ssidatalakeprodg2.blob.core.windows.net/sistemanacionalsupervision?sv=2024-08-04&se=2025-03-06T21%3A16%3A24Z&sr=c&sp=rcwdl&sig=M0nZnQIm8kBbZZRtIw0lk7id4n2vQMOkMekF553IK3s%3D',
       message: 'Container SAS Token obtenido correctamente',
       statusCode: 200
     } as AzureBlobResponse)); //comentar en deploy
